@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('production_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('production_batch_id')->constrained('production_batches');
-            $table->foreignId('product_id')->constrained('products');
+            $table->foreignId('produks_id')->constrained('produks');
             $table->foreignId('raw_material_id')->constrained('raw_materials');
             $table->integer('quantity_used');
             $table->integer('estimated_cost');
