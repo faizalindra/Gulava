@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('produks', function (Blueprint $table) {
+        Schema::create('production_batches', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique();
-            $table->string('grade_id')->nullable();
-            $table->string('name', 100);
-            $table->integer('price');
-            $table->integer('estimated_sales');
-            $table->integer('stock');
+            $table->integer('quantity_produced');
+            $table->integer('estimated_cost');
             $table->string('description')->nullable();
+            $table->date('completed_at')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('produks');
+        Schema::dropIfExists('production_batches');
     }
 };
