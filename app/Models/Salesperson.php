@@ -11,6 +11,8 @@ class Salesperson extends Model
 
     protected $guarded = ['id'];
 
+    protected $table = 'salespersons';
+
     protected $fillable = [
         'code',
         'nik',
