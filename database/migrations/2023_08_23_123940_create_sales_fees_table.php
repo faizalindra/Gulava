@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('returing_goods', function (Blueprint $table) {
+        Schema::create('sales_fees', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique();
-            $table->foreignId('petty_cash_id')->constrained('petty_cash');
+            $table->foreignId('salespersons_id')->constrained('salespersons');
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('salesperson_id')->constrained('salespersons');
-            $table->foreignId('outgoing_good_id')->constrained('outgoing_goods');
-            $table->bigInteger('total_amount');
+            $table->foreignId('returning_goods_id')->constrained('returning_goods');
+            $table->bigInteger('price');
             $table->string('description')->nullable();
             $table->timestamps();
         });
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('returing_goods');
+        Schema::dropIfExists('sales_fees');
     }
 };

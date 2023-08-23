@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('outgoing_goods', function (Blueprint $table) {
+        Schema::create('returning_goods', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique();
-            $table->foreignId('salespersons_id')->constrained('salespersons');
+            $table->foreignId('petty_cash_id')->constrained('petty_cash');
             $table->foreignId('user_id')->constrained('users');
-            $table->unsignedBigInteger('total_price');
+            $table->foreignId('salespersons_id')->constrained('salespersons');
+            $table->foreignId('outgoing_good_id')->constrained('outgoing_goods');
+            $table->bigInteger('total_amount');
             $table->string('description')->nullable();
             $table->timestamps();
         });
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('outgoing_goods');
+        Schema::dropIfExists('returing_goods');
     }
 };
