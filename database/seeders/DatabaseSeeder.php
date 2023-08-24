@@ -23,6 +23,12 @@ class DatabaseSeeder extends Seeder
             UsersSeed::class,
             SuppliersSeed::class,
             SalespersonSeeds::class,
+            RawMaterialsSeed::class,
+            ProduksSeed::class,
+            PettyCashSeed::class,
+            ExpenseCategorySeed::class,
+            IncomeCategorySeed::class,
+
             // ExpenseCategoriesSeed::class,
             // PettyCashSeed::class,
             // ExpensesSeed::class,
