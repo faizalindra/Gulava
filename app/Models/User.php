@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -18,9 +18,16 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'username',
+        'firstname',
+        'lastname',
         'email',
         'password',
+        'address',
+        'city',
+        'country',
+        'postal',
+        'about'
     ];
 
     /**
@@ -40,36 +47,16 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
     ];
 
-    public function transactions()
+    /**
+     * Always encrypt the password when it is updated.
+     *
+     * @param $value
+    * @return string
+    */
+    public function setPasswordAttribute($value)
     {
-        return $this->hasMany(Transaction::class);
-    }
-
-    public function expenses()
-    {
-        return $this->hasMany(Expense::class);
-    }
-
-    public function incomes()
-    {
-        return $this->hasMany(Income::class);
-    }
-
-    public function salesFee()
-    {
-        return $this->hasMany(SalesFee::class);
-    }
-
-    public function outgoingGoods()
-    {
-        return $this->hasMany(OutgoingGoods::class);
-    }
-
-    public function incomingGoods()
-    {
-        return $this->hasMany(IncomingGoods::class);
+        $this->attributes['password'] = bcrypt($value);
     }
 }
