@@ -37,4 +37,18 @@ class Salesperson extends Model
         'bank_account' => 'integer',
         'is_active' => 'boolean',
     ];
+
+    public function ongingGoods()
+    {
+        return $this->hasMany(OutgoingGoods::class);
+    }
+
+    public function returningGoods()
+    {
+        return $this->hasMany(ReturningGoods::class);
+    }
+
+    public function salesFee(){
+        return $this->hasMany(SalesFee::class);
+    }
 }

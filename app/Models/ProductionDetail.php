@@ -23,4 +23,26 @@ class ProductionDetail extends Model
         'quantity_used' => 'integer',
         'estimated_cost' => 'integer',
     ];
+
+    public function productionBatch()
+    {
+        return $this->belongsTo(ProductionBatch::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    public function rawMaterial()
+    {
+        return $this->belongsTo(RawMaterial::class);
+    }
+
+    public function productionDetail()
+    {
+        return $this->hasMany(ProductionDetail::class);
+    }
+
+    
 }

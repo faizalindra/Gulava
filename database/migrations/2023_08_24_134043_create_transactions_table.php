@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('invoice_number');
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('petty_cash_id')->constrained('petty_cash')->cascadeOnDelete();
             $table->bigInteger('total_price');
             $table->bigInteger('paid_price');
             $table->bigInteger('change_price');

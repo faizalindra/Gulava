@@ -23,4 +23,9 @@ class RawMaterialFlow extends Model
         'price' => 'integer',
         'is_in' => 'boolean',
     ];
+
+    public function rawMaterial()
+    {
+        return $this->belongsTo(RawMaterial::class);
+    }
 }

@@ -5,14 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SalesFee extends Model
+class ReturningGoods extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'code',
         'sales_id',
-        'fee_id',
+        'user_id',
+        'ongoing_goods_id',
+        'petty_cash_id',
         'price',
         'description',
     ];
@@ -34,5 +36,10 @@ class SalesFee extends Model
     public function ongoingGoods()
     {
         return $this->belongsTo(OutgoingGoods::class);
+    }
+
+    public function pettyCash()
+    {
+        return $this->belongsTo(PettyCash::class);
     }
 }

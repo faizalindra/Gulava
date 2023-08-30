@@ -26,4 +26,16 @@ class RawMaterial extends Model
         'stock_min' => 'integer',
         'supplier_id' => 'integer',
     ];
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
+    }
+
+    public function rawMaterialFlows()
+    {
+        return $this->hasMany(RawMaterialFlow::class);
+    }
+
+    
 }

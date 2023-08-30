@@ -25,4 +25,9 @@ class ProductionBatch extends Model
         'estimated_cost' => 'integer',
         'is_active' => 'boolean',
     ];
+
+    public function productionDetails()
+    {
+        return $this->hasMany(ProductionDetail::class);
+    }
 }

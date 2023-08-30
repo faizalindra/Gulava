@@ -5,21 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Supplier extends Model
+class Recipe extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id'];
 
-    protected $fillable = [
-        'code',
+    protected $fillable =[
         'name',
-        'address',
-        'phone',
-        'email',
-        'contact_person',
-        'contact_person_phone',
-        'contact_person_email',
+        'product_id',
         'is_active',
     ];
 
@@ -27,10 +21,12 @@ class Supplier extends Model
         'is_active' => 'boolean',
     ];
 
-
-    public function rawMaterials()
+    public function product()
     {
-        return $this->hasMany(RawMaterial::class);
+        return $this->belongsTo(Product::class);
     }
 
+    public function details(){
+        return $this->hasMany(RawMaterial::class)->withPivot('quantity','unit');
+    }
 }

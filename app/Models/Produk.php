@@ -26,4 +26,9 @@ class Produk extends Model
         'stock' => 'integer',
         'is_active' => 'boolean',
     ];
+
+    public function recipe()
+    {
+        return $this->hasMany(Recipe::class);
+    }
 }
