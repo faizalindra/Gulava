@@ -3020,6 +3020,9 @@ window.darkMode = function (el) {
     el.removeAttribute("checked");
   }
 };
+var darkVersionCheckbox = document.getElementById('dark-version');
+darkVersionCheckbox.click();
+
 
 /***/ }),
 
