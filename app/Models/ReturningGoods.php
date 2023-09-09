@@ -23,10 +23,10 @@ class ReturningGoods extends Model
         'price' => 'integer',
     ];
 
-    public function salesperson()
-    {
-        return $this->belongsTo(Salesperson::class);
-    }
+    // public function salesperson()
+    // {
+    //     return $this->belongsTo(Salesperson::class);
+    // }
 
     public function user()
     {

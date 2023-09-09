@@ -17,4 +17,17 @@ class OutgoingGoods extends Model
         'description',
     ];
 
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function salesperson(){
+        return $this->belongsTo(Salesperson::class);
+    }
+
+    public function returningGoods(){
+        return $this->hasOne(ReturningGoods::class);
+    }
+
 }
