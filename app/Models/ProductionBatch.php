@@ -30,4 +30,9 @@ class ProductionBatch extends Model
     {
         return $this->hasMany(ProductionDetail::class);
     }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

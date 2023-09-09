@@ -31,4 +31,8 @@ class Produk extends Model
     {
         return $this->hasMany(Recipe::class);
     }
+
+    public function production(){
+        return $this->hasMany(ProductionBatch::class);
+    }
 }
