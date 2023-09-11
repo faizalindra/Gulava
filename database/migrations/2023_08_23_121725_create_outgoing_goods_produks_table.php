@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('outgoing_good_id')->constrained('outgoing_goods');
             $table->foreignId('produk_id')->constrained('produks');
-            $table->integer('quantity');
-            $table->integer('price');
-            $table->integer('total_price');
+            $table->bigInteger('quantity');
+            $table->bigInteger('price');
+            $table->bigInteger('total_price');
             $table->string('description')->nullable();
             $table->timestamps();
         });

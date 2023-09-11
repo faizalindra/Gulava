@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('production_batch_id')->constrained('production_batches')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('raw_material_id')->constrained('raw_materials')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->integer('quantity_used');
-            $table->integer('estimated_cost');
+            $table->bigInteger('quantity_used');
+            $table->bigInteger('estimated_cost');
             $table->timestamps();
         });
     }

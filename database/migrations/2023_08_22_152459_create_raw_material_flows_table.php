@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('raw_material_flows', function (Blueprint $table) {
             $table->id();
             $table->foreignId('raw_material_id')->constrained('raw_materials');
+            $table->foreignId('supplier_id')->constrained('suppliers');
             $table->bigInteger('quantity');
             $table->bigInteger('price');
             $table->boolean('is_in')->default(true);

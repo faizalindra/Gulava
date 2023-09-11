@@ -11,7 +11,7 @@ class ReturningGoods extends Model
 
     protected $fillable = [
         'code',
-        'sales_id',
+        // 'sales_id',
         'user_id',
         'ongoing_goods_id',
         'petty_cash_id',

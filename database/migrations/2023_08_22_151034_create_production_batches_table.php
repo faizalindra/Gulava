@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('production_batches', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique();
-            $table->foreignId('product_id')->constrained('products')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->integer('quantity_produced');
-            $table->integer('estimated_cost');
+            $table->foreignId('produks_id')->constrained('produks')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->bigInteger('quantity_produced');
+            $table->bigInteger('estimated_cost');
             $table->string('description')->nullable();
             $table->date('completed_at')->nullable();
             $table->boolean('is_active')->default(true);

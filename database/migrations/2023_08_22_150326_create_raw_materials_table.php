@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('code')->unique();
             $table->string('name', 100);
-            $table->integer('price');
-            $table->integer('stock');
+            $table->bigInteger('price');
+            $table->bigInteger('stock');
+            $table->string('unit');
             $table->integer('stock_min');
             $table->foreignId('supplier_id')->constrained('suppliers');
             $table->timestamps();
