@@ -10,7 +10,7 @@
                     <div class="row">
                         <div class="col-8">
                             <div class="numbers">
-                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Penjualan Hari ini Rp</p>
+                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Penjualan Bulan ini Rp</p>
                                 <h5 class="font-weight-bolder">
                                     $53,000
                                 </h5>
@@ -35,7 +35,7 @@
                     <div class="row">
                         <div class="col-8">
                             <div class="numbers">
-                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Produksi Hari ini Kg</p>
+                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Produksi Bulan ini Kg</p>
                                 <h5 class="font-weight-bolder">
                                     2,300
                                 </h5>
@@ -60,7 +60,7 @@
                     <div class="row">
                         <div class="col-8">
                             <div class="numbers">
-                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Bruto Bersih Hari ini</p>
+                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Bruto Bersih Bulan ini</p>
                                 <h5 class="font-weight-bolder">
                                     +3,462
                                 </h5>
