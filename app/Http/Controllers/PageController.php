@@ -3,9 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Services\Produks\ProduksService;
+use App\Services\ProduksGrade\ProduksGradeService;
 
 class PageController extends Controller
 {
+    protected $produksService;
+    protected $produksGradeService;
+    public function __construct(ProduksService $produksService, ProduksGradeService $produksGradeService)
+    {
+        $this->produksService = $produksService;
+        $this->produksGradeService = $produksGradeService;
+    }
+
     /**
      * Display all the static pages when authenticated
      *
@@ -48,7 +58,9 @@ class PageController extends Controller
 
     public function product()
     {
-        return view("pages.product");
+        $products = $this->produksService->getAllProduksForTable(['paginate' => 10]);
+        $grades = $this->produksGradeService->getAllProduksGrade();
+        return view("pages.product", compact('products','grades'));
     }
 
     public function inventory()

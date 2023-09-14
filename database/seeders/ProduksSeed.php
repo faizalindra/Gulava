@@ -15,7 +15,7 @@ class ProduksSeed extends Seeder
         $data = [
             [
                 'code' => 'PRD000',
-                'grade_id' => 'GRD000',
+                'grade' => 'GRD000',
                 'name' => 'Grade A',
                 'price' => 10000,
                 'estimated_sales' => 100,
@@ -25,7 +25,7 @@ class ProduksSeed extends Seeder
             ],
             [
                 'code' => 'PRD001',
-                'grade_id' => 'GRD001',
+                'grade' => 'GRD001',
                 'name' => 'Grade B',
                 'price' => 20000,
                 'estimated_sales' => 200,
@@ -35,7 +35,7 @@ class ProduksSeed extends Seeder
             ],
             [
                 'code' => 'PRD002',
-                'grade_id' => 'GRD002',
+                'grade' => 'GRD002',
                 'name' => 'Grade C',
                 'price' => 30000,
                 'estimated_sales' => 300,
@@ -45,7 +45,7 @@ class ProduksSeed extends Seeder
             ],
             [
                 'code' => 'PRD003',
-                'grade_id' => 'GRD003',
+                'grade' => 'GRD003',
                 'name' => 'Grade D',
                 'price' => 40000,
                 'estimated_sales' => 400,

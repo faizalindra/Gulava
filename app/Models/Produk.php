@@ -10,12 +10,13 @@ class Produk extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+    protected $table = 'produks';
 
     protected $fillable = [
         'code',
         'name',
         'description',
-        'grade_id',
+        'grade',
         'price',
         'stock',
         'is_active',
@@ -32,7 +33,12 @@ class Produk extends Model
         return $this->hasMany(Recipe::class);
     }
 
-    public function production(){
-        return $this->hasMany(ProductionBatch::class);
+    public function production()
+    {
+        return $this->hasMany(ProductionBatch::class, 'produks_id', 'id');
+    }
+    public function grade()
+    {
+        return $this->belongsTo(ProduksGrade::class, 'grade', 'name');
     }
 }
