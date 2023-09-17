@@ -32,7 +32,9 @@ class DatabaseSeeder extends Seeder
                 SuppliersSeed::class,
                 SalespersonSeeds::class,
                 RawMaterialsSeed::class,
+                RawMaterialFlowSeed::class,
                 ProduksGradeSeed::class,
+                ProductionBatchSeed::class,
             ]
         );
     }

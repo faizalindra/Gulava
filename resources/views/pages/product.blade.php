@@ -161,7 +161,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-7">
                                 <div class="container">
                                     <form id="produkForm" method="POST" action="{{ route('produks.create') }}">
                                         @csrf
@@ -216,7 +216,7 @@
                                     </form>
                                 </div>
                             </div>
-                            <div class="col-6">
+                            <div class="col-5">
                                 <form id="produkGradeForm" method="POST" action="{{ route('produk.grade.create') }}">
                                     @csrf
                                     @method('post')

@@ -26,7 +26,7 @@ class ProductionBatch extends Model
         'is_active' => 'boolean',
     ];
 
-    public function productionDetails()
+    public function detail()
     {
         return $this->hasMany(ProductionDetail::class);
     }
