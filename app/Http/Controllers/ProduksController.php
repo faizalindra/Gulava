@@ -15,7 +15,6 @@ class ProduksController extends Controller
 
     public function create(CreateProdukRequest $request)
     {
-        // dd($request->input());
         $data = $request->validated();
         $this->mainService->create($data);
         return redirect()->route('product')->with('success', 'Produk berhasil ditambahkan');

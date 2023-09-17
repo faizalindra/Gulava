@@ -10,6 +10,10 @@ class ProduksGrade extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public $timestamps = false;
+
+    protected $fillable = ['name'];
+
     public function produks()
     {
         return $this->hasMany(Produk::class, 'grade', 'name');

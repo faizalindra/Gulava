@@ -58,9 +58,16 @@ class PageController extends Controller
 
     public function product()
     {
-        $products = $this->produksService->getAllProduksForTable(['paginate' => 10]);
+        $products = $this->produksService->getAllProduksForTable();
         $grades = $this->produksGradeService->getAllProduksGrade();
-        return view("pages.product", compact('products','grades'));
+        return view("pages.product", compact('products', 'grades'));
+    }
+
+    public function produksDetail($id)
+    {
+        $product = $this->produksService->find($id);
+        $product->load(['grade', 'production']);
+        return view('pages.product-detail', compact('product'));
     }
 
     public function inventory()

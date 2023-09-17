@@ -2,7 +2,10 @@
 
 @section('content')
     @include('layouts.navbars.auth.topnav', ['title' => 'Produk'])
-    <script src="assets/js/core/jquery-3.7.1.min.js"></script>
+    <script src="{{ asset('assets/js/core/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('assets/js/core/jQuery_dataTables_1.13.6.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('assets/css/jQuery_dataTables_1.13.6.min.css') }}" />
+
     <div class="container-fluid py-4">
         <div class="row align-items-center">
             <div class="col-3">
@@ -13,14 +16,16 @@
             </div>
             <div class="col-6">
                 @if (session('success'))
-                    <div id="product-alert" class="alert alert-success alert-dismissible fade show text-bold text-white" role="alert">
+                    <div id="product-alert" class="alert alert-success alert-dismissible fade show text-bold text-white"
+                        role="alert">
                         {{ session('success') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
 
                 @if ($errors->any())
-                    <div id="product-alert" class="alert alert-danger alert-dismissible fade show text-bold text-white" role="alert">
+                    <div id="product-alert" class="alert alert-danger alert-dismissible fade show text-bold text-white"
+                        role="alert">
                         <strong>Oops!</strong><br>
                         <ul>
                             @foreach ($errors->all() as $error)
@@ -30,11 +35,11 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
-                    <script>
-                        $("#product-alert").fadeTo(4000, 500).slideUp(500, function() {
-                            $("#product-alert").alert('close');
-                        });
-                    </script>
+                <script>
+                    $("#product-alert").fadeTo(4000, 500).slideUp(500, function() {
+                        $("#product-alert").alert('close');
+                    });
+                </script>
             </div>
         </div>
         <div class="row">
@@ -45,7 +50,7 @@
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
                         <div class="table-responsive p-0">
-                            <table class="table align-items-center mb-0">
+                            <table id="tableProduks" class="table align-items-center mb-0">
                                 <thead>
                                     <tr>
                                         <th
@@ -73,6 +78,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($products as $product)
+                                        {{-- @dd($product) --}}
                                         <tr>
                                             <td>
                                                 <p class="text-xs font-weight-bold mb-0  text-center">{{ $product->id }}
@@ -119,8 +125,9 @@
                                                 </span>
                                             </td>
                                             <td class="align-middle">
-                                                <a href="javascript:;" class="text-secondary font-weight-bold text-xs"
-                                                    data-toggle="tooltip" data-original-title="Edit user">
+                                                <a href="{{ route('produks.detail', ['id' => $product->id]) }}"
+                                                    class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
+                                                    data-original-title="Edit user">
                                                     <i class=" fas fa-eye text-secondary font-weight-bold text-xs"
                                                         data-toggle="tooltip" data-original-title="Lihat Detail"></i>
                                                 </a>
@@ -134,6 +141,11 @@
                 </div>
             </div>
         </div>
+        <script>
+            $(document).ready(function() {
+                $('#tableProduks').DataTable();
+            });
+        </script>
 
 
         <!-- Form Modal -->
@@ -148,64 +160,91 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <!-- <div class="col-6"> -->
-                        <div class="container">
-                            <form id="contactForm" method="POST" action="{{ route('produks.create') }}">
-                                @csrf
-                                @method('post')
-                                <div class="col-12">
-                                    <div class="mb-1">
-                                        <label class="form-label" for="name">Nama</label>
-                                        <input class="form-control" id="name" name="name" type="text"
-                                            placeholder="Nama" data-sb-validations="required" required />
-                                        <div class="invalid-feedback" data-sb-feedback="name:required">Nama is required.
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="container">
+                                    <form id="produkForm" method="POST" action="{{ route('produks.create') }}">
+                                        @csrf
+                                        @method('post')
+                                        <div class="col-12">
+                                            <div class="mb-1">
+                                                <label class="form-label" for="name">Nama</label>
+                                                <input class="form-control" id="name" name="name" type="text"
+                                                    placeholder="Nama" data-sb-validations="required" required />
+                                                <div class="invalid-feedback" data-sb-feedback="name:required">Nama is
+                                                    required.
+                                                </div>
+                                            </div>
+                                            <div class="mb-1">
+                                                <label class="form-label" for="price">Harga Satuan</label>
+                                                <input class="form-control" id="price" name="price" type="number"
+                                                    placeholder="Harga Satuan (Rp.)" data-sb-validations="required"
+                                                    required />
+                                                <div class="invalid-feedback" data-sb-feedback="price:required">Harga
+                                                    Satuan
+                                                    is
+                                                    required.</div>
+                                            </div>
+                                            <div class="mb-1">
+                                                <label class="form-label" for="stock">Stok</label>
+                                                <input class="form-control" id="stock" name="stock" type="number"
+                                                    value="0" placeholder="Stok Produk (Kg)"
+                                                    data-sb-validations="required" required />
+                                                <div class="invalid-feedback" data-sb-feedback="stock:required">Stok
+                                                    Produk is
+                                                    required.</div>
+                                            </div>
+                                            <div class="mb-1">
+                                                <label class="form-label" for="grade">Grade</label>
+                                                <select class="form-select" id="grade" name="grade"
+                                                    aria-label="Grade" required>
+                                                    @foreach ($grades as $grade)
+                                                        <option value="{{ $grade->name }}">{{ $grade->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="mb-1">
+                                                <label for="description" class="form-label">Deskripsi Produk</label>
+                                                <textarea class="form-control" name="description" id="description" rows="3"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-6"></div>
+                                        <div class="d-grid pt-4">
+                                            <button class="btn btn-primary btn-lg" id="submitButton"
+                                                type="submit">Submit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <form id="produkGradeForm" method="POST" action="{{ route('produk.grade.create') }}">
+                                    @csrf
+                                    @method('post')
+                                    <div class="col-12">
+                                        <div class="mb-1">
+                                            <label class="form-label" for="name">Nama Grade</label>
+                                            <input class="form-control" id="name" name="name" type="text"
+                                                placeholder="Nama" data-sb-validations="required" required />
+                                            <div class="invalid-feedback" data-sb-feedback="name:required">Nama is
+                                                required.
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="mb-1">
-                                        <label class="form-label" for="price">Harga Satuan</label>
-                                        <input class="form-control" id="price" name="price" type="number"
-                                            placeholder="Harga Satuan (Rp.)" data-sb-validations="required" required />
-                                        <div class="invalid-feedback" data-sb-feedback="price:required">Harga Satuan
-                                            is
-                                            required.</div>
+                                    <div class="col-6"></div>
+                                    <div class="d-grid pt-4">
+                                        <button class="btn btn-primary btn-lg" id="submitButton"
+                                            type="submit">Submit</button>
                                     </div>
-                                    <div class="mb-1">
-                                        <label class="form-label" for="stock">Stok</label>
-                                        <input class="form-control" id="stock" name="stock" type="number"
-                                            value="0" placeholder="Stok Produk (Kg)" data-sb-validations="required"
-                                            required />
-                                        <div class="invalid-feedback" data-sb-feedback="stock:required">Stok Produk is
-                                            required.</div>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label class="form-label" for="grade">Grade</label>
-                                        <select class="form-select" id="grade" name="grade" aria-label="Grade"
-                                            required>
-                                            @foreach ($grades as $grade)
-                                                <option value="{{ $grade->name }}">{{ $grade->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="description" class="form-label">Deskripsi Produk</label>
-                                        <textarea class="form-control" name="description" id="description" rows="3"></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-6"></div>
-                                <div class="d-grid pt-4">
-                                    <button class="btn btn-primary btn-lg" id="submitButton"
-                                        type="submit">Submit</button>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
-                        <!-- </div> -->
 
                         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
                     </div>
                     <!-- <div class="modal-footer">
-                                                                                                                                <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
-                                                                                                                                <button type="button" class="btn bg-gradient-primary">Save changes</button>
-                                                                                                                            </div> -->
+                                                                                                                                                    <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+                                                                                                                                                    <button type="button" class="btn bg-gradient-primary">Save changes</button>
+                                                                                                                                                </div> -->
                 </div>
             </div>
         </div>

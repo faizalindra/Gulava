@@ -26,33 +26,34 @@ class ProduksRepositoryImplement extends Eloquent implements ProduksRepository
         $query = $this->model->withCount(['production' => function ($query) {
             $query->whereNull('completed_at');
         }]);
-    
+
         // Use a ternary operator to conditionally apply pagination or get all results
-        $produks = $request && isset($request['paginate']) ? $query->paginate($request['paginate']) : $query->get();
-    
+        $produks = $request && isset($request['paginate'])
+            ? $query->paginate($request['paginate'])
+            : $query->get();
+
         // Iterate through the products
         foreach ($produks as $produk) {
             // Check if there is no production history for the product
             $noProductionHistory = $produk->production->isEmpty();
-    
+
             if ($noProductionHistory) {
                 $produk->is_production = false;
             } else {
                 // Check the count of ProductionBatch records with completed_at = null
                 $ongoingProductionCount = $produk->production_count;
-    
+
                 if ($ongoingProductionCount > 0) {
                     $produk->is_production = true;
                 } else {
                     $produk->is_production = false;
                 }
             }
-    
+
             // Remove the production_count attribute if you don't need it in the response
             unset($produk->production_count);
         }
-    
+
         return $produks;
     }
-    
 }

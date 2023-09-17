@@ -22,6 +22,7 @@ use App\Http\Controllers\ChangePassword;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ProdukGradeController;
 use App\Http\Controllers\ProduksController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserProfileController;
@@ -41,16 +42,22 @@ Route::post('/login', [LoginController::class, 'login'])->middleware('guest')->n
 Route::get('/dashboard', [HomeController::class, 'index'])->name('home')->middleware('auth');
 
 Route::group(['middleware' => ['auth', 'web']], function () {
-	Route::get('/virtual-reality', [PageController::class, 'vr'])->name('virtual-reality');
-	Route::get('/rtl', [PageController::class, 'rtl'])->name('rtl');
-	Route::get('/product', [PageController::class, 'product'])->name('product');
-	Route::get('/inventory', [PageController::class, 'inventory'])->name('inventory');
 	Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
+	Route::get('/inventory', [PageController::class, 'inventory'])->name('inventory');
+	
+	Route::get('/product', [PageController::class, 'product'])->name('product');
+	Route::get('/produks/{id}', [PageController::class, 'produksDetail'])->name('produks.detail');
+	Route::post('/produks', [ProduksController::class, 'create'])->name('produks.create');
+	Route::post('/produk-grade',[ProdukGradeController::class, 'create'])->name('produk.grade.create');
+
+
 	Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');
 	Route::get('/profile-static', [PageController::class, 'profile'])->name('profile-static');
-	// Route::get('/sign-in-static', [PageController::class, 'signin'])->name('sign-in-static');
-	// Route::get('/sign-up-static', [PageController::class, 'signup'])->name('sign-up-static'); 
 	Route::get('/{page}', [PageController::class, 'index'])->name('page');
 	Route::post('logout', [LoginController::class, 'logout'])->name('logout');
-	Route::post('/produks', [ProduksController::class, 'create'])->name('produks.create');
+
+	// Route::get('/virtual-reality', [PageController::class, 'vr'])->name('virtual-reality');
+	// Route::get('/rtl', [PageController::class, 'rtl'])->name('rtl');
+	// Route::get('/sign-in-static', [PageController::class, 'signin'])->name('sign-in-static');
+	// Route::get('/sign-up-static', [PageController::class, 'signup'])->name('sign-up-static'); 
 });

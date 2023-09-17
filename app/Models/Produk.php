@@ -35,10 +35,15 @@ class Produk extends Model
 
     public function production()
     {
-        return $this->hasMany(ProductionBatch::class, 'produks_id', 'id');
+        return $this->hasMany(ProductionBatch::class, 'produks_id', 'id')->orderBy('created_at', 'desc');
     }
     public function grade()
     {
         return $this->belongsTo(ProduksGrade::class, 'grade', 'name');
+    }
+
+    public function outgoingGoods()
+    {
+        return $this->belongsToMany(OutgoingGoods::class, 'outgoing_goods_produks', 'outgoing_good_id', 'produk_id');
     }
 }

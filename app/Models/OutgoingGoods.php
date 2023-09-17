@@ -13,6 +13,7 @@ class OutgoingGoods extends Model
         'code',
         'salesperson_id',
         'user_id',
+        'produk_id',
         'total_price',
         'description',
     ];
