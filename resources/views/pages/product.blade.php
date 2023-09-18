@@ -242,9 +242,9 @@
                         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
                     </div>
                     <!-- <div class="modal-footer">
-                                                                                                                                                    <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
-                                                                                                                                                    <button type="button" class="btn bg-gradient-primary">Save changes</button>
-                                                                                                                                                </div> -->
+                                                                                                                                                        <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+                                                                                                                                                        <button type="button" class="btn bg-gradient-primary">Save changes</button>
+                                                                                                                                                    </div> -->
                 </div>
             </div>
         </div>
