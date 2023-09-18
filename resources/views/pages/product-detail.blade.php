@@ -1,7 +1,12 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-    @include('layouts.navbars.auth.topnav', ['title' => 'Produk Detail'])
+    @include('layouts.navbars.auth.topnav', [
+        'title' => 'Produk Detail',
+        'parents' => [
+            ['href' => route('product'), 'title' => 'Produk'],
+        ],
+    ])
     <script src="{{ asset('assets/js/core/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('assets/js/core/jQuery_dataTables_1.13.6.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('assets/css/jQuery_dataTables_1.13.6.min.css') }}" />
@@ -28,8 +33,8 @@
                                 <p class="card-text">Est. Rp. {{ $product->price * $product->stock }}</p>
                             </div>
                             <div class="col text-end">
-                                <p class="card-text">{{ $product->stock . ' Kg'}}</p>
-                                <p class="card-text">Rp. {{ $product->price . '/Kg'}}</p>
+                                <p class="card-text">{{ $product->stock . ' Kg' }}</p>
+                                <p class="card-text">Rp. {{ $product->price . '/Kg' }}</p>
                             </div>
                         </div>
                     </div>
