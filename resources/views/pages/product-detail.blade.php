@@ -3,20 +3,52 @@
 @section('content')
     @include('layouts.navbars.auth.topnav', [
         'title' => 'Produk Detail',
-        'parents' => [
-            ['href' => route('product'), 'title' => 'Produk'],
-        ],
+        'parents' => [['href' => route('product'), 'title' => 'Produk']],
     ])
     <script src="{{ asset('assets/js/core/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('assets/js/core/jQuery_dataTables_1.13.6.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('assets/css/jQuery_dataTables_1.13.6.min.css') }}" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.all.min.js"
+        integrity="sha256-Cci6HROOxRjlhukr+AVya7ZcZnNZkLzvB7ccH/5aDic=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.min.css"
+        integrity="sha256-VJuwjrIWHWsPSEvQV4DiPfnZi7axOaiWwKfXaJnR5tA=" crossorigin="anonymous">
+    <div id="prod_id" value="{{ $product->id }}"></div>
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col text-start">
-                <button type="button" class="btn btn-info btn-sm"><i class="fa fa-pencil fa-sm"></i> Edit</button>
+                <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
+                    data-bs-target="#editProdukModal"><i class="fa fa-pencil fa-sm"></i> Edit</button>
+            </div>
+            <div class="col text-center">
+                @if (session('success'))
+                    <div id="product-alert" class="alert alert-success alert-dismissible fade show text-bold text-white"
+                        role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div id="product-alert" class="alert alert-danger alert-dismissible fade show text-bold text-white"
+                        role="alert">
+                        <strong>Oops!</strong><br>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li class="text-bold">{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
             </div>
             <div class="col text-end">
-                <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-cross fa-sm"></i> Nonaktifkan</button>
+                @if ($product->is_active)
+                    <button type="button" class="btn btn-danger btn-sm" id="diableProductButton"
+                        onclick="showConfirmation()">Nonaktifkan</button>
+                @else
+                    <button type="button" class="btn btn-success btn-sm" id="diableProductButton"
+                        onclick="showConfirmation()">Aktifkan</button>
+                @endif
             </div>
         </div>
         <div class="row mb-4">
@@ -30,11 +62,11 @@
                                 <h4 class="card-title">
                                     <p class="card-title">{{ $product->code }} - {{ $product->name }}</p>
                                 </h4>
-                                <p class="card-text">Est. Rp. {{ $product->price * $product->stock }}</p>
+                                <p class="card-text">Est. Rp. {{ number_format($product->price * $product->stock, 0,'.','.') }}</p>
                             </div>
                             <div class="col text-end">
-                                <p class="card-text">{{ $product->stock . ' Kg' }}</p>
-                                <p class="card-text">Rp. {{ $product->price . '/Kg' }}</p>
+                                <p class="card-text">{{ number_format($product->stock, 0,'.','.') . ' Kg' }}</p>
+                                <p class="card-text">Rp. {{ number_format($product->price, 0,'.','.') . '/Kg' }}</p>
                             </div>
                         </div>
                     </div>
@@ -158,8 +190,8 @@
                                                 @endif
                                             </td>
                                             <td>{{ $production->code }}</td>
-                                            <td class="text-center">{{ $production->quantity_produced }}</td>
-                                            <td class="text-center">Rp. {{ $production->estimated_cost }}</td>
+                                            <td class="text-center">{{ number_format($production->quantity_produced, 0,'.','.') }}</td>
+                                            <td class="text-center">Rp. {{ number_format($production->estimated_cost, 0,'.','.') }}</td>
                                             <td>{{ $production->created_at }}</td>
                                             <td>{{ $production->completed_at ?? '' }}</td>
                                             {{-- <td>{{ Str::limit($production->description, 15)}}</td> --}}
@@ -173,14 +205,145 @@
                 </div>
             </div>
         </div>
+
+        <!-- Form Modal -->
+        <div class="modal fade" id="editProdukModal" tabindex="-1" role="dialog"
+            aria-labelledby="editProdukModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editProdukModalLabel">Edit Produk </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="text-dark">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="container">
+                                    <form id="produkForm" method="post"
+                                        action="{{ route('produks.update', ['id' => $product->id]) }}">
+                                        @csrf
+                                        @method('post')
+                                        <div class="col-12">
+                                            <div class="mb-1">
+                                                <label class="form-label" for="name">Nama</label>
+                                                <input class="form-control" id="name" name="name" type="text"
+                                                    placeholder="Nama" data-sb-validations="required"
+                                                    value="{{ $product->name }}" required />
+                                                <div class="invalid-feedback" data-sb-feedback="name:required">Nama is
+                                                    required.
+                                                </div>
+                                            </div>
+                                            <div class="mb-1">
+                                                <label class="form-label" for="price">Harga Satuan</label>
+                                                <input class="form-control" id="price" name="price" type="number"
+                                                    placeholder="Harga Satuan (Rp.)" data-sb-validations="required"
+                                                    value="{{ $product->price }}" required />
+                                                <div class="invalid-feedback" data-sb-feedback="price:required">Harga
+                                                    Satuan
+                                                    is
+                                                    required.</div>
+                                            </div>
+                                            <div class="mb-1">
+                                                <label class="form-label" for="estimated_sales">Estimasi Total</label>
+                                                <input class="form-control" id="estimated_sales" name="estimated_sales"
+                                                    type="number" placeholder="Harga Satuan (Rp.)"
+                                                    data-sb-validations="required"
+                                                    value="{{ $product->estimated_sales }}" />
+                                            </div>
+                                            <div class="mb-1">
+                                                <label class="form-label" for="stock">Stok</label>
+                                                <input class="form-control" id="stock" name="stock" type="number"
+                                                    value="0" placeholder="Stok Produk (Kg)"
+                                                    data-sb-validations="required" value="{{ $product->stock }}"
+                                                    required />
+                                                <div class="invalid-feedback" data-sb-feedback="stock:required">Stok
+                                                    Produk is
+                                                    required.</div>
+                                            </div>
+                                            <div class="mb-1">
+                                                <label class="form-label" for="grade">Grade</label>
+                                                <select class="form-select" id="grade" name="grade"
+                                                    aria-label="Grade" value="{{ $product->grade }}" required>
+                                                    @foreach ($grades as $grade)
+                                                        <option value="{{ $grade->name }}">{{ $grade->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="mb-1">
+                                                <label for="description" class="form-label">Deskripsi Produk</label>
+                                                <textarea class="form-control" name="description" id="description" value={{ $product->description }}
+                                                    rows="3"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-6"></div>
+                                        <div class="d-grid pt-4">
+                                            <button class="btn btn-primary btn-lg" id="submitButton"
+                                                type="submit">Submit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script> --}}
+                    </div>
+                </div> -->
+            </div>
+        </div>
+
         <script>
             $(document).ready(function() {
                 $('#productionTable').DataTable();
                 // $('#salesTaketable').DataTable({
                 //     "pageLength": 5
                 // });
+                $("#product-alert").fadeTo(4000, 500).slideUp(500, function() {
+                    $("#product-alert").alert('close');
+                });
             });
+
+            function showConfirmation() {
+                // prod_id = $('#prod_id').attr('date-value');
+                var prod_url = "{{ route('produk.disable', ['id' => $product->id]) }}";
+                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                Swal.fire({
+                    title: 'Nonaktifkan Produk?',
+                    text: 'Produk akan dinonaktifkan dan tidak dapat digunakan untuk produksi.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, Nonaktifkan!',
+                    cancelButtonText: 'No, cancel!',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: "POST",
+                            url: prod_url,
+                            data: {
+                                _token: csrfToken,
+                            },
+                            success: function(data, status) {
+                                console.log(data);
+                                console.log(status);
+                                Swal.fire('Nonaktifkan!', 'Your item has been deactivated.', 'success');
+                                location.reload();
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText);
+                                Swal.fire('Error', 'An error occurred while deactivating your item.',
+                                    'error');
+                                location.reload();
+                            }
+                        });
+                        // Swal.fire('Nonaktifkan!', 'Your item has been deactivated.', 'success');
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        Swal.fire('Cancelled', 'Your item is still active.', 'error');
+                    }
+                });
+            }
         </script>
         @include('layouts.footers.auth.footer')
+    </div>
     </div>
 @endsection

@@ -48,7 +48,9 @@ Route::group(['middleware' => ['auth', 'web']], function () {
 	Route::get('/product', [PageController::class, 'product'])->name('product');
 	Route::get('/produks/{id}', [PageController::class, 'produksDetail'])->name('produks.detail');
 	Route::post('/produks', [ProduksController::class, 'create'])->name('produks.create');
+	Route::post('/produks/{id}/update', [ProduksController::class, 'update'])->name('produks.update');
 	Route::post('/produk-grade',[ProdukGradeController::class, 'create'])->name('produk.grade.create');
+	Route::post('/produk/{id}/disable',[ProduksController::class, 'disable'])->name('produk.disable');
 
 
 	Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');

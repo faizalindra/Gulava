@@ -69,8 +69,9 @@ class PageController extends Controller
         $product->load(['production' => function($q) {
             $q->orderBy('created_at', 'desc');
         }]);
+        $grades = $this->produksGradeService->getAllProduksGrade();
         
-        return view('pages.product-detail', compact('product'));
+        return view('pages.product-detail', compact('product', 'grades'));
     }
 
     public function inventory()
