@@ -23,7 +23,7 @@ class RawMaterial extends Model
 
     protected $casts = [
         'price' => 'integer',
-        'unit' => 'integer',
+        'unit' => 'string',
         'stock' => 'integer',
         'stock_min' => 'integer',
         'supplier_id' => 'integer',
@@ -34,7 +34,7 @@ class RawMaterial extends Model
         return $this->belongsToMany(Supplier::class);
     }
 
-    public function rawMaterialFlows()
+    public function flows()
     {
         return $this->hasMany(RawMaterialFlow::class);
     }

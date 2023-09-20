@@ -4,16 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\Produks\ProduksService;
+use App\Services\RawMaterial\RawMaterialService;
 use App\Services\ProduksGrade\ProduksGradeService;
 
 class PageController extends Controller
 {
     protected $produksService;
     protected $produksGradeService;
-    public function __construct(ProduksService $produksService, ProduksGradeService $produksGradeService)
+    protected $rawMaterialService;
+    public function __construct(ProduksService $produksService, ProduksGradeService $produksGradeService, RawMaterialService $rawMaterialService)
     {
         $this->produksService = $produksService;
         $this->produksGradeService = $produksGradeService;
+        $this->rawMaterialService = $rawMaterialService;
     }
 
     /**
@@ -74,8 +77,24 @@ class PageController extends Controller
         return view('pages.product-detail', compact('product', 'grades'));
     }
 
+    public function rawMaterial()
+    {
+        $rawMaterials = $this->rawMaterialService->getAllRawMaterialForTable(['paginate' => 10]);
+        return view("pages.rawmaterial", compact('rawMaterials'));
+    }
+
     public function inventory()
     {
         return view("pages.inventory");
+    }
+
+    public function outgoing()
+    {
+        return view("pages.outgoing-goods");
+    }
+
+    public function production()
+    {
+        return view("pages.production");
     }
 }
