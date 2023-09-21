@@ -32,6 +32,11 @@ class ProduksServiceImplement extends Service implements ProduksService{
         $this->mainRepository->create($data);
     }
 
+    public function getAllProduksForFormSelector(){
+      $data = $this->mainRepository->getAllProduksForFormSelector();
+      return $data;
+    }
+
     private function generateCode(){
       return 'PRD' . date('YmdHis');
     }

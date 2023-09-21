@@ -33,6 +33,6 @@ class ProductionBatch extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class, 'produks_id', 'id');
+        return $this->belongsTo(Produk::class, 'produks_id', 'id');
     }
 }

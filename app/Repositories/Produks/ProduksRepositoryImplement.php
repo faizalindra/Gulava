@@ -25,7 +25,7 @@ class ProduksRepositoryImplement extends Eloquent implements ProduksRepository
         // Start by building the base query with the withCount
         $query = $this->model->withCount(['production' => function ($query) {
             $query->whereNull('completed_at');
-        }]);
+        }])->with('production');
 
         // Use a ternary operator to conditionally apply pagination or get all results
         $produks = $request && isset($request['paginate'])
@@ -55,5 +55,11 @@ class ProduksRepositoryImplement extends Eloquent implements ProduksRepository
         }
 
         return $produks;
+    }
+
+    public function getAllProduksForFormSelector()
+    {
+        $data = $this->model->selectRaw('CONCAT(code, " - ", name) as name, id')->get();
+        return $data;
     }
 }

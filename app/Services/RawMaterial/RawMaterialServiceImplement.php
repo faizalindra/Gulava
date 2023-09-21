@@ -22,4 +22,9 @@ class RawMaterialServiceImplement extends Service implements RawMaterialService{
     {
       return $this->mainRepository->getAllRawMaterialForTable($request);
     }
+
+    public function getAllRawMaterialForFormSelector()
+    {
+      return $this->mainRepository->getAllRawMaterialForFormSelector();
+    }
 }

@@ -31,4 +31,9 @@ class RawMaterialRepositoryImplement extends Eloquent implements RawMaterialRepo
 
         return $data;
     }
+
+    public function getAllRawMaterialForFormSelector()
+    {
+        return $this->model->selectRaw('CONCAT(code, " - ", name) as name, id')->get();
+    }
 }

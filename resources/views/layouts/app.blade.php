@@ -15,7 +15,7 @@
     <!-- Nucleo Icons -->
     <link href="{{ asset('./assets/css/nucleo-icons.css') }}" rel="stylesheet" />
     <link href="{{ asset('./assets/css/nucleo-svg.css') }}" rel="stylesheet" />
-    <link href="{{asset("/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css")}}" rel="stylesheet">
+    <link href="{{asset("/assets//fontawesome-6.4.2/css/all.min.css")}}" rel="stylesheet">
     <!-- Font Awesome Icons -->
     <script src="{{ asset('https://kit.fontawesome.com/42d5adcbca.js') }}" crossorigin="anonymous"></script>
     <link href="{{ asset('assets/css/nucleo-svg.css') }}" rel="stylesheet" />
