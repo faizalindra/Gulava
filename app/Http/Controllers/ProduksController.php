@@ -2,16 +2,38 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Produk\CreateProdukRequest;
-use App\Http\Requests\UpdateProdukRequest;
 use App\Services\Produks\ProduksService;
+use App\Http\Requests\UpdateProdukRequest;
+use App\Http\Requests\Produk\CreateProdukRequest;
+use App\Services\ProduksGrade\ProduksGradeService;
 
 class ProduksController extends Controller
 {
     protected $mainService;
-    public function __construct(ProduksService $mainService)
+    protected $produksGradeService;
+
+    public function __construct(ProduksService $mainService, ProduksGradeService $produksGradeService)
     {
         $this->mainService = $mainService;
+        $this->produksGradeService = $produksGradeService;
+    }
+
+    public function index()
+    {
+        $products = $this->mainService->getAllProduksForTable();
+        $grades = $this->produksGradeService->getAllProduksGrade();
+        return view("pages.product", compact('products', 'grades'));
+    }
+
+    public function detail($id)
+    {
+        $product = $this->mainService->find($id);
+        $product->load(['production' => function ($q) {
+            $q->orderBy('created_at', 'desc');
+        }]);
+        $grades = $this->produksGradeService->getAllProduksGrade();
+
+        return view('pages.product-detail', compact('product', 'grades'));
     }
 
     public function create(CreateProdukRequest $request)

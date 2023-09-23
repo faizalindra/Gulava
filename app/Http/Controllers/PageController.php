@@ -66,37 +66,6 @@ class PageController extends Controller
         return view("pages.sign-up-static");
     }
 
-    public function product()
-    {
-        $products = $this->produksService->getAllProduksForTable();
-        $grades = $this->produksGradeService->getAllProduksGrade();
-        return view("pages.product", compact('products', 'grades'));
-    }
-
-    public function produksDetail($id)
-    {
-        $product = $this->produksService->find($id);
-        $product->load(['production' => function ($q) {
-            $q->orderBy('created_at', 'desc');
-        }]);
-        $grades = $this->produksGradeService->getAllProduksGrade();
-
-        return view('pages.product-detail', compact('product', 'grades'));
-    }
-
-    public function rawMaterial()
-    {
-        $rawMaterials = $this->rawMaterialService->getAllRawMaterialForTable();
-        return view("pages.rawmaterial", compact('rawMaterials'));
-    }
-
-    public function production()
-    {
-        $productions = $this->productionService->getAllProductionForTable();
-        $products = $this->produksService->getAllProduksForFormSelector();
-        $materials = $this->rawMaterialService->getAllRawMaterialForFormSelector();
-        return view("pages.production", compact('productions', 'products', 'materials'));
-    }
 
     public function inventory()
     {

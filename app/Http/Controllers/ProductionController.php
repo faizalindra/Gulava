@@ -2,19 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Production\CreateProductionRequest;
 use Illuminate\Http\Request;
+use App\Services\Produks\ProduksService;
 use App\Services\Production\ProductionService;
+use App\Services\RawMaterial\RawMaterialService;
+use App\Http\Requests\Production\CreateProductionRequest;
 // use App\Http\Requests\Production\CreateProductionRequest;
 
 class ProductionController extends Controller
 {
     protected $mainService;
-    public function __construct(ProductionService $mainService)
-    {
+    protected $produksService;
+    protected $rawMaterialService;
+    public function __construct(
+        ProductionService $mainService,
+        ProduksService $produksService,
+        RawMaterialService $rawMaterialService
+    ) {
         $this->mainService = $mainService;
+        $this->produksService = $produksService;
+        $this->rawMaterialService = $rawMaterialService;
     }
 
+    public function index()
+    {
+        $productions = $this->mainService->getAllProductionForTable();
+        $products = $this->produksService->getAllProduksForFormSelector();
+        $materials = $this->rawMaterialService->getAllRawMaterialForFormSelector();
+        return view("pages.production", compact('productions', 'products', 'materials'));
+    }
 
     public function create(CreateProductionRequest $request)
     {
@@ -25,6 +41,12 @@ class ProductionController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
+    }
+
+    public function detail($id)
+    {
+        $production = $this->mainService->find($id);
+        return view('pages.production-detail', compact('production'));
     }
 
     public function getProduks()
