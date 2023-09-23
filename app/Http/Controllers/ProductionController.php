@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Production\CreateProductionRequest;
-use App\Services\Production\ProductionService;
 use Illuminate\Http\Request;
+use App\Services\Production\ProductionService;
+// use App\Http\Requests\Production\CreateProductionRequest;
 
 class ProductionController extends Controller
 {
@@ -17,9 +18,9 @@ class ProductionController extends Controller
 
     public function create(CreateProductionRequest $request)
     {
-        // dd($request->all());
-        $validated = $request->validated();
-        $data = $this->mainService->create($validated);
-        return back()->with('success', 'Produksi berhasil ditambahkan');
+        dd($request->validated());
+        $request = $request->validated();
+        $this->mainService->create($request);
+        return response()->json(['message' => 'Produksi berhasil ditambahkan']);
     }
 }

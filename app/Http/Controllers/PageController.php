@@ -86,13 +86,13 @@ class PageController extends Controller
 
     public function rawMaterial()
     {
-        $rawMaterials = $this->rawMaterialService->getAllRawMaterialForTable(['paginate' => 10]);
+        $rawMaterials = $this->rawMaterialService->getAllRawMaterialForTable();
         return view("pages.rawmaterial", compact('rawMaterials'));
     }
 
     public function production()
     {
-        $productions = $this->productionService->getAllProductionForTable(['paginate' => 10]);
+        $productions = $this->productionService->getAllProductionForTable();
         $products = $this->produksService->getAllProduksForFormSelector();
         $materials = $this->rawMaterialService->getAllRawMaterialForFormSelector();
         return view("pages.production", compact('productions', 'products', 'materials'));

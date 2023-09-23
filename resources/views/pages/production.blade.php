@@ -150,7 +150,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col">
-                            <form id="productionForm" method="post" action="{{ route('production.create') }}">
+                            <form id="productionForm" method="POST" action="{{ route('production.create') }}">
                                 @csrf
                                 @method('post')
                                 <div class="col-12">
@@ -159,10 +159,11 @@
                                         <select class="form-control" id="product_id" name="product_id" required>
                                             <option value="" selected disabled hidden>Pilih Produk</option>
                                             @foreach ($products as $product)
-                                                <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                                <option value="{{ intval($product->id) }}">{{ $product->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
+                                    <input id="material_count" type="number" name="material_count" value="0" hidden>
                                     <div class="mb-1 mb-2">
                                         <label class="form-label" for="description">Deskripsi</label>
                                         <textarea class="form-control" id="description" name="description" rows="3"
@@ -173,14 +174,14 @@
                                     </div>
                                     <button id="addMaterial" onclick="addMaterialRow()" type="button"
                                         class="btn btn-primary">Add
-                                        Material</button>
+                                        Bahan Baku</button>
                                 </div>
                                 <div class="col-6"></div>
                                 <div class="d-grid pt-4 modal-footer">
                                     <div class="row">
                                         <div class="col"><button class="btn btn-secondary btn-lg" type="button"
                                                 data-bs-dismiss="modal">Cancel</button></div>
-                                        <div class="col"><button class="btn btn-primary btn-lg" id="submitButton"
+                                        <div class="col"><button class="btn btn-primary btn-lg" id="submit"
                                                 type="submit">Submit</button></div>
                                     </div>
                                 </div>
@@ -198,7 +199,7 @@
             $('#tableProduction').DataTable();
         });
 
-        const myModal = new bootstrap.Modal(document.getElementById('modalProduction'), options)
+        // const myModal = new bootstrap.Modal(document.getElementById('modalProduction'), options)
         // Function to add a new material row
         function addMaterialRow() {
             const materialRow = `
@@ -227,21 +228,30 @@
                     </div>
                 </div>
             `;
+            updateMaterialCount(1);
+            let count = $('#material_count').val();
+            console.log(count);
             $("#materials").append(materialRow);
         }
 
         // Function to remove a material row
         function removeMaterialRow(event) {
             $(event.target).closest(".material").remove();
+            updateMaterialCount(-1);
+            let count = $('#material_count').val();
+            console.log(count);
         }
 
-        $("#productionForm").submit(function(event) {
-            event.preventDefault();
-            const formData = $(this).serializeArray();
-            console.log(formData);
-            // You can now send the formData to your API for processing.
-            // Implement your API call here.
-        });
+        function updateMaterialCount(change) {
+            const materialCountInput = $('#material_count');
+            const currentCount = parseInt(materialCountInput.val());
+            const newCount = currentCount + change;
+
+            // Ensure the count is not negative
+            if (newCount >= 0) {
+                materialCountInput.val(newCount);
+            }
+        }
     </script>
 
     @include('layouts.footers.auth.footer')

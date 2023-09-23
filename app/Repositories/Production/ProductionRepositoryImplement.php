@@ -23,7 +23,15 @@ class ProductionRepositoryImplement extends Eloquent implements ProductionReposi
 
     public function getAllProductionForTable($params = null)
     {
-        $data = $this->model->all();
+        $data = $this->model->with(['product', 'detail']);
+
+        // Add a calculated field 'time_difference' to the query
+        $data = $data->selectRaw('*, TIMESTAMPDIFF(HOUR, updated_at, created_at) AS period');
+
+        $data = $params && isset($params['paginate'])
+            ? $data->paginate($params['paginate'])
+            : $data->get();
+
         return $data;
     }
 }
