@@ -165,8 +165,8 @@
                                 @method('post')
                                 <div class="col-12">
                                     <div class="mb-1">
-                                        <label class="form-label" for="product_id">Produk</label>
-                                        <select class="form-control" id="product_id" name="product_id" required>
+                                        <label class="form-label" for="produks_id">Produk</label>
+                                        <select class="form-control" id="produks_id" name="produks_id" required>
                                             <option value="" selected disabled hidden>Pilih Produk</option>
                                             @foreach ($products as $product)
                                                 <option value="{{ intval($product->id) }}">{{ $product->name }}</option>
@@ -225,7 +225,7 @@
                             <select class="form-control" name="materials[id][]" required>
                                 <option value=""  selected disabled hidden>Pilih Bahan Baku</option>
                                 @foreach ($materials as $material)
-                                    <option value="{{ $material->id }}">{{ $material->name }}</option>
+                                    <option value="{{ $material->id }}" data-unit="{{$material->unit}}">{{ $material->name }}</option>
                                 @endforeach
                             </select>
                         </div>

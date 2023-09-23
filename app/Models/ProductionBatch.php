@@ -12,6 +12,7 @@ class ProductionBatch extends Model
     protected $guarded = ['id'];
 
     protected $fillable = [
+        'produks_id',
         'code',
         'quantity_produced',
         'estimated_cost',
