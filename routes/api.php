@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\ProduksController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,4 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth')->group(function(){
+    Route::get('/api/production', [ProductionController::class, 'getProduks'])->name('api.production');
 });

@@ -18,9 +18,14 @@ class ProductionController extends Controller
 
     public function create(CreateProductionRequest $request)
     {
-        dd($request->validated());
         $request = $request->validated();
         $this->mainService->create($request);
         return response()->json(['message' => 'Produksi berhasil ditambahkan']);
+    }
+
+    public function getProduks()
+    {
+        $produks = $this->mainService->getAllProductionForTable(['paginate' => 10]);
+        return response()->json($produks);
     }
 }

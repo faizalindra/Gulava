@@ -4,12 +4,20 @@
     @include('layouts.navbars.auth.topnav', ['title' => 'Produksi'])
     <script src="{{ asset('assets/js/core/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('assets/js/core/jQuery_dataTables_1.13.6.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/core/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('assets/js/core/jszip.min.js') }}"></script>
+    <script src="{{ asset('assets/js/core/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('assets/js/core/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('assets/js/core/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('assets/js/core/buttons.print.min.js') }}"></script> --}}
     <link rel="stylesheet" href="{{ asset('assets/css/jQuery_dataTables_1.13.6.min.css') }}" />
+    {{-- <link rel="stylesheet" href="{{ asset('assets/css/buttons.dataTables.min.css') }}" /> --}}
 
     <div class="container-fluid py-4">
         <div class="row align-items-center">
             <div class="col-3">
-                <button type="button" class="btn bg-gradient-primary" data-bs-toggle="modal" data-bs-target="#modalProduction">
+                <button type="button" class="btn bg-gradient-primary" data-bs-toggle="modal"
+                    data-bs-target="#modalProduction">
                     <i class="fas fa-plus"></i> Tambah
                 </button>
             </div>
@@ -49,7 +57,7 @@
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
                         <div class="table-responsive p-0">
-                            <table id="tableProduction" class="table align-items-center mb-0">
+                            <table id="tableProduction">
                                 <thead>
                                     <tr>
                                         <th
@@ -127,6 +135,8 @@
                                         </tr>
                                     @endforeach
                                 </tbody>
+                                <tfoot>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -196,7 +206,12 @@
     <!-- Optional: Place to the bottom of scripts -->
     <script>
         $(document).ready(function() {
-            $('#tableProduction').DataTable();
+            $('#tableProduction').DataTable({
+                // dom: 'Bfrtip',
+                // buttons: [
+                //     'copy', 'csv', 'excel', 'pdf', 'print'
+                // ]
+            });
         });
 
         // const myModal = new bootstrap.Modal(document.getElementById('modalProduction'), options)
