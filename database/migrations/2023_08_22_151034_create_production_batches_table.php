@@ -18,7 +18,7 @@ return new class extends Migration
             $table->bigInteger('quantity_produced');
             $table->bigInteger('estimated_cost');
             $table->string('description')->nullable();
-            $table->date('completed_at')->nullable();
+            $table->timestamp('completed_at')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

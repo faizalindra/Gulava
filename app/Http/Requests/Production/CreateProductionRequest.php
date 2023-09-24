@@ -36,7 +36,7 @@ class CreateProductionRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
-        return back()->with('errorValidation',$validator->errors());
+        return back()->with('error',$validator->errors());
     }
 
     public function messages()

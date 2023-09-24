@@ -7,4 +7,5 @@ use LaravelEasyRepository\BaseService;
 interface ProductionService extends BaseService{
 
     public function getAllProductionForTable(array|null $params = null);
+    public function getDetailProduction(int $id);
 }

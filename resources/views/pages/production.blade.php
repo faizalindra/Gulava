@@ -16,8 +16,7 @@
     <div class="container-fluid py-4">
         <div class="row align-items-center">
             <div class="col-3">
-                <button type="button" class="btn bg-gradient-primary" data-bs-toggle="modal"
-                    data-bs-target="#modalProduction">
+                <button type="button" class="btn bg-gradient-primary" data-bs-toggle="modal" data-bs-target="#modalProduction">
                     <i class="fas fa-plus"></i> Tambah
                 </button>
             </div>
@@ -110,7 +109,11 @@
                                             </td>
                                             <td>
                                                 <p class="text-xs text-center font-weight-bold mb-0">
-                                                    {{ $production->period }} Jam
+                                                    @if (!$production->is_active)
+                                                        {{ $production->period }} Jam
+                                                    @else
+                                                        -
+                                                    @endif
                                                 </p>
                                             </td>
                                             <td class="align-middle text-center text-sm">
@@ -125,7 +128,7 @@
                                                 @endif
                                             </td>
                                             <td class="align-middle">
-                                                <a href="{{ route('produks.detail', ['id' => $production->id]) }}"
+                                                <a href="{{ route('production.detail', ['id' => $production->id]) }}"
                                                     class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
                                                     data-original-title="Edit user">
                                                     <i class=" fas fa-eye text-secondary font-weight-bold text-xs"
@@ -225,7 +228,7 @@
                             <select class="form-control" name="materials[id][]" required>
                                 <option value=""  selected disabled hidden>Pilih Bahan Baku</option>
                                 @foreach ($materials as $material)
-                                    <option value="{{ $material->id }}" data-unit="{{$material->unit}}">{{ $material->name }}</option>
+                                    <option value="{{ $material->id }}" data-unit="{{ $material->unit }}">{{ $material->name }}</option>
                                 @endforeach
                             </select>
                         </div>

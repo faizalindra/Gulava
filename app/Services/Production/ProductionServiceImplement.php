@@ -71,6 +71,11 @@ class ProductionServiceImplement extends Service implements ProductionService
     return $this->mainRepository->getAllProductionForTable($params);
   }
 
+  public function getDetailProduction(int $id)
+  {
+    return $this->mainRepository->getDetailProduction($id);
+  }
+
 
   private function generateProductionCode()
   {

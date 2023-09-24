@@ -7,4 +7,5 @@ use LaravelEasyRepository\Repository;
 interface ProductionRepository extends Repository{
 
     public function getAllProductionForTable(array|null $params = null);
+    public function getDetailProduction(int $id);
 }

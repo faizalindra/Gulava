@@ -61,8 +61,9 @@ Route::group(['middleware' => ['auth', 'web']], function () {
 	Route::get('/outgoing', [PageController::class, 'outgoing'])->name('outgoing');
 
 	Route::get('/production', [ProductionController::class, 'index'])->name('production');
-	Route::post('/production', [ProductionController::class, 'create'])->name('production.create');
 	Route::get('/production/{id}', [ProductionController::class, 'detail'])->name('production.detail');
+	Route::post('/production', [ProductionController::class, 'create'])->name('production.create');
+	Route::post('/production/{id}/finish', [ProductionController::class, 'finish'])->name('production.finish');
 
 	Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');
 	Route::get('/profile-static', [PageController::class, 'profile'])->name('profile-static');

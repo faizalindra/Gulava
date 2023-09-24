@@ -34,4 +34,10 @@ class ProductionRepositoryImplement extends Eloquent implements ProductionReposi
 
         return $data;
     }
+
+    public function getDetailProduction(int $id)
+    {
+        $data = $this->model->selectRaw('*, TIMESTAMPDIFF(HOUR, updated_at, created_at) AS period')->with(['product', 'detail'])->find($id);
+        return $data;
+    }
 }

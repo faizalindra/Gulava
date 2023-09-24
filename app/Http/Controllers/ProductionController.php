@@ -7,6 +7,8 @@ use App\Services\Produks\ProduksService;
 use App\Services\Production\ProductionService;
 use App\Services\RawMaterial\RawMaterialService;
 use App\Http\Requests\Production\CreateProductionRequest;
+use App\Http\Requests\Production\FinishProductionRequest;
+
 // use App\Http\Requests\Production\CreateProductionRequest;
 
 class ProductionController extends Controller
@@ -45,7 +47,8 @@ class ProductionController extends Controller
 
     public function detail($id)
     {
-        $production = $this->mainService->find($id);
+        $production = $this->mainService->getDetailProduction($id);
+        $production->load('product', 'detail.rawMaterial');
         return view('pages.production-detail', compact('production'));
     }
 
@@ -53,5 +56,12 @@ class ProductionController extends Controller
     {
         $produks = $this->mainService->getAllProductionForTable(['paginate' => 10]);
         return response()->json($produks);
+    }
+
+    public function finish(FinishProductionRequest $request, $id)
+    {
+        $request = $request->validated();
+        $this->mainService->update($id, $request);
+        return back()->with('success', 'Produksi berhasil diselesaikan');
     }
 }
