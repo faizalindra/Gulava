@@ -12,7 +12,7 @@ class RawMaterialFlowSeed extends Seeder
      */
     public function run(): void
     {
-        $count = 200;
+        $count = 20;
         $rawMaterialCount = \App\Models\RawMaterial::count();
         $supplierCount = \App\Models\Supplier::count();
         $data = [];

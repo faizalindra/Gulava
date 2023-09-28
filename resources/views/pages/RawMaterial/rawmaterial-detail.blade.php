@@ -8,22 +8,22 @@
     <script src="{{ asset('assets/js/core/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('assets/js/core/jQuery_dataTables_1.13.6.min.js') }}"></script>
     <script src="{{ asset('assets/js/core/sweetalert2.all.min.js') }}"></script>
-    <script src="{{ asset('assets/js/core/jquery.datetimepicker.full.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/core/jquery.datetimepicker.full.min.js') }}"></script> --}}
 
     <link rel="stylesheet" href="{{ asset('assets/css/jQuery_dataTables_1.13.6.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/sweetalert2.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/css/jquery.datetimepicker.min.css') }}" />
-    <div id="prod_id" value="{{ $production->id }}"></div>
+    {{-- <link rel="stylesheet" href="{{ asset('assets/css/jquery.datetimepicker.min.css') }}" /> --}}
+    <div id="material_id" value="{{ $material->id }}"></div>
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-2 text-start">
-                @if ($production->is_active)
+                {{-- @if ($production->is_active)
                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalId">
                         Selesaikan
                     </button>
                 @else
                     <button type="button" class="btn btn-success btn-sm">Selesai</button>
-                @endif
+                @endif --}}
             </div>
             <div class="col">
                 <div class="col-6">
@@ -59,90 +59,82 @@
             <div class="col">
                 <div class="card border border-primary shadow-0 ">
                     <div class="card-header pb-1 mb-1">
-                        <h5>Detail - {{ $production->code }}</h5>
+                        <h5>Detail - {{ $material->code }}</h5>
                     </div>
                     <div class="card-body pt-1 mt-1">
                         <div class="row">
                             <div class="col-5">
-                                <h3>{{ $production->product->name }}</h3>
+                                <h3>{{ $material->name }}</h3>
                                 <hr class="hr">
-                                <div class="row">
-                                    <div class="col-6">
-                                        @if (!$production->is_active)
-                                            <span class="badge bg-success">{{ number_format($production->period, 1) }}
-                                                Jam</span>
+                                <div class="row text-center">
+                                    <div class="col">Stok</div>
+                                    <div class="col">Estimasi Harga</div>
+                                </div>
+                                <div class="row text-center">
+                                    <div class="col">
+                                        @if ($material->stock > $material->stock_min + $material->stock_min * 0.3)
+                                            <span
+                                                class="badge badge-pill badge-success bg-success">{{ $material->stock . ' ' . $material->unit }}</span>
+                                        @elseif ($material->stock > $material->stock_min && $material->stock < $material->stock_min + $material->stock_min * 0.3)
+                                            <span
+                                                class="badge badge-pill badge-warning bg-warning">{{ $material->stock . ' ' . $material->unit }}</span>
                                         @else
-                                            <span class="badge bg-primary">- Jam</span>
+                                            <span
+                                                class="badge badge-pill badge-danger bg-danger">{{ $material->stock . ' ' . $material->unit }}</span>
                                         @endif
                                     </div>
-                                    <div class="col-6">
-                                        <p class="">{{ $production->created_at->format('D, d-m-Y H:i') }}</p>
-                                    </div>
+                                    <div class="col">Rp. {{ number_format($material->price, 0, '.', '.') }}</div>
                                 </div>
-                                <br>
-                                <div class="row text-center">
-                                    <div class="col-6">Estimasi Harga</div>
-                                    <div class="col-6">Hasil Produksi</div>
+                                <div class="row mt-4 pt-4">
+                                    <span class="text-card">List Supplier :
+                                        <ul>
+                                            @foreach ($material->suppliers as $supplier)
+                                                <li><a href="{{ route('profile') }}">{{ $supplier->name }}</a></li>
+                                            @endforeach
+                                        </ul>
+                                    </span>
                                 </div>
-                                <div class="row text-center">
-                                    @if (!$production->is_active)
-                                        <div class="col-6">Rp.
-                                            {{ number_format($production->estimated_cost, 0, '.', '.') }}
-                                        </div>
-                                        <div class="col-6">{{ $production->quantity_produced }} Kg</div>
-                                    @else
-                                        <div class="col-6">Rp. -
-                                        </div>
-                                        <div class="col-6">- Kg</div>
-                                    @endif
-                                </div>
-                                <hr class="hr">
-                                <span class="card-text">{{ $production->description }}</span>
                             </div>
                             <div class="col-7">
                                 <div class="card border border-primary shadow-0 ">
                                     <div class="card-body">
-                                        <h5 class="card-title">Bahan Baku</h5>
+                                        <h5 class="card-title">Histori Bahan Baku</h5>
                                         <div class="table-responsive">
-                                            <table class="table">
+                                            <table id="flowsTable" class="table">
                                                 <thead>
                                                     <tr>
+                                                        <th scope="col"></th>
                                                         <th scope="col">#</th>
-                                                        <th scope="col">Kode</th>
-                                                        <th scope="col">Bahan Baku</th>
+                                                        <th scope="col">Supplier</th>
                                                         <th scope="col">Jumlah</th>
-                                                        <th scope="col">Biaya</th>
+                                                        <th scope="col">Harga</th>
+                                                        <th scope="col">Tanggal</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @php
-                                                        $total_cost = 0; // Initialize the total_cost variable
-                                                    @endphp
-                                                    @foreach ($production->detail as $detail)
-                                                        @php
-                                                            $line_cost = $detail->rawMaterial->price * $detail->quantity_used;
-                                                            $total_cost += $line_cost;
-                                                        @endphp
+                                                    @foreach ($material->flows as $flow)
                                                         <tr>
-                                                            <td class="text-center">{{ $loop->iteration }}</th>
-                                                            <td class="text-center">{{ $detail->rawMaterial->code }}</td>
-                                                            <td class="text-center">{{ $detail->rawMaterial->name }}</td>
                                                             <td class="text-center">
-                                                                {{ $detail->quantity_used . ' ' . $detail->rawMaterial->unit }}
+                                                                @if ($flow->is_in == true)
+                                                                    <button
+                                                                        class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-3 btn-sm d-flex align-items-center justify-content-center"><i
+                                                                            class="fas fa-arrow-up"></i></button>
+                                                                @else
+                                                                    <button
+                                                                        class="btn btn-icon-only btn-rounded btn-outline-danger mb-0 me-3 btn-sm d-flex align-items-center justify-content-center"><i
+                                                                            class="fas fa-arrow-down"></i></button>
+                                                                @endif
                                                             </td>
-                                                            <td class="text-end">Rp.
-                                                                {{ number_format($detail->rawMaterial->price * $detail->quantity_used, 0, '.', '.') }}
-                                                            </td>
+                                                            <td class="text-center">{{ $loop->iteration }}</th>
+                                                            <td class="text-center">{{ $flow->supplier->name }}</td>
+                                                            <td class="text-center">
+                                                                {{ $flow->quantity . ' ' . $material->unit }}</td>
+                                                            <td class="text-center">Rp.
+                                                                {{ number_format($flow->price, 0, '.', '.') }}</td>
+                                                            <td class="text-center">{{ $flow->created_at }}</td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
-                                                <tfoot>
-                                                    <tr>
-                                                        <th colspan="4" class="text-end">Total</th>
-                                                        <th>Rp.
-                                                            {{ number_format($total_cost, 0, '.', '.') }}</th>
-                                                    </tr>
-                                                </tfoot>
                                             </table>
                                         </div>
                                     </div>
@@ -158,7 +150,7 @@
 
 
         <!-- Modal Body-->
-        <div class="modal fade" id="modalId" tabindex="-1" role="dialog" aria-labelledby="modalTitleId"
+        {{-- <div class="modal fade" id="modalId" tabindex="-1" role="dialog" aria-labelledby="modalTitleId"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -218,65 +210,23 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-
-
-
+        </div> --}}
 
 
         <script>
             $(document).ready(function() {
-                // $('#productionTable').DataTable();
-                // $('#salesTaketable').DataTable({
-                //     "pageLength": 5
-                // });
-                $('.datetimepicker').datetimepicker({
-                    format: 'Y-m-d H:i:s', // Your desired format
-                    step: 1, // Optional: specify the time increment (1 second in this case)
+                $('#flowsTable').DataTable({
+                    "pageLength": 5,
+                    "lengthChange": false,
                 });
+                // $('.datetimepicker').datetimepicker({
+                //     format: 'Y-m-d H:i:s', // Your desired format
+                //     step: 1, // Optional: specify the time increment (1 second in this case)
+                // });
                 $("#alert-alert").fadeTo(4000, 500).slideUp(500, function() {
                     $("#alert-alert").alert('close');
                 });
             });
-
-            // function showConfirmation() {
-            //     var prod_url = "{{ route('production.finish', ['id' => $production->id]) }}";
-            //     var csrfToken = $('meta[name="csrf-token"]').attr('content');
-            //     Swal.fire({
-            //         title: 'Selesaikan Produksi?',
-            //         text: 'Produksi akan dianggap selesai dan tidak dapat diubah kembali',
-            //         icon: 'warning',
-            //         showCancelButton: true,
-            //         confirmButtonText: 'Yes, Selesaikan!',
-            //         cancelButtonText: 'No, Batalkan!',
-            //     }).then((result) => {
-            //         if (result.isConfirmed) {
-            //             $.ajax({
-            //                 type: "POST",
-            //                 url: prod_url,
-            //                 data: {
-            //                     _token: csrfToken,
-            //                 },
-            //                 success: function(data, status) {
-            //                     console.log(data);
-            //                     console.log(status);
-            //                     Swal.fire('Selesai!', 'Produksi telah selesai!', 'success');
-            //                     location.reload();
-            //                 },
-            //                 error: function(xhr, status, error) {
-            //                     console.error(xhr.responseText);
-            //                     Swal.fire('Error', 'An error occurred while deactivating your item.',
-            //                         'error');
-            //                     location.reload();
-            //                 }
-            //             });
-            //             // Swal.fire('Nonaktifkan!', 'Your item has been deactivated.', 'success');
-            //         } else if (result.dismiss === Swal.DismissReason.cancel) {
-            //             Swal.fire('Cancelled', 'Produksi masih aktif.', 'error');
-            //         }
-            //     });
-            // }
         </script>
         @include('layouts.footers.auth.footer')
     </div>

@@ -21,8 +21,10 @@ class RawMaterialController extends Controller
 
     public function detail($id)
     {
-        $rawMaterial = $this->mainService->find($id);
-        return view('pages.rawmaterial-detail', compact('rawMaterial'));
+        $material = $this->mainService->find($id);
+        $material->load(['flows.supplier','suppliers']);
+        // dd($material->toArray());
+        return view('pages.RawMaterial.rawmaterial-detail', compact('material'));
     }
     
 }

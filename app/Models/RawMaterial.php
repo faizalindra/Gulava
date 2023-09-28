@@ -26,12 +26,11 @@ class RawMaterial extends Model
         'unit' => 'string',
         'stock' => 'integer',
         'stock_min' => 'integer',
-        'supplier_id' => 'integer',
     ];
 
-    public function supplier()
+    public function suppliers()
     {
-        return $this->belongsToMany(Supplier::class);
+        return $this->belongsToMany(Supplier::class, 'raw_material_supplier', 'raw_material_id', 'supplier_id');
     }
 
     public function flows()

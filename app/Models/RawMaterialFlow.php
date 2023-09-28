@@ -13,6 +13,7 @@ class RawMaterialFlow extends Model
 
     protected $fillable = [
         'raw_material_id',
+        'supplier_id',
         'quantity',
         'price',
         'is_in',
@@ -27,5 +28,9 @@ class RawMaterialFlow extends Model
     public function rawMaterial()
     {
         return $this->belongsTo(RawMaterial::class);
+    }
+
+    public function supplier(){
+        return $this->belongsTo(Supplier::class, 'supplier_id');
     }
 }

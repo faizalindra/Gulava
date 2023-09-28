@@ -19,7 +19,6 @@ return new class extends Migration
             $table->bigInteger('stock');
             $table->string('unit');
             $table->integer('stock_min');
-            $table->foreignId('supplier_id')->constrained('suppliers');
             $table->timestamps();
         });
     }

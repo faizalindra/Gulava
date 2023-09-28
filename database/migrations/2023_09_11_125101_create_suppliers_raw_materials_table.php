@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('suppliers_raw_materials', function (Blueprint $table) {
+        Schema::create('raw_material_supplier', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('suppliers_id')->constrained('suppliers')->cascadeOnDelete();
-            $table->foreignId('raw_materials_id')->constrained('raw_materials')->cascadeOnDelete();
+            $table->foreignId('supplier_id')->constrained('suppliers')->cascadeOnDelete();
+            $table->foreignId('raw_material_id')->constrained('raw_materials')->cascadeOnDelete();
             // $table->timestamps();
         });
     }
