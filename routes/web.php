@@ -56,6 +56,7 @@ Route::group(['middleware' => ['auth', 'web']], function () {
 	Route::post('/produk-grade', [ProdukGradeController::class, 'create'])->name('produk.grade.create');
 
 	Route::get('raw-material', [RawMaterialController::class, 'index'])->name('raw-material');
+	Route::post('raw-material', [RawMaterialController::class, 'create'])->name('raw-material.create');
 	Route::get('raw-material/{id}', [RawMaterialController::class, 'detail'])->name('raw-material.detail');
 	Route::put('raw-material/{id}/update', [RawMaterialController::class, 'update'])->name('raw-material.update');
 

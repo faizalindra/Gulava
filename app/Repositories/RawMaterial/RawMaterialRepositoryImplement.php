@@ -20,6 +20,11 @@ class RawMaterialRepositoryImplement extends Eloquent implements RawMaterialRepo
         $this->model = $model;
     }
 
+    public function count()
+    {
+        return $this->model->count();
+    }
+
     public function getAllRawMaterialForTable($request = null)
     {
         $data = $this->model

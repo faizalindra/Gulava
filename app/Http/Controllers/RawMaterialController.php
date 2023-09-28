@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\RawMaterial\CreateRawMaterialRequest;
+// use App\Http\Requests\RawMaterial\CreateRawMaterialRequest;
 use Illuminate\Http\Request;
 use App\Services\Supplier\SupplierService;
 use App\Services\RawMaterial\RawMaterialService;
+use App\Http\Requests\RawMaterial\CreateRawMaterialRequest;
+use App\Http\Requests\RawMaterial\UpdateRawMaterialRequest;
 
 class RawMaterialController extends Controller
 {
@@ -20,7 +22,8 @@ class RawMaterialController extends Controller
     public function index()
     {
         $rawMaterials = $this->mainService->getAllRawMaterialForTable();
-        return view("pages.RawMaterial.rawmaterial", compact('rawMaterials'));
+        $suppliers = $this->supplierService->getAllSupplierForSelect();
+        return view("pages.RawMaterial.rawmaterial", compact('rawMaterials','suppliers'));
     }
 
     public function detail($id)
@@ -32,7 +35,14 @@ class RawMaterialController extends Controller
         return view('pages.RawMaterial.rawmaterial-detail', compact('material', 'suppliers'));
     }
 
-    public function update($id, CreateRawMaterialRequest $request){
+    public function create(UpdateRawMaterialRequest $request)
+    {
+        $payload = $request->validated();
+        $this->mainService->create($payload);
+        return redirect()->route('raw-material')->with('success', 'Berhasil menambahkan data bahan baku');
+    }
+
+    public function update($id, UpdateRawMaterialRequest $request){
         $payload = $request->validated();
         $this->mainService->update($id, $payload);
         return redirect()->route('raw-material.detail', $id)->with('success', 'Berhasil mengubah data bahan baku');

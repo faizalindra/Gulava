@@ -20,6 +20,24 @@ class RawMaterialServiceImplement extends Service implements RawMaterialService
     $this->mainRepository = $mainRepository;
   }
 
+  public function create($data)
+  {
+    DB::beginTransaction();
+    try {
+      $data['code'] = $this->generateCode();
+      
+      $material = $this->mainRepository->create($data);
+      foreach ($data['suppliers'] as $supplier) {
+        $material->suppliers()->attach($supplier);
+      }
+
+      return DB::commit();
+    } catch (\Throwable $th) {
+      DB::rollBack();
+      throw $th;
+    }
+  }
+
   public function update($id, array $data)
   {
     DB::beginTransaction();
@@ -47,5 +65,13 @@ class RawMaterialServiceImplement extends Service implements RawMaterialService
   public function getAllRawMaterialForFormSelector()
   {
     return $this->mainRepository->getAllRawMaterialForFormSelector();
+  }
+
+
+  private function generateCode(){
+    $code = 'B';
+    $code .= date('ymd');
+    $code .= $this->mainRepository->count() + 1;
+    return $code;
   }
 }
