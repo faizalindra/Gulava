@@ -20,7 +20,7 @@ class RawMaterialController extends Controller
     public function index()
     {
         $rawMaterials = $this->mainService->getAllRawMaterialForTable();
-        return view("pages.rawmaterial", compact('rawMaterials'));
+        return view("pages.RawMaterial.rawmaterial", compact('rawMaterials'));
     }
 
     public function detail($id)

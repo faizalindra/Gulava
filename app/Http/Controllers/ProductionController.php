@@ -31,7 +31,7 @@ class ProductionController extends Controller
         $productions = $this->mainService->getAllProductionForTable();
         $products = $this->produksService->getAllProduksForFormSelector();
         $materials = $this->rawMaterialService->getAllRawMaterialForFormSelector();
-        return view("pages.production", compact('productions', 'products', 'materials'));
+        return view("pages.Production.production", compact('productions', 'products', 'materials'));
     }
 
     public function create(CreateProductionRequest $request)
@@ -49,7 +49,7 @@ class ProductionController extends Controller
     {
         $production = $this->mainService->getDetailProduction($id);
         $production->load('product', 'detail.rawMaterial');
-        return view('pages.production-detail', compact('production'));
+        return view('pages.Production.production-detail', compact('production'));
     }
 
     public function getProduks()

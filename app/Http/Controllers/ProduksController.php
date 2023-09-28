@@ -22,7 +22,7 @@ class ProduksController extends Controller
     {
         $products = $this->mainService->getAllProduksForTable();
         $grades = $this->produksGradeService->getAllProduksGrade();
-        return view("pages.product", compact('products', 'grades'));
+        return view("pages.Product.product", compact('products', 'grades'));
     }
 
     public function detail($id)
@@ -33,7 +33,7 @@ class ProduksController extends Controller
         }]);
         $grades = $this->produksGradeService->getAllProduksGrade();
 
-        return view('pages.product-detail', compact('product', 'grades'));
+        return view('pages.Product.product-detail', compact('product', 'grades'));
     }
 
     public function create(CreateProdukRequest $request)
