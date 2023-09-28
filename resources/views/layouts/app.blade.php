@@ -15,9 +15,9 @@
     <!-- Nucleo Icons -->
     <link href="{{ asset('./assets/css/nucleo-icons.css') }}" rel="stylesheet" />
     <link href="{{ asset('./assets/css/nucleo-svg.css') }}" rel="stylesheet" />
-    <link href="{{asset("/assets//fontawesome-6.4.2/css/all.min.css")}}" rel="stylesheet">
+    <link href="{{asset("/assets/fontawesome-6.4.2/css/all.css")}}" rel="stylesheet">
     <!-- Font Awesome Icons -->
-    <script src="{{ asset('https://kit.fontawesome.com/42d5adcbca.js') }}" crossorigin="anonymous"></script>
+    <script src="{{ asset('assets/fontawesome-6.4.2/css/all.css') }}"></script>
     <link href="{{ asset('assets/css/nucleo-svg.css') }}" rel="stylesheet" />
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('assets/css/argon-dashboard.css') }}" rel="stylesheet" />

@@ -44,10 +44,10 @@
             <div class="col text-end">
                 @if ($product->is_active)
                     <button type="button" class="btn btn-danger btn-sm" id="diableProductButton"
-                        onclick="showConfirmation()">Nonaktifkan</button>
+                        onclick="showConfirmation('disable')">Nonaktifkan</button>
                 @else
                     <button type="button" class="btn btn-success btn-sm" id="diableProductButton"
-                        onclick="showConfirmation()">Aktifkan</button>
+                        onclick="showConfirmation('enable')">Aktifkan</button>
                 @endif
             </div>
         </div>
@@ -62,11 +62,12 @@
                                 <h4 class="card-title">
                                     <p class="card-title">{{ $product->code }} - {{ $product->name }}</p>
                                 </h4>
-                                <p class="card-text">Est. Rp. {{ number_format($product->price * $product->stock, 0,'.','.') }}</p>
+                                <p class="card-text">Est. Rp.
+                                    {{ number_format($product->price * $product->stock, 0, '.', '.') }}</p>
                             </div>
                             <div class="col text-end">
-                                <p class="card-text">{{ number_format($product->stock, 0,'.','.') . ' Kg' }}</p>
-                                <p class="card-text">Rp. {{ number_format($product->price, 0,'.','.') . '/Kg' }}</p>
+                                <p class="card-text">{{ number_format($product->stock, 0, '.', '.') . ' Kg' }}</p>
+                                <p class="card-text">Rp. {{ number_format($product->price, 0, '.', '.') . '/Kg' }}</p>
                             </div>
                         </div>
                     </div>
@@ -190,8 +191,10 @@
                                                 @endif
                                             </td>
                                             <td>{{ $production->code }}</td>
-                                            <td class="text-center">{{ number_format($production->quantity_produced, 0,'.','.') }}</td>
-                                            <td class="text-center">Rp. {{ number_format($production->estimated_cost, 0,'.','.') }}</td>
+                                            <td class="text-center">
+                                                {{ number_format($production->quantity_produced, 0, '.', '.') }}</td>
+                                            <td class="text-center">Rp.
+                                                {{ number_format($production->estimated_cost, 0, '.', '.') }}</td>
                                             <td>{{ $production->created_at }}</td>
                                             <td>{{ $production->completed_at ?? '' }}</td>
                                             {{-- <td>{{ Str::limit($production->description, 15)}}</td> --}}
@@ -304,16 +307,32 @@
                 });
             });
 
-            function showConfirmation() {
-                // prod_id = $('#prod_id').attr('date-value');
-                var prod_url = "{{ route('produk.disable', ['id' => $product->id]) }}";
+            function showConfirmation(action) {
+                var prod_url = "";
+                var confirmationTitle = "";
+                var confirmationText = "";
+                var successMessage = "";
+
+                if (action === "disable") {
+                    prod_url = "{{ route('produk.disable', ['id' => $product->id]) }}";
+                    confirmationTitle = 'Nonaktifkan Produk?';
+                    confirmationText = 'Produk akan dinonaktifkan dan tidak dapat digunakan untuk produksi.';
+                    successMessage = 'Your item has been deactivated.';
+                } else if (action === "enable") {
+                    prod_url = "{{ route('produk.disable', ['id' => $product->id]) }}";
+                    confirmationTitle = 'Aktifkan Produk?';
+                    confirmationText = 'Produk akan diaktifkan dan dapat digunakan untuk produksi.';
+                    successMessage = 'Your item has been activated.';
+                }
+
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
                 Swal.fire({
-                    title: 'Nonaktifkan Produk?',
-                    text: 'Produk akan dinonaktifkan dan tidak dapat digunakan untuk produksi.',
+                    title: confirmationTitle,
+                    text: confirmationText,
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: 'Yes, Nonaktifkan!',
+                    confirmButtonText: 'Yes, ' + (action === "disable" ? 'Nonaktifkan' : 'Aktifkan') + '!',
                     cancelButtonText: 'No, cancel!',
                 }).then((result) => {
                     if (result.isConfirmed) {
@@ -326,19 +345,20 @@
                             success: function(data, status) {
                                 console.log(data);
                                 console.log(status);
-                                Swal.fire('Nonaktifkan!', 'Your item has been deactivated.', 'success');
+                                Swal.fire((action === "disable" ? 'Nonaktifkan' : 'Aktifkan') + '!',
+                                    successMessage, 'success');
                                 location.reload();
                             },
                             error: function(xhr, status, error) {
                                 console.error(xhr.responseText);
-                                Swal.fire('Error', 'An error occurred while deactivating your item.',
-                                    'error');
+                                Swal.fire('Error', 'An error occurred while ' + (action === "disable" ?
+                                    'deactivating' : 'activating') + ' your item.', 'error');
                                 location.reload();
                             }
                         });
-                        // Swal.fire('Nonaktifkan!', 'Your item has been deactivated.', 'success');
                     } else if (result.dismiss === Swal.DismissReason.cancel) {
-                        Swal.fire('Cancelled', 'Your item is still active.', 'error');
+                        Swal.fire('Cancelled', 'Your item is still ' + (action === "disable" ? 'active' : 'inactive') +
+                            '.', 'error');
                     }
                 });
             }

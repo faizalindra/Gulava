@@ -123,12 +123,12 @@
                                                                 $total_cost += $line_cost;
                                                             @endphp
                                                             <tr>
-                                                                <td>{{ $loop->iteration }}</th>
-                                                                <td>{{ $detail->rawMaterial->code }}</td>
-                                                                <td>{{ $detail->rawMaterial->name }}</td>
-                                                                <td>{{ $detail->quantity_used . ' ' . $detail->rawMaterial->unit }}
+                                                                <td class="text-center">{{ $loop->iteration }}</th>
+                                                                <td class="text-center">{{ $detail->rawMaterial->code }}</td>
+                                                                <td class="text-center">{{ $detail->rawMaterial->name }}</td>
+                                                                <td class="text-center">{{ $detail->quantity_used . ' ' . $detail->rawMaterial->unit }}
                                                                 </td>
-                                                                <td>Rp.
+                                                                <td class="text-end">Rp.
                                                                     {{ number_format($detail->rawMaterial->price * $detail->quantity_used, 0, '.', '.') }}
                                                                 </td>
                                                             </tr>

@@ -19,10 +19,10 @@ class RawMaterialController extends Controller
         return view("pages.rawmaterial", compact('rawMaterials'));
     }
 
-    // public function detail($id)
-    // {
-    //     $rawMaterial = $this->mainService->find($id);
-    //     return view('pages.rawmaterial-detail', compact('rawMaterial'));
-    // }
+    public function detail($id)
+    {
+        $rawMaterial = $this->mainService->find($id);
+        return view('pages.rawmaterial-detail', compact('rawMaterial'));
+    }
     
 }
