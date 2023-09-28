@@ -57,6 +57,7 @@ Route::group(['middleware' => ['auth', 'web']], function () {
 
 	Route::get('raw-material', [RawMaterialController::class, 'index'])->name('raw-material');
 	Route::get('raw-material/{id}', [RawMaterialController::class, 'detail'])->name('raw-material.detail');
+	Route::put('raw-material/{id}/update', [RawMaterialController::class, 'update'])->name('raw-material.update');
 
 	Route::get('/outgoing', [PageController::class, 'outgoing'])->name('outgoing');
 

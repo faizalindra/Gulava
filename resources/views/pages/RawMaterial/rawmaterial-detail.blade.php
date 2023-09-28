@@ -5,25 +5,26 @@
         'title' => 'Detail Produksi',
         'parents' => [['href' => route('production'), 'title' => 'Produksi']],
     ])
-    <script src="{{ asset('assets/js/core/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ asset('assets/js/core/jQuery_dataTables_1.13.6.min.js') }}"></script>
-    <script src="{{ asset('assets/js/core/sweetalert2.all.min.js') }}"></script>
-    {{-- <script src="{{ asset('assets/js/core/jquery.datetimepicker.full.min.js') }}"></script> --}}
 
     <link rel="stylesheet" href="{{ asset('assets/css/jQuery_dataTables_1.13.6.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/sweetalert2.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/select2.min.css') }}" />
+
+    <script src="{{ asset('assets/js/core/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('assets/js/core/jQuery_dataTables_1.13.6.min.js') }}"></script>
+    <script src="{{ asset('assets/js/core/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ asset('assets/js/core/select2.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/core/jquery.datetimepicker.full.min.js') }}"></script> --}}
+
+
     {{-- <link rel="stylesheet" href="{{ asset('assets/css/jquery.datetimepicker.min.css') }}" /> --}}
     <div id="material_id" value="{{ $material->id }}"></div>
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-2 text-start">
-                {{-- @if ($production->is_active)
-                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalId">
-                        Selesaikan
-                    </button>
-                @else
-                    <button type="button" class="btn btn-success btn-sm">Selesai</button>
-                @endif --}}
+                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editModal">
+                    Edit
+                </button>
             </div>
             <div class="col">
                 <div class="col-6">
@@ -68,7 +69,7 @@
                                 <hr class="hr">
                                 <div class="row text-center">
                                     <div class="col">Stok</div>
-                                    <div class="col">Estimasi Harga</div>
+                                    <div class="col">harga Bahan Baku</div>
                                 </div>
                                 <div class="row text-center">
                                     <div class="col">
@@ -150,67 +151,74 @@
 
 
         <!-- Modal Body-->
-        {{-- <div class="modal fade" id="modalId" tabindex="-1" role="dialog" aria-labelledby="modalTitleId"
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalTitle"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="tambahProdukModalLabel">Selesaikan Produksi</h5>
+                        <h5 class="modal-title" id="editModalTitle">Edit Bahan Baku</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true" class="text-dark">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="container-fluid">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col">
-                                        <form id="finishProduction" method="POST"
-                                            action="{{ route('production.finish', ['id' => $production->id]) }}">
-                                            @csrf
-                                            @method('post')
-                                            <input type="hidden" name="is_active" value="0">
-                                            <div class="col-12">
-                                                <div class="mb-1">
-                                                    <label class="form-label" for="name">Selesai Pada</label>
-                                                    <input class="form-control datetimepicker" id="completed_at"
-                                                        name="completed_at" data-sb-validations="required" required
-                                                        autocomplete="false" />
-                                                    <div class="invalid-feedback" data-sb-feedback="name:required">
-                                                    </div>
-                                                </div>
-                                                <div class="mb-1">
-                                                    <label class="form-label" for="name">Estimasi Harga</label>
-                                                    <input class="form-control" id="estimated_cost" name="estimated_cost"
-                                                        type="number" placeholder="Estimasi Harga"
-                                                        data-sb-validations="required" required />
-                                                    <div class="invalid-feedback" data-sb-feedback="name:required">
-                                                    </div>
-                                                </div>
-                                                <div class="mb-1">
-                                                    <label class="form-label" for="name">Hasil Produksi</label>
-                                                    <input class="form-control" id="quantity_produced"
-                                                        name="quantity_produced" type="number"
-                                                        placeholder="Hasil Produksi" data-sb-validations="required"
-                                                        required />
-                                                    <div class="invalid-feedback" data-sb-feedback="name:required">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6"></div>
-                                            <div class="d-grid pt-4">
-                                                <button class="btn btn-primary btn-lg" id="submitButton"
-                                                    type="submit">Submit</button>
-                                            </div>
-                                        </form>
-                                    </div>
+                        <form id="editRawMaterial" method="POST"
+                            action="{{ route('raw-material.update', ['id' => $material->id]) }}">
+                            @csrf
+                            @method('PUT')
+                            <div class="mb-3">
+                                <label class="form-label" for="code">Kode</label>
+                                <input class="form-control" id="code" name="code" type="text"
+                                    value="{{ $material->code }}" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="name">Nama</label>
+                                <input class="form-control" id="name" name="name" type="text"
+                                    value="{{ $material->name }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="price">Harga</label>
+                                <input class="form-control" id="price" name="price" type="number"
+                                    value="{{ $material->price }}" required>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="stock">Stok</label>
+                                    <input class="form-control" id="stock" name="stock" type="number"
+                                        value="{{ $material->stock }}" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="stock_min">Stok Minimal</label>
+                                    <input class="form-control" id="stock_min" name="stock_min" type="number"
+                                        value="{{ $material->stock_min }}" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="unit">Unit</label>
+                                    <input class="form-control" id="unit" name="unit" type="text"
+                                        value="{{ $material->unit }}" required>
                                 </div>
                             </div>
-                        </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="suppliers">Supplier</label>
+                                <select class="select2" id="suppliers" name="suppliers[]" multiple="">
+                                    @foreach ($suppliers as $supplier)
+                                        <option value="{{ $supplier->id }}"
+                                            {{ in_array($supplier->id, $material->suppliers->pluck('id')->toArray()) ? 'selected' : '' }}>
+                                            {{ $supplier->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            
+                            <div class="d-grid pt-4">
+                                <button class="btn btn-primary btn-lg" id="editSubmitButton" type="submit">Simpan</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-        </div> --}}
+        </div>
+
 
 
         <script>
@@ -219,10 +227,16 @@
                     "pageLength": 5,
                     "lengthChange": false,
                 });
-                // $('.datetimepicker').datetimepicker({
-                //     format: 'Y-m-d H:i:s', // Your desired format
-                //     step: 1, // Optional: specify the time increment (1 second in this case)
-                // });
+
+                $('.select2').select2({
+                    width: '100%', // Set the width to 100% of its container
+                    dropdownCssClass: 'select2-dropdown-big', // Apply custom CSS class to the dropdown
+
+                });
+
+                //send editRawMaterial via ajax
+
+
                 $("#alert-alert").fadeTo(4000, 500).slideUp(500, function() {
                     $("#alert-alert").alert('close');
                 });
