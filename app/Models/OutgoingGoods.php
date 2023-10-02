@@ -31,4 +31,8 @@ class OutgoingGoods extends Model
         return $this->hasOne(ReturningGoods::class);
     }
 
+    public function products(){
+        return $this->belongsToMany(Produk::class, 'outgoing_goods_produks', 'outgoing_good_id', 'produk_id')->withPivot('quantity', 'price', 'total_price', 'description');
+    }
+
 }

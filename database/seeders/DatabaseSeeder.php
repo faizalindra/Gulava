@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
                 RawMaterialFlowSeed::class,
                 ProduksGradeSeed::class,
                 ProductionBatchSeed::class,
+                LogisticSeed::class,
             ]
         );
     }

@@ -11,9 +11,9 @@ class ReturningGoods extends Model
 
     protected $fillable = [
         'code',
-        // 'sales_id',
+        'salespersons_id',
         'user_id',
-        'ongoing_goods_id',
+        'outgoing_good_id',
         'petty_cash_id',
         'price',
         'description',
@@ -23,23 +23,27 @@ class ReturningGoods extends Model
         'price' => 'integer',
     ];
 
-    // public function salesperson()
-    // {
-    //     return $this->belongsTo(Salesperson::class);
-    // }
+    public function salesperson()
+    {
+        return $this->belongsTo(Salesperson::class);
+    }
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function ongoingGoods()
+    public function outgoingGoods()
     {
-        return $this->belongsTo(OutgoingGoods::class);
+        return $this->belongsTo(OutgoingGoods::class, 'outgoing_good_id', 'id');
     }
 
     public function pettyCash()
     {
         return $this->belongsTo(PettyCash::class);
+    }
+
+    public function products(){
+        return $this->belongsToMany(Produk::class, 'produks_returning_goods', 'returning_goods_id', 'product_id')->withPivot('quantity', 'price', 'total_price', 'description');
     }
 }

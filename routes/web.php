@@ -22,6 +22,7 @@ use App\Http\Controllers\ChangePassword;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\LogisticController;
 use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\ProdukGradeController;
 use App\Http\Controllers\ProduksController;
@@ -59,6 +60,8 @@ Route::group(['middleware' => ['auth', 'web']], function () {
 	Route::post('raw-material', [RawMaterialController::class, 'create'])->name('raw-material.create');
 	Route::get('raw-material/{id}', [RawMaterialController::class, 'detail'])->name('raw-material.detail');
 	Route::put('raw-material/{id}/update', [RawMaterialController::class, 'update'])->name('raw-material.update');
+
+	Route::get('/logistic', [LogisticController::class, 'index'])->name('logistic');
 
 	Route::get('/outgoing', [PageController::class, 'outgoing'])->name('outgoing');
 

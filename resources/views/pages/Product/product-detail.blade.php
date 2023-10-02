@@ -7,11 +7,9 @@
     ])
     <script src="{{ asset('assets/js/core/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('assets/js/core/jQuery_dataTables_1.13.6.min.js') }}"></script>
+    <script src="{{ asset('assets/js/core/sweetalert2.all.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('assets/css/jQuery_dataTables_1.13.6.min.css') }}" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.all.min.js"
-        integrity="sha256-Cci6HROOxRjlhukr+AVya7ZcZnNZkLzvB7ccH/5aDic=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.min.css"
-        integrity="sha256-VJuwjrIWHWsPSEvQV4DiPfnZi7axOaiWwKfXaJnR5tA=" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ asset('assets/css/sweetalert2.min.css') }}" />
     <div id="prod_id" value="{{ $product->id }}"></div>
     <div class="container-fluid py-4">
         <div class="row">
