@@ -59,7 +59,7 @@ class ProduksRepositoryImplement extends Eloquent implements ProduksRepository
 
     public function getAllProduksForFormSelector()
     {
-        $data = $this->model->selectRaw('CONCAT(code, " - ", name) as name, id')->where('is_active', true)->get();
+        $data = $this->model->selectRaw('CONCAT(code, " - ", name) as name, id, price')->where('is_active', true)->get();
         return $data;
     }
 }

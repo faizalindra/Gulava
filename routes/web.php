@@ -62,6 +62,8 @@ Route::group(['middleware' => ['auth', 'web']], function () {
 	Route::put('raw-material/{id}/update', [RawMaterialController::class, 'update'])->name('raw-material.update');
 
 	Route::get('/logistic', [LogisticController::class, 'index'])->name('logistic');
+	Route::get('/logistic/{id}', [LogisticController::class, 'detail'])->name('logistic.detail');
+	Route::post('/logistic', [LogisticController::class, 'create'])->name('logistic.create');
 
 	Route::get('/outgoing', [PageController::class, 'outgoing'])->name('outgoing');
 

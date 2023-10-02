@@ -83,60 +83,67 @@
                                         <th rowspan="2" class="text-secondary opacity-7"></th>
                                     </tr>
                                     <tr>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Mulai</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Berakhir</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Durasi</th>
+                                        <th
+                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Mulai</th>
+                                        <th
+                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Berakhir</th>
+                                        <th
+                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Durasi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php
-                                        function getDuration($start, $end)
-                                        {
-                                            $start = Carbon\Carbon::parse($start);
-                                            $end = Carbon\Carbon::parse($end);
-                                            $diff = $start->diffInHours($end);
-                                            return $diff;
-                                        }
-                                    @endphp
                                     @foreach ($outgoingGoods as $og)
                                         <tr>
-                                            <td class="text-xs font-weight-bold mb-0">{{$loop->iteration}}</td>
-                                            <td class="text-xs font-weight-bold mb-0">{{$og->code}}</td>
-                                            <td class="text-xs font-weight-bold mb-0">{{$og->salesperson->name}}</td>
+                                            <td class="text-xs font-weight-bold mb-0">{{ $loop->iteration }}</td>
+                                            <td class="text-xs font-weight-bold mb-0">{{ $og->code }}</td>
+                                            <td class="text-xs font-weight-bold mb-0">{{ $og->salesperson->name }}</td>
+
                                             <td class="text-xs font-weight-bold mb-0 text-center">
                                                 {{ date('Y-m-d', strtotime($og->created_at)) }}<br>
                                                 {{ date('H:i:s', strtotime($og->created_at)) }}
                                             </td>
+
                                             <td class="text-xs font-weight-bold mb-0 text-center">
-                                                @if ($og->has('returningGoods') && $og->returningGoods->is_active)
+                                                @if ($og->has('returningGoods') && !$og->returningGoods->is_active)
                                                     {{ date('Y-m-d', strtotime($og->returningGoods->created_at)) }}<br>
                                                     {{ date('H:i:s', strtotime($og->returningGoods->created_at)) }}
                                                 @else
                                                     -
                                                 @endif
                                             </td>
-                                            
+
                                             <td class="text-xs font-weight-bold mb-0 text-center">
-                                                @if ($og->has('returningGoods') && $og->returningGoods->is_active)
-                                                    {{ getDuration($og->created_at, $og->returningGoods->created_at) }} Jam
+                                                @if ($og->has('returningGoods') && !$og->returningGoods->is_active)
+                                                    @php
+                                                        $start = Carbon\Carbon::parse($og->created_at);
+                                                        $end = Carbon\Carbon::parse($og->returningGoods->created_at);
+                                                        $diff = $start->diffInHours($end);
+                                                        $diff = $diff . ' Jam';
+                                                    @endphp
                                                 @else
                                                     -
                                                 @endif
                                             </td>
+
                                             <td class="text-xs font-weight-bold mb-0 text-end">
-                                                @if ($og->has('returningGoods') && $og->returningGoods->is_active)
-                                                    Rp. {{ number_format($og->returningGoods->total_price, 0, ',', '.') }}
+                                                @if ($og->has('returningGoods') && !$og->returningGoods->is_active)
+                                                    Rp. {{ number_format($og->returningGoods->total_amount, 0, ',', '.') }}
                                                 @else
                                                     -
                                                 @endif
                                             </td>
+
                                             <td class="text-xs font-weight-bold mb-0">
                                                 <ul>
                                                     @foreach ($og->products as $product)
-                                                        <li>{{$product->name}}</li>
+                                                        <li>{{ $product->name }}</li>
                                                     @endforeach
                                                 </ul>
                                             </td>
+
                                             <td class="text-xs font-weight-bold mb-0">
                                                 @if ($og->has('returningGoods'))
                                                     @if ($og->returningGoods->is_active)
@@ -148,19 +155,20 @@
                                                             Selesai
                                                         </span>
                                                     @endif
-                                                    
                                                 @else
                                                     <span class="badge badge-sm bg-gradient-info">-</span>
                                                 @endif
                                             </td>
+
                                             <td class="text-xs font-weight-bold mb-0">
-                                                {{-- <a href="{{ route('logistic.detail', ['id' => $og->id]) }}"
+                                                <a href="{{ route('logistic.detail', ['id' => $og->id]) }}"
                                                     class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
-                                                    data-original-title="Edit user"> --}}
+                                                    data-original-title="Edit user">
                                                     <i class=" fas fa-eye text-secondary font-weight-bold text-xs"
                                                         data-toggle="tooltip" data-original-title="Lihat Detail"></i>
-                                                {{-- </a> --}}
+                                                </a>
                                             </td>
+
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -187,32 +195,32 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col">
-                            {{-- <form id="productionForm" method="POST" action="{{ route('production.create') }}">
+                            <form id="logisticForm" method="POST" action="{{ route('logistic.create') }}">
                                 @csrf
                                 @method('post')
                                 <div class="col-12">
                                     <div class="mb-1">
-                                        <label class="form-label" for="produks_id">Produk</label>
-                                        <select class="form-control" id="produks_id" name="produks_id" required>
-                                            <option value="" selected disabled hidden>Pilih Produk</option>
-                                            @foreach ($products as $product)
-                                                <option value="{{ intval($product->id) }}">{{ $product->name }}</option>
+                                        <label class="form-label" for="salesperson_id">Sales</label>
+                                        <select class="form-control" id="salesperson_id" name="salesperson_id" required>
+                                            <option value="" selected disabled hidden>Pilih Sales</option>
+                                            @foreach ($salesperson as $sales)
+                                                <option value="{{ intval($sales->id) }}">{{ $sales->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
-                                    <input id="material_count" type="number" name="material_count" value="0" hidden>
-                                    <div class="mb-1 mb-2">
-                                        <label class="form-label" for="description">Deskripsi</label>
-                                        <textarea class="form-control" id="description" name="description" rows="3"
-                                            placeholder="Description of the product"></textarea>
-                                    </div>
-                                    <div id="materials">
-                                        <!-- Material rows will be added here -->
-                                    </div>
-                                    <button id="addMaterial" onclick="addMaterialRow()" type="button"
-                                        class="btn btn-primary">Add
-                                        Bahan Baku</button>
                                 </div>
+                                <div class="mb-1 mb-2">
+                                    <label class="form-label" for="description">Deskripsi</label>
+                                    <textarea class="form-control" id="description" name="description" rows="3"
+                                        placeholder="description of the product"></textarea>
+                                </div>
+                                <input id="product_count" type="number" name="product_count" value="0" hidden>
+                                <div id="products">
+
+                                </div>
+                                <button id="addLogistic" onclick="addLogisticRow()" type="button"
+                                    class="btn btn-primary">Add
+                                    Bahan Baku</button>
                                 <div class="col-6"></div>
                                 <div class="d-grid pt-4 modal-footer">
                                     <div class="row">
@@ -222,7 +230,7 @@
                                                 type="submit">Submit</button></div>
                                     </div>
                                 </div>
-                            </form> --}}
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -241,54 +249,95 @@
             });
         });
 
-        // const myModal = new bootstrap.Modal(document.getElementById('modalProduction'), options)
-        // Function to add a new material row
-        // function addMaterialRow() {
-        //     const materialRow = `
-    //         <div class="row material">
-    //             <div class="col mb-1">
-    //                 <div class="form-group">
-    //                     <label for="material_id">Bahan Baku:</label>
-    //                     <select class="form-control" name="materials[id][]" required>
-    //                         <option value=""  selected disabled hidden>Pilih Bahan Baku</option>
-    //                     </select>
-    //                 </div>
-    //             </div>
-    //             <div class="col mb-1">
-    //                 <label class="form-label" for="quantity_used">Jumlah:</label>
-    //                 <input class="form-control" type="number" name="materials[quantity_used][]" required>
-    //             </div>
-    //             <div class="col mb-1">
-    //                 <label class="form-label" for="estimated_cost">Estimasi Biaya:</label>
-    //                 <input class="form-control" type="number" name="materials[estimated_cost][]" required>
-    //             </div>
-    //             <div class="col-1 mb-1">
-    //                 <button class="removeMaterial btn btn-danger mt-3 p-3" onclick="removeMaterialRow(event)" type="button"><i class="fa fa-trash"></i></button>
-    //             </div>
-    //         </div>
-    //     `;
-        //     updateMaterialCount(1);
-        //     let count = $('#material_count').val();
-        //     console.log(count);
-        //     $("#materials").append(materialRow);
-        // }
+        function addLogisticRow() {
+            const logisticRow = `
+            <div class="row logistic">
+                <div class="col mb-1">
+                    <div class="form-group">
+                        <label for="logistic_id">Produk:</label>
+                        <select class="form-control" name="products[product_id][]" required>
+                            <option value="" selected disabled hidden>Pilih Produk</option>
+                            @foreach ($products as $product)
+                                <option value="{{ intval($product->id) }}"" data-price="{{ $product->price }}">{{ $product->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col mb-1">
+                    <label class="form-label" for="quantity_used">Jumlah:</label>
+                    <input class="form-control" type="number" name="products[quantity][]" required>
+                </div>
+                <div class="col mb-1">
+                    <label class="form-label" for="price">Harga Satuan:</label>
+                    <input class="form-control" type="number" name="products[price][]" required>
+                </div>
+                <div class="col mb-1">
+                    <label class="form-label" for="total_price">Total Harga:</label>
+                    <input class="form-control" type="number" name="products[total_price][]"
+                        readonly>
+                </div>
+                <div class="col-1 mb-1">
+                    <button class="removeLogistic btn btn-danger mt-3 p-3"
+                        onclick="removeLogisticRow(event)" type="button"><i
+                            class="fa fa-trash"></i></button>
+                </div>
+            </div>
+        `;
+            updateLogisticCount(1);
+            let count = $('#product_count').val();
+            console.log(count);
+            $("#products").append(logisticRow);
+            // Get the newly added row
+            const newRow = $("#products .logistic").last();
 
-        // Function to remove a material row
-        function removeMaterialRow(event) {
-            $(event.target).closest(".material").remove();
-            updateMaterialCount(-1);
-            let count = $('#material_count').val();
+            // Add event listeners for quantity and price fields in the new row
+            newRow.find("input[name='products[quantity][]'], input[name='products[price][]']").on("input", function() {
+                // Get quantity and price values from the current row
+                const quantity = parseFloat(newRow.find("input[name='products[quantity][]']").val()) || 0;
+                const price = parseFloat(newRow.find("input[name='products[price][]']").val()) || 0;
+
+                // Calculate the total price
+                const total = quantity * price;
+
+                // Update the total price field in the current row
+                newRow.find("input[name='products[total_price][]']").val(total);
+            });
+
+            // Add event listener for the product selection dropdown
+            newRow.find("select[name='products[product_id][]']").on("change", function() {
+                // Get the selected option
+                const selectedOption = $(this).find("option:selected");
+
+                // Get the data-price attribute value
+                const price = parseFloat(selectedOption.data("price")) || 0;
+
+                // Update the price input field with the selected price
+                newRow.find("input[name='products[price][]']").val(price);
+
+                // Calculate and update the total price
+                const quantity = parseFloat(newRow.find("input[name='products[quantity][]']").val()) || 0;
+                const total = quantity * price;
+                newRow.find("input[name='products[total_price][]']").val(total);
+            });
+        }
+
+        // Function to remove a logistic row
+        function removeLogisticRow(event) {
+            $(event.target).closest(".logistic").remove();
+            updateLogisticCount(-1);
+            let count = $('#product_count').val();
             console.log(count);
         }
 
-        function updateMaterialCount(change) {
-            const materialCountInput = $('#material_count');
-            const currentCount = parseInt(materialCountInput.val());
+        function updateLogisticCount(change) {
+            const logisticCountInput = $('#product_count');
+            const currentCount = parseInt(logisticCountInput.val());
             const newCount = currentCount + change;
 
             // Ensure the count is not negative
             if (newCount >= 0) {
-                materialCountInput.val(newCount);
+                logisticCountInput.val(newCount);
             }
         }
     </script>
