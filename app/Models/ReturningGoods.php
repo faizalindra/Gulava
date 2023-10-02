@@ -44,6 +44,6 @@ class ReturningGoods extends Model
     }
 
     public function products(){
-        return $this->belongsToMany(Produk::class, 'produks_returning_goods', 'returning_goods_id', 'product_id')->withPivot('quantity', 'price', 'total_price', 'description');
+        return $this->belongsToMany(Produk::class, 'produks_returning_goods', 'returning_goods_id', 'produk_id')->withPivot('quantity', 'price', 'total_price');
     }
 }

@@ -11,7 +11,7 @@ class OutgoingGoods extends Model
 
     protected $fillable = [
         'code',
-        'salesperson_id',
+        'salespersons_id',
         'user_id',
         'produk_id',
         'total_price',
@@ -24,11 +24,11 @@ class OutgoingGoods extends Model
     }
 
     public function salesperson(){
-        return $this->belongsTo(Salesperson::class);
+        return $this->belongsTo(Salesperson::class, 'salespersons_id');
     }
 
     public function returningGoods(){
-        return $this->hasOne(ReturningGoods::class);
+        return $this->hasOne(ReturningGoods::class, 'outgoing_good_id');
     }
 
     public function products(){

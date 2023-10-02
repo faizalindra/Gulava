@@ -31,7 +31,7 @@ class LogisticSeed extends Seeder
                 'salespersons_id' =>  $salespersonID[$salesPersonSelector]->id,
                 'user_id' => 1,
                 'total_price' => rand(100000, 1000000),
-                'description' => $this->faker->text(100),
+                'description' => $this->faker->text(5),
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
@@ -68,7 +68,7 @@ class LogisticSeed extends Seeder
                 'salespersons_id' => $og->salespersons_id,
                 'outgoing_good_id' => $og->id,
                 'total_amount' => $og->total_price,
-                'description' => $this->faker->text(20),
+                'description' => $this->faker->text(5),
                 'created_at' => now(),
                 'updated_at' => now(),
             ];

@@ -56,84 +56,113 @@
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
                         <div class="table-responsive p-0">
-                            <table id="tableProduction">
+                            <table id="tableLogistic" class="table align-items-center mb-0">
                                 <thead>
                                     <tr>
-                                        <th
+                                        <th rowspan="2"
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7  text-center">
                                             #</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Tanggal Keberangkatan</th>
-                                        <th
+                                        <th rowspan="2"
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                            Kode</th>
+                                        <th rowspan="2"
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Sales</th>
-                                        <th
+                                        <th colspan="3"
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 text-center">
+                                            Periode</th>
+                                        <th rowspan="2"
                                             class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Total Harga</th>
-                                        <th
+                                        <th rowspan="2"
                                             class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             List Produk</th>
-                                        <th
+                                        <th rowspan="2"
                                             class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Status</th>
-                                        <th class="text-secondary opacity-7"></th>
+                                        <th rowspan="2" class="text-secondary opacity-7"></th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Mulai</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Berakhir</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Durasi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {{-- @foreach ($productions as $production)
+                                    @php
+                                        function getDuration($start, $end)
+                                        {
+                                            $start = Carbon\Carbon::parse($start);
+                                            $end = Carbon\Carbon::parse($end);
+                                            $diff = $start->diffInHours($end);
+                                            return $diff;
+                                        }
+                                    @endphp
+                                    @foreach ($outgoingGoods as $og)
                                         <tr>
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0  text-center">{{ $production->id }}
-                                                </p>
+                                            <td class="text-xs font-weight-bold mb-0">{{$loop->iteration}}</td>
+                                            <td class="text-xs font-weight-bold mb-0">{{$og->code}}</td>
+                                            <td class="text-xs font-weight-bold mb-0">{{$og->salesperson->name}}</td>
+                                            <td class="text-xs font-weight-bold mb-0 text-center">
+                                                {{ date('Y-m-d', strtotime($og->created_at)) }}<br>
+                                                {{ date('H:i:s', strtotime($og->created_at)) }}
                                             </td>
-                                            <td>
-                                                <div class="d-flex flex-column justify-content-center">
-                                                    <h6 class="mb-0 text-sm">{{ $production->code }}</h6>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $production->product->name }}
-                                                </p>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0">
-                                                    {{ $production->quantity_produced }} Kg</p>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs text-center font-weight-bold mb-0">
-                                                    Rp. {{ number_format($production->estimated_cost, 0, '.', '.') }}
-                                                </p>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs text-center font-weight-bold mb-0">
-                                                    @if (!$production->is_active)
-                                                        {{ $production->period }} Jam
-                                                    @else
-                                                        -
-                                                    @endif
-                                                </p>
-                                            </td>
-                                            <td class="align-middle text-center text-sm">
-                                                @if (!$production->is_active)
-                                                    <span class="badge badge-sm bg-gradient-success">
-                                                        Selesai
-                                                    </span>
+                                            <td class="text-xs font-weight-bold mb-0 text-center">
+                                                @if ($og->has('returningGoods') && $og->returningGoods->is_active)
+                                                    {{ date('Y-m-d', strtotime($og->returningGoods->created_at)) }}<br>
+                                                    {{ date('H:i:s', strtotime($og->returningGoods->created_at)) }}
                                                 @else
-                                                    <span class="badge badge-sm bg-gradient-info">
-                                                        Proses
-                                                    </span>
+                                                    -
                                                 @endif
                                             </td>
-                                            <td class="align-middle">
-                                                <a href="{{ route('production.detail', ['id' => $production->id]) }}"
+                                            
+                                            <td class="text-xs font-weight-bold mb-0 text-center">
+                                                @if ($og->has('returningGoods') && $og->returningGoods->is_active)
+                                                    {{ getDuration($og->created_at, $og->returningGoods->created_at) }} Jam
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
+                                            <td class="text-xs font-weight-bold mb-0 text-end">
+                                                @if ($og->has('returningGoods') && $og->returningGoods->is_active)
+                                                    Rp. {{ number_format($og->returningGoods->total_price, 0, ',', '.') }}
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
+                                            <td class="text-xs font-weight-bold mb-0">
+                                                <ul>
+                                                    @foreach ($og->products as $product)
+                                                        <li>{{$product->name}}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </td>
+                                            <td class="text-xs font-weight-bold mb-0">
+                                                @if ($og->has('returningGoods'))
+                                                    @if ($og->returningGoods->is_active)
+                                                        <span class="badge badge-sm bg-gradient-info">
+                                                            Proses
+                                                        </span>
+                                                    @else
+                                                        <span class="badge badge-sm bg-gradient-success">
+                                                            Selesai
+                                                        </span>
+                                                    @endif
+                                                    
+                                                @else
+                                                    <span class="badge badge-sm bg-gradient-info">-</span>
+                                                @endif
+                                            </td>
+                                            <td class="text-xs font-weight-bold mb-0">
+                                                {{-- <a href="{{ route('logistic.detail', ['id' => $og->id]) }}"
                                                     class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
-                                                    data-original-title="Edit user">
+                                                    data-original-title="Edit user"> --}}
                                                     <i class=" fas fa-eye text-secondary font-weight-bold text-xs"
                                                         data-toggle="tooltip" data-original-title="Lihat Detail"></i>
-                                                </a>
+                                                {{-- </a> --}}
                                             </td>
                                         </tr>
-                                    @endforeach --}}
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -204,7 +233,7 @@
     <!-- Optional: Place to the bottom of scripts -->
     <script>
         $(document).ready(function() {
-            $('#tableProduction').DataTable({
+            $('#tableLogistic').DataTable({
                 // dom: 'Bfrtip',
                 // buttons: [
                 //     'copy', 'csv', 'excel', 'pdf', 'print'
@@ -216,28 +245,28 @@
         // Function to add a new material row
         // function addMaterialRow() {
         //     const materialRow = `
-        //         <div class="row material">
-        //             <div class="col mb-1">
-        //                 <div class="form-group">
-        //                     <label for="material_id">Bahan Baku:</label>
-        //                     <select class="form-control" name="materials[id][]" required>
-        //                         <option value=""  selected disabled hidden>Pilih Bahan Baku</option>
-        //                     </select>
-        //                 </div>
-        //             </div>
-        //             <div class="col mb-1">
-        //                 <label class="form-label" for="quantity_used">Jumlah:</label>
-        //                 <input class="form-control" type="number" name="materials[quantity_used][]" required>
-        //             </div>
-        //             <div class="col mb-1">
-        //                 <label class="form-label" for="estimated_cost">Estimasi Biaya:</label>
-        //                 <input class="form-control" type="number" name="materials[estimated_cost][]" required>
-        //             </div>
-        //             <div class="col-1 mb-1">
-        //                 <button class="removeMaterial btn btn-danger mt-3 p-3" onclick="removeMaterialRow(event)" type="button"><i class="fa fa-trash"></i></button>
-        //             </div>
-        //         </div>
-        //     `;
+    //         <div class="row material">
+    //             <div class="col mb-1">
+    //                 <div class="form-group">
+    //                     <label for="material_id">Bahan Baku:</label>
+    //                     <select class="form-control" name="materials[id][]" required>
+    //                         <option value=""  selected disabled hidden>Pilih Bahan Baku</option>
+    //                     </select>
+    //                 </div>
+    //             </div>
+    //             <div class="col mb-1">
+    //                 <label class="form-label" for="quantity_used">Jumlah:</label>
+    //                 <input class="form-control" type="number" name="materials[quantity_used][]" required>
+    //             </div>
+    //             <div class="col mb-1">
+    //                 <label class="form-label" for="estimated_cost">Estimasi Biaya:</label>
+    //                 <input class="form-control" type="number" name="materials[estimated_cost][]" required>
+    //             </div>
+    //             <div class="col-1 mb-1">
+    //                 <button class="removeMaterial btn btn-danger mt-3 p-3" onclick="removeMaterialRow(event)" type="button"><i class="fa fa-trash"></i></button>
+    //             </div>
+    //         </div>
+    //     `;
         //     updateMaterialCount(1);
         //     let count = $('#material_count').val();
         //     console.log(count);
