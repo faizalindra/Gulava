@@ -107,7 +107,7 @@
                                             </td>
 
                                             <td class="text-xs font-weight-bold mb-0 text-center">
-                                                @if ($og->has('returningGoods') && !$og->returningGoods->is_active)
+                                                @if ($og->returningGoods)
                                                     {{ date('Y-m-d', strtotime($og->returningGoods->created_at)) }}<br>
                                                     {{ date('H:i:s', strtotime($og->returningGoods->created_at)) }}
                                                 @else
@@ -116,20 +116,21 @@
                                             </td>
 
                                             <td class="text-xs font-weight-bold mb-0 text-center">
-                                                @if ($og->has('returningGoods') && !$og->returningGoods->is_active)
+                                                @if ($og->returningGoods)
                                                     @php
                                                         $start = Carbon\Carbon::parse($og->created_at);
                                                         $end = Carbon\Carbon::parse($og->returningGoods->created_at);
                                                         $diff = $start->diffInHours($end);
-                                                        $diff = $diff . ' Jam';
+                                                        echo $diff;
                                                     @endphp
+                                                    Jam
                                                 @else
                                                     -
                                                 @endif
                                             </td>
 
                                             <td class="text-xs font-weight-bold mb-0 text-end">
-                                                @if ($og->has('returningGoods') && !$og->returningGoods->is_active)
+                                                @if ($og->returningGoods)
                                                     Rp. {{ number_format($og->returningGoods->total_amount, 0, ',', '.') }}
                                                 @else
                                                     -
@@ -145,18 +146,14 @@
                                             </td>
 
                                             <td class="text-xs font-weight-bold mb-0">
-                                                @if ($og->has('returningGoods'))
-                                                    @if ($og->returningGoods->is_active)
-                                                        <span class="badge badge-sm bg-gradient-info">
-                                                            Proses
-                                                        </span>
-                                                    @else
-                                                        <span class="badge badge-sm bg-gradient-success">
-                                                            Selesai
-                                                        </span>
-                                                    @endif
+                                                @if ($og->returningGoods)
+                                                    <span class="badge badge-sm bg-gradient-success">
+                                                        Selesai
+                                                    </span>
                                                 @else
-                                                    <span class="badge badge-sm bg-gradient-info">-</span>
+                                                    <span class="badge badge-sm bg-gradient-info">
+                                                        Proses
+                                                    </span>
                                                 @endif
                                             </td>
 
@@ -208,6 +205,11 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                </div>
+                                <div class="col mb-1">
+                                    <label class="form-label" for="total_price">Jumlah (Rp.) :</label>
+                                    <input class="form-control" type="number" name="total_price" id="total_price"
+                                        readonly>
                                 </div>
                                 <div class="mb-1 mb-2">
                                     <label class="form-label" for="description">Deskripsi</label>
@@ -302,6 +304,7 @@
 
                 // Update the total price field in the current row
                 newRow.find("input[name='products[total_price][]']").val(total);
+                updateTotalPrice();
             });
 
             // Add event listener for the product selection dropdown
@@ -319,6 +322,7 @@
                 const quantity = parseFloat(newRow.find("input[name='products[quantity][]']").val()) || 0;
                 const total = quantity * price;
                 newRow.find("input[name='products[total_price][]']").val(total);
+                updateTotalPrice();
             });
         }
 
@@ -327,6 +331,7 @@
             $(event.target).closest(".logistic").remove();
             updateLogisticCount(-1);
             let count = $('#product_count').val();
+            updateTotalPrice();
             console.log(count);
         }
 
@@ -339,6 +344,19 @@
             if (newCount >= 0) {
                 logisticCountInput.val(newCount);
             }
+        }
+
+        function updateTotalPrice() {
+            let totalPrice = 0;
+
+            // Iterate through all rows and sum up the total prices
+            $("#products .logistic").each(function() {
+                const total = parseFloat($(this).find("input[name='products[total_price][]']").val()) || 0;
+                totalPrice += total;
+            });
+
+            // Update the "Jumlah" field with the calculated total price
+            $("#total_price").val(totalPrice);
         }
     </script>
 

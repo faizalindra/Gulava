@@ -25,6 +25,7 @@ class CreateOutgoingGoodsRequest extends FormRequest
         return [
             'salesperson_id' => 'required|integer|min:1|exists:salespersons,id',
             'description' => 'required|string',
+            'total_price' => 'required|min:0|numeric|digits_between:1,12',
             'product_count' => 'required|integer|min:1',
             'products' => 'required|array',
             'products.product_id.*' => 'required|integer|min:1|exists:produks,id|distinct',
@@ -49,6 +50,10 @@ class CreateOutgoingGoodsRequest extends FormRequest
             'salesperson_id.exists' => 'Salesperson tidak ditemukan',
             'description.required' => 'Deskripsi harus diisi',
             'description.string' => 'Deskripsi harus berupa string',
+            'total_price.required' => 'Total harga harus diisi',
+            'total_price.min' => 'Total harga minimal 0',
+            'total_price.numeric' => 'Total harga harus berupa angka',
+            'total_price.digits_between' => 'Total harga maksimal 12 digit',
             'product_count.required' => 'Produk harus diisi',
             'product_count.integer' => 'Produk harus berupa angka',
             'product_count.min' => 'Produk minimal 1',

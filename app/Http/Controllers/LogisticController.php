@@ -42,10 +42,9 @@ class LogisticController extends Controller
 
     public function create(CreateOutgoingGoodsRequest $request)
     {
-        // dd($request->input());
         $request = $request->validated();
-        dd($request);
-        $this->outgoingGoodsService->create($request);
+        $data = $this->outgoingGoodsService->create($request);
+        return $data->toArray();
         return redirect()->route('logistic.index')->with('success', 'Berhasil menambahkan data');
     }
 }
