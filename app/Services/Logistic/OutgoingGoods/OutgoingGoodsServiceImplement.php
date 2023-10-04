@@ -39,8 +39,6 @@ class OutgoingGoodsServiceImplement extends Service implements OutgoingGoodsServ
       ]);
     }
     $data->save();
-    $data->load(['products','salesperson','user']);
-    return $data;
   }
 
 

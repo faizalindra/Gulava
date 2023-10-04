@@ -13,110 +13,227 @@
     {{-- <div id="prod_id" value="{{ $product->id }}"></div> --}}
     <div class="container-fluid py-4">
         <div class="row">
-            <div class="col text-start">
-                <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
-                    data-bs-target="#editProdukModal"><i class="fa fa-pencil fa-sm"></i>Edit</button>
+            <div class="col-4 text-start">
+                @if (!$outgoingGoods->returningGoods)
+                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#editProdukModal"><i class="fa fa-pencil fa-sm"></i> Edit</button>
+                @endif
+
             </div>
-            <div class="col text-center">
-                
+            <div class="col-4 text-center">
+                @if (session('success'))
+                    <div id="alert-alert" class="alert alert-success alert-dismissible fade show text-bold text-white"
+                        role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div id="alert-alert" class="alert alert-danger alert-dismissible fade show text-bold text-white"
+                        role="alert">
+                        <strong>Oops!</strong><br>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li class="text-bold">{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
             </div>
-            <div class="col text-end">
-                {{-- @if ($product->is_active)
-                    <button type="button" class="btn btn-danger btn-sm" id="diableProductButton"
-                        onclick="showConfirmation('disable')">Nonaktifkan</button>
-                @else
-                    <button type="button" class="btn btn-success btn-sm" id="diableProductButton"
-                        onclick="showConfirmation('enable')">Aktifkan</button>
-                @endif --}}
+        </div>
+
+        @if ($outgoingGoods->returningGoods)
+        <div class="row justify-content-end">
+            <div class="col-4 text-end">
+                <a href="{{ route('logistic.print', ['id' => $outgoingGoods->returningGoods->id, 'type' => 'surat-jalan']) }}" target="_blank"
+                    class="btn btn-success btn-sm"><i class="fa fa-print fa-sm"></i> Print</a>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row text-center text-dark">
+                                <h4>LAPORAN KEMBALI</h4>
+                            </div>
+                            <div class="row justify-content-between">
+                                <div class="col-6">
+                                    <div class="row">
+                                        <div class="col-4">Kode</div>
+                                        <div class="col-8">: {{ $outgoingGoods->returningGoods->code }}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-4">Kode Surat</div>
+                                        <div class="col-8">: {{ $outgoingGoods->code }}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-4">Sales</div>
+                                        <div class="col-8">: {{ $outgoingGoods->salesperson->name }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-4">Durasi</div>
+                                        <div class="col-8">: .. jam
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="row">
+                                        <div class="col-4">Tanggal</div>
+                                        <div class="col-8">:
+                                            {{ $outgoingGoods->returningGoods->created_at->format('Y-d-m H:i') }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-4">Telp</div>
+                                        <div class="col-8">:
+                                            {{ $outgoingGoods->salesperson->phone }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pt-4">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead class="table-light">
+                                            <tr class="text-center">
+                                                <th rowspan="2" scope="col">No</th>
+                                                <th rowspan="2" scope="col">Nama Produk</th>
+                                                <th rowspan="2" scope="col">Kode/SKU</th>
+                                                <th colspan="3" scope="col">Sales</th>
+                                                <th rowspan="3" scope="col">Harga</th>
+                                                <th rowspan="3" scope="col">Total Harga</th>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col">Awal</th>
+                                                <th scope="col">Akhir</th>
+                                                <th scope="col">Sisa</th>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($outgoingGoods->returningGoods->products as $product)
+                                                <tr>
+                                                    <td scope="row">{{ $loop->iteration }}</td>
+                                                    <td>{{ $product->name }}</td>
+                                                    <td>{{ $product->code }}</td>
+                                                    <td class="text-end">{{ $outgoingGoods->products[$loop->iteration - 1]->pivot->quantity }} Kg</td>
+                                                    <td class="text-end">{{ $product->pivot->quantity }} Kg</td>
+                                                    <td class="text-end">{{ $product->pivot->quantity - $product->pivot->quantity }} Kg</td>
+                                                    <td class="text-end">Rp.
+                                                        {{ number_format($product->pivot->price, 0, '.', '.') }}</td>
+                                                    <td class="text-end">Rp.
+                                                        {{ number_format($product->pivot->total_price, 0, '.', '.') }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                        <tfoot class="th" scope="row" aria-colspan="5">
+                                            <tr>
+                                                <td colspan="7" class="text-end">Sub-Total</td>
+                                                <td class="text-end">Rp.
+                                                    {{ number_format($outgoingGoods->total_price, 0, '.', '.') }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="7" class="text-end">Sales Fee</td>
+                                                <td class="text-end">Rp. -
+                                                    {{ number_format($outgoingGoods->returningGoods->salesFee->price, 0, '.', '.') }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="7" class="text-end">Total</td>
+                                                <td class="text-end text-bold text-dark">Rp.
+                                                    {{ number_format($outgoingGoods->returningGoods->total_amount, 0, '.', '.') }}</td>
+                                            </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+        <div class="row justify-content-end pt-3 mt-3">
+            <div class="col-4 text-end">
+                <a href="{{ route('logistic.print', ['id' => $outgoingGoods->returningGoods->id, 'type' => 'surat-jalan']) }}" target="_blank"
+                    class="btn btn-success btn-sm"><i class="fa fa-print fa-sm"></i> Print</a>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
                 <div class="card mb-4">
-                    <div class="card-body"></div>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- Form Modal -->
-        <div class="modal fade" id="editProdukModal" tabindex="-1" role="dialog"
-            aria-labelledby="editProdukModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-md modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editProdukModalLabel">Selesaikan Logistik </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true" class="text-dark">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col">
-                                <div class="container">
-                                    {{-- <form id="produkForm" method="post"
-                                        action="{{ route('produks.update', ['id' => $product->id]) }}">
-                                        @csrf
-                                        @method('post')
-                                        <div class="col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="name">Nama</label>
-                                                <input class="form-control" id="name" name="name" type="text"
-                                                    placeholder="Nama" data-sb-validations="required"
-                                                    value="{{ $product->name }}" required />
-                                                <div class="invalid-feedback" data-sb-feedback="name:required">Nama is
-                                                    required.
-                                                </div>
-                                            </div>
-                                            <div class="mb-1">
-                                                <label class="form-label" for="price">Harga Satuan</label>
-                                                <input class="form-control" id="price" name="price" type="number"
-                                                    placeholder="Harga Satuan (Rp.)" data-sb-validations="required"
-                                                    value="{{ $product->price }}" required />
-                                                <div class="invalid-feedback" data-sb-feedback="price:required">Harga
-                                                    Satuan
-                                                    is
-                                                    required.</div>
-                                            </div>
-                                            <div class="mb-1">
-                                                <label class="form-label" for="estimated_sales">Estimasi Total</label>
-                                                <input class="form-control" id="estimated_sales" name="estimated_sales"
-                                                    type="number" placeholder="Harga Satuan (Rp.)"
-                                                    data-sb-validations="required"
-                                                    value="{{ $product->estimated_sales }}" />
-                                            </div>
-                                            <div class="mb-1">
-                                                <label class="form-label" for="stock">Stok</label>
-                                                <input class="form-control" id="stock" name="stock" type="number"
-                                                    value="0" placeholder="Stok Produk (Kg)"
-                                                    data-sb-validations="required" value="{{ $product->stock }}"
-                                                    required />
-                                                <div class="invalid-feedback" data-sb-feedback="stock:required">Stok
-                                                    Produk is
-                                                    required.</div>
-                                            </div>
-                                            <div class="mb-1">
-                                                <label class="form-label" for="grade">Grade</label>
-                                                <select class="form-select" id="grade" name="grade"
-                                                    aria-label="Grade" value="{{ $product->grade }}" required>
-                                                    @foreach ($grades as $grade)
-                                                        <option value="{{ $grade->name }}">{{ $grade->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="mb-1">
-                                                <label for="description" class="form-label">Deskripsi Produk</label>
-                                                <textarea class="form-control" name="description" id="description" value={{ $product->description }}
-                                                    rows="3"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-6"></div>
-                                        <div class="d-grid pt-4">
-                                            <button class="btn btn-primary btn-lg" id="submitButton"
-                                                type="submit">Submit</button>
-                                        </div>
-                                    </form> --}}
+                    <div class="card-body">
+                        <div class="row text-center text-dark">
+                            <h4>SURAT JALAN</h4>
+                        </div>
+                        <div class="row justify-content-between">
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-4">Kode</div>
+                                    <div class="col-8">: {{ $outgoingGoods->code }}</div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-4">Sales</div>
+                                    <div class="col-8">: {{ $outgoingGoods->salesperson->name }}</div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="row">
+                                    <div class="col-4">Tanggal</div>
+                                    <div class="col-8">: {{ $outgoingGoods->created_at->format('Y-d-m H:i') }}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">Telp</div>
+                                    <div class="col-8">: {{ $outgoingGoods->salesperson->phone }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row pt-4">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th scope="col">No</th>
+                                            <th scope="col">Nama Produk</th>
+                                            {{-- <th scope="col">Deskripsi</th> --}}
+                                            <th scope="col">Kode/SKU</th>
+                                            <th scope="col">Jumlah</th>
+                                            <th scope="col">Harga</th>
+                                            <th scope="col">Total Harga</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($outgoingGoods->products as $product)
+                                            <tr>
+                                                <td scope="row">{{ $loop->iteration }}</td>
+                                                <td>{{ $product->name }}</td>
+                                                {{-- <td>{{ $product->description }}</td> --}}
+                                                <td>{{ $product->code }}</td>
+                                                <td class="text-end">{{ $product->pivot->quantity }} Kg</td>
+                                                <td class="text-end">Rp. {{ number_format($product->pivot->price, 0,'.','.') }}</td>
+                                                <td class="text-end">Rp.
+                                                    {{ number_format($product->pivot->total_price, 0, '.', '.') }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                    <tfoot class="th" scope="row" aria-colspan="5">
+                                        <tr>
+                                            <td colspan="5" class="text-end">Total</td>
+                                            <td class="text-end">Rp.
+                                                {{ number_format($outgoingGoods->total_price, 0, '.', '.') }}</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row pb-4 pt-2">
+                            <span>Catatan : {{ $outgoingGoods->description }}</span>
+                        </div>
+                        <div class="row">
+                            <div class="col-8"></div>
+                            <div class="col-4 text-center">
+                                <span class="text-bold">Pengirim</span>
+                                <br> <br> <br>
+                                <span
+                                    class="text-bold text-underline">{{ $outgoingGoods->user->firstname . ' ' . $outgoingGoods->user->lastname }}</span>
                             </div>
                         </div>
                     </div>
@@ -124,18 +241,133 @@
             </div>
         </div>
 
+
+        @if (!$outgoingGoods->returningGoods)
+            <div class="modal fade" id="editProdukModal" tabindex="-1" role="dialog"
+                aria-labelledby="editProdukModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editProdukModalLabel">Selesaikan Logistik </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="text-dark">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="container">
+                                        <form id="logisticForm" method="PUT" action="{{ route('logistic.update') }}">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label" for="salesperson_id">Sales</label>
+                                                    <select class="form-control" id="salesperson_id"
+                                                        name="salesperson_id"
+                                                        value="{{ $outgoingGoods->salespersons_id }}" required>
+                                                        @foreach ($salesperson as $sales)
+                                                            <option value="{{ intval($sales->id) }}"
+                                                                {{ $outgoingGoods->salespersons_id == $sales->id ? 'selected' : '' }}>
+                                                                {{ $sales->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col mb-1">
+                                                <label class="form-label" for="total_price">Jumlah (Rp.) :</label>
+                                                <input class="form-control" type="number" name="total_price"
+                                                    value="{{ $outgoingGoods->total_price }}" id="total_price" readonly>
+                                            </div>
+                                            <div class="mb-1 mb-2">
+                                                <label class="form-label" for="description">Deskripsi</label>
+                                                <textarea class="form-control" id="description" name="description" rows="3"
+                                                    value="{{ $outgoingGoods->description }}" placeholder="Deskripsi"></textarea>
+                                            </div>
+                                            <input id="product_count" type="number" name="product_count" value="0"
+                                                hidden>
+                                            <div id="products">
+                                                @foreach ($outgoingGoods->products as $product)
+                                                    <div class="row logistic">
+                                                        <div class="col mb-1">
+                                                            <div class="form-group">
+                                                                <label for="logistic_id">Produk:</label>
+                                                                <select class="form-control" name="products[product_id][]"
+                                                                    required>
+                                                                    <option value="" selected disabled hidden>Pilih
+                                                                        Produk</option>
+                                                                    @foreach ($products as $p)
+                                                                        <option value="{{ intval($p->id) }}"
+                                                                            data-price="{{ $p->price }}">
+                                                                            {{ $p->name }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col mb-1">
+                                                            <label class="form-label" for="quantity_used">Jumlah:</label>
+                                                            <input class="form-control" type="number"
+                                                                value="{{ $product->pivot->quantity }}"
+                                                                name="products[quantity][]" required>
+                                                        </div>
+                                                        <div class="col mb-1">
+                                                            <label class="form-label" for="price">Harga
+                                                                Satuan:</label>
+                                                            <input class="form-control" type="number"
+                                                                value="{{ $product->pivot->price }}"
+                                                                name="products[price][]" required>
+                                                        </div>
+                                                        <div class="col mb-1">
+                                                            <label class="form-label" for="total_price">Total
+                                                                Harga:</label>
+                                                            <input class="form-control" type="number"
+                                                                value="{{ $product->pivot->total_price }}"
+                                                                name="products[total_price][]" readonly>
+                                                        </div>
+                                                        <div class="col-1 mb-1">
+                                                            <button class="removeLogistic btn btn-danger mt-3 p-3"
+                                                                onclick="removeLogisticRow(event)" type="button"><i
+                                                                    class="fa fa-trash"></i></button>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                            <button id="addLogistic" onclick="addLogisticRow()" type="button"
+                                                class="btn btn-primary">Add
+                                                Bahan Baku</button>
+                                            <div class="col-6"></div>
+                                            <div class="d-grid pt-4 modal-footer">
+                                                <div class="row">
+                                                    <div class="col"><button class="btn btn-secondary btn-lg"
+                                                            type="button" data-bs-dismiss="modal">Cancel</button>
+                                                    </div>
+                                                    <div class="col"><button class="btn btn-primary btn-lg"
+                                                            id="submit" type="submit">Submit</button></div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+
         <script>
             $(document).ready(function() {
                 $('#productionTable').DataTable();
-                // $('#salesTaketable').DataTable({
-                //     "pageLength": 5
-                // });
-                $("#product-alert").fadeTo(4000, 500).slideUp(500, function() {
-                    $("#product-alert").alert('close');
+                $("#alert-alert").fadeTo(4000, 500).slideUp(500, function() {
+                    $("#alert-alert").alert('close');
                 });
+            });
+            $("#alert-alert").fadeTo(4000, 500).slideUp(500, function() {
+                $("#alert-alert").alert('close');
             });
         </script>
         @include('layouts.footers.auth.footer')
-    </div>
     </div>
 @endsection

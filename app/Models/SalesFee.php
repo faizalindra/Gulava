@@ -11,8 +11,9 @@ class SalesFee extends Model
 
     protected $fillable = [
         'code',
-        'sales_id',
-        'fee_id',
+        'salespersons_id',
+        'user_id',
+        'returning_goods_id',
         'price',
         'description',
     ];
@@ -31,8 +32,8 @@ class SalesFee extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function ongoingGoods()
+    public function returingGoods()
     {
-        return $this->belongsTo(OutgoingGoods::class);
+        return $this->belongsTo(ReturningGoods::class);
     }
 }

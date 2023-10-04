@@ -35,16 +35,21 @@ class LogisticController extends Controller
 
     public function detail($id)
     {
-        $outgoingGoods = OutgoingGoods::with(['user', 'salesperson', 'returningGoods.products', 'products'])->find($id);
+        $outgoingGoods = OutgoingGoods::with(['user', 'salesperson', 'returningGoods.products', 'returningGoods.user', 'returningGoods.salesFee', 'products'])->find($id);
         $salesperson = $this->salespersonService->getAllSalespersonForSelect();
-        return view('pages.Logistic.logistic-detail', compact('outgoingGoods', 'salesperson'));
+        $products = $this->productService->getAllProduksForFormSelector();
+        // return $outgoingGoods->toArray();
+        return view('pages.Logistic.logistic-detail', compact('outgoingGoods', 'salesperson', 'products'));
     }
 
     public function create(CreateOutgoingGoodsRequest $request)
     {
         $request = $request->validated();
-        $data = $this->outgoingGoodsService->create($request);
-        return $data->toArray();
+        $this->outgoingGoodsService->create($request);
         return redirect()->route('logistic.index')->with('success', 'Berhasil menambahkan data');
+    }
+
+    public function print($id){
+
     }
 }

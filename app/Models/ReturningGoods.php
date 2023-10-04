@@ -32,6 +32,10 @@ class ReturningGoods extends Model
     {
         return $this->belongsTo(User::class);
     }
+    
+    public function salesFee(){
+        return $this->hasOne(SalesFee::class);
+    }
 
     public function outgoingGoods()
     {

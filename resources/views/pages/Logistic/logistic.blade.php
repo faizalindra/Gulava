@@ -260,7 +260,7 @@
                         <select class="form-control" name="products[product_id][]" required>
                             <option value="" selected disabled hidden>Pilih Produk</option>
                             @foreach ($products as $product)
-                                <option value="{{ intval($product->id) }}"" data-price="{{ $product->price }}">{{ $product->name }}
+                                <option value="{{ intval($product->id) }}" data-price="{{ $product->price }}">{{ $product->name }}
                                 </option>
                             @endforeach
                         </select>

@@ -30,7 +30,7 @@ class LogisticSeed extends Seeder
                 'code' => 'OGG' . str_pad($i, 3, '0', STR_PAD_LEFT),
                 'salespersons_id' =>  $salespersonID[$salesPersonSelector]->id,
                 'user_id' => 1,
-                'total_price' => rand(100000, 1000000),
+                'total_price' => 0,
                 'description' => $this->faker->text(5),
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -54,12 +54,15 @@ class LogisticSeed extends Seeder
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
+                $og->total_price += $qty * $price;
             }
         }
+        $outgoingGoods->each->save();
         OutgoingGoodsProduks::insert($data);
 
         $outgoingGoods->load('products');
         $returningGoods = [];
+        $salesFees = [];
         foreach ($outgoingGoods as $og) {
             $returningGoods[] = [
                 'code' => 'RTG' . str_pad($og->id, 3, '0', STR_PAD_LEFT),
@@ -67,17 +70,29 @@ class LogisticSeed extends Seeder
                 'user_id' => 1,
                 'salespersons_id' => $og->salespersons_id,
                 'outgoing_good_id' => $og->id,
-                'total_amount' => $og->total_price,
+                'total_amount' => $og->total_price - ($og->total_price * 0.1),
+                'description' => $this->faker->text(5),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+
+            $salesFees[] = [
+                'code' => 'SF' . str_pad($og->id, 3, '0', STR_PAD_LEFT),
+                'salespersons_id' => $og->salespersons_id,
+                'user_id' => 1,
+                'returning_goods_id' => $og->id,
+                'price' => $og->total_price * 0.1,
                 'description' => $this->faker->text(5),
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
         }
         \App\Models\ReturningGoods::insert($returningGoods);
+        \App\Models\SalesFee::insert($salesFees);
         $returningGoods = \App\Models\ReturningGoods::with('outgoingGoods')->get();
         $data = [];
-        foreach($returningGoods as $rg){
-            foreach($rg->outgoingGoods->products as $ogp){
+        foreach ($returningGoods as $rg) {
+            foreach ($rg->outgoingGoods->products as $ogp) {
                 $data[] = [
                     'returning_goods_id' => $rg->id,
                     'produk_id' => $ogp->id,
