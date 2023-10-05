@@ -46,10 +46,21 @@ class LogisticController extends Controller
     {
         $request = $request->validated();
         $this->outgoingGoodsService->create($request);
-        return redirect()->route('logistic.index')->with('success', 'Berhasil menambahkan data');
+        return back()->with('success', 'Berhasil menambahkan data');
     }
 
-    public function print($id){
+    public function update($id, CreateOutgoingGoodsRequest $request)
+    {
+        try {
+            $request = $request->validated();
+            $this->outgoingGoodsService->update($id, $request);
+            return back()->with('success', 'Berhasil mengubah data');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal mengubah data, error: ' . $e->getMessage());
+        }
+    }
 
+    public function print($id)
+    {
     }
 }

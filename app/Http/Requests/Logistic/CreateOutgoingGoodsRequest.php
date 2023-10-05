@@ -38,6 +38,7 @@ class CreateOutgoingGoodsRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
+        dd($validator->errors());
         return back()->with('error',$validator->errors());
     }
 

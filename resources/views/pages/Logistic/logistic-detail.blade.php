@@ -42,21 +42,27 @@
                     </div>
                 @endif
             </div>
+            @if (!$outgoingGoods->returningGoods)
+                <div class="col-4 text-end">
+                    <a href="{{ route('logistic.print', ['id' => $outgoingGoods->id, 'type' => 'surat-jalan']) }}"
+                        target="_blank" class="btn btn-success btn-sm"><i class="fa fa-print fa-sm"></i> Print</a>
+                </div>
+            @endif
         </div>
 
         @if ($outgoingGoods->returningGoods)
-        <div class="row justify-content-end">
-            <div class="col-4 text-end">
-                <a href="{{ route('logistic.print', ['id' => $outgoingGoods->returningGoods->id, 'type' => 'surat-jalan']) }}" target="_blank"
-                    class="btn btn-success btn-sm"><i class="fa fa-print fa-sm"></i> Print</a>
+            <div class="row justify-content-end">
+                <div class="col-4 text-end">
+                    <a href="{{ route('logistic.print', ['id' => $outgoingGoods->returningGoods->id, 'type' => 'surat-jalan']) }}"
+                        target="_blank" class="btn btn-success btn-sm"><i class="fa fa-print fa-sm"></i> Print</a>
+                </div>
             </div>
-        </div>
             <div class="row">
                 <div class="col-12">
                     <div class="card mb-4">
                         <div class="card-body">
                             <div class="row text-center text-dark">
-                                <h4>LAPORAN KEMBALI</h4>
+                                <h4><u>LAPORAN PERJALANAN</u></h4>
                             </div>
                             <div class="row justify-content-between">
                                 <div class="col-6">
@@ -75,7 +81,14 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-4">Durasi</div>
-                                        <div class="col-8">: .. jam
+                                        <div class="col-8">:
+                                            @php
+                                                $start = Carbon\Carbon::parse($outgoingGoods->created_at);
+                                                $end = Carbon\Carbon::parse($outgoingGoods->returningGoods->created_at);
+                                                $diff = $start->diffInHours($end);
+                                                echo $diff;
+                                            @endphp
+                                            Jam
                                         </div>
                                     </div>
                                 </div>
@@ -116,9 +129,12 @@
                                                     <td scope="row">{{ $loop->iteration }}</td>
                                                     <td>{{ $product->name }}</td>
                                                     <td>{{ $product->code }}</td>
-                                                    <td class="text-end">{{ $outgoingGoods->products[$loop->iteration - 1]->pivot->quantity }} Kg</td>
+                                                    <td class="text-end">
+                                                        {{ $outgoingGoods->products[$loop->iteration - 1]->pivot->quantity }}
+                                                        Kg</td>
                                                     <td class="text-end">{{ $product->pivot->quantity }} Kg</td>
-                                                    <td class="text-end">{{ $product->pivot->quantity - $product->pivot->quantity }} Kg</td>
+                                                    <td class="text-end">
+                                                        {{ $product->pivot->quantity - $product->pivot->quantity }} Kg</td>
                                                     <td class="text-end">Rp.
                                                         {{ number_format($product->pivot->price, 0, '.', '.') }}</td>
                                                     <td class="text-end">Rp.
@@ -135,13 +151,17 @@
                                             <tr>
                                                 <td colspan="7" class="text-end">Sales Fee</td>
                                                 <td class="text-end">Rp. -
-                                                    {{ number_format($outgoingGoods->returningGoods->salesFee->price, 0, '.', '.') }}</td>
+                                                    {{ number_format($outgoingGoods->returningGoods->salesFee->price, 0, '.', '.') }}
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td colspan="7" class="text-end">Total</td>
                                                 <td class="text-end text-bold text-dark">Rp.
-                                                    {{ number_format($outgoingGoods->returningGoods->total_amount, 0, '.', '.') }}</td>
+                                                    {{ number_format($outgoingGoods->returningGoods->total_amount, 0, '.', '.') }}
+                                                </td>
                                             </tr>
+                                        </tfoot>
+                                        <caption>Catatan : {{ $outgoingGoods->returningGoods->description }}</caption>
                                     </table>
                                 </div>
                             </div>
@@ -151,18 +171,20 @@
             </div>
         @endif
 
-        <div class="row justify-content-end pt-3 mt-3">
-            <div class="col-4 text-end">
-                <a href="{{ route('logistic.print', ['id' => $outgoingGoods->returningGoods->id, 'type' => 'surat-jalan']) }}" target="_blank"
-                    class="btn btn-success btn-sm"><i class="fa fa-print fa-sm"></i> Print</a>
+        @if ($outgoingGoods->returningGoods)
+            <div class="row justify-content-end pt-3 mt-3">
+                <div class="col-4 text-end">
+                    <a href="{{ route('logistic.print', ['id' => $outgoingGoods->id, 'type' => 'surat-jalan']) }}"
+                        target="_blank" class="btn btn-success btn-sm"><i class="fa fa-print fa-sm"></i> Print</a>
+                </div>
             </div>
-        </div>
+        @endif
         <div class="row">
             <div class="col-12">
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="row text-center text-dark">
-                            <h4>SURAT JALAN</h4>
+                            <h4><u>SURAT JALAN</u></h4>
                         </div>
                         <div class="row justify-content-between">
                             <div class="col-6">
@@ -208,7 +230,8 @@
                                                 {{-- <td>{{ $product->description }}</td> --}}
                                                 <td>{{ $product->code }}</td>
                                                 <td class="text-end">{{ $product->pivot->quantity }} Kg</td>
-                                                <td class="text-end">Rp. {{ number_format($product->pivot->price, 0,'.','.') }}</td>
+                                                <td class="text-end">Rp.
+                                                    {{ number_format($product->pivot->price, 0, '.', '.') }}</td>
                                                 <td class="text-end">Rp.
                                                     {{ number_format($product->pivot->total_price, 0, '.', '.') }}</td>
                                             </tr>
@@ -221,11 +244,9 @@
                                                 {{ number_format($outgoingGoods->total_price, 0, '.', '.') }}</td>
                                         </tr>
                                     </tfoot>
+                                    <caption>Catatan : {{ $outgoingGoods->description }}</caption>
                                 </table>
                             </div>
-                        </div>
-                        <div class="row pb-4 pt-2">
-                            <span>Catatan : {{ $outgoingGoods->description }}</span>
                         </div>
                         <div class="row">
                             <div class="col-8"></div>
@@ -241,7 +262,7 @@
             </div>
         </div>
 
-
+        {{-- Form Edit Logistic --}}
         @if (!$outgoingGoods->returningGoods)
             <div class="modal fade" id="editProdukModal" tabindex="-1" role="dialog"
                 aria-labelledby="editProdukModalLabel" aria-hidden="true">
@@ -257,9 +278,10 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="container">
-                                        <form id="logisticForm" method="PUT" action="{{ route('logistic.update') }}">
+                                        <form id="logisticForm" method="post"
+                                            action="{{ route('logistic.update', ['id' => $outgoingGoods->id]) }}">
                                             @csrf
-                                            @method('PUT')
+                                            @method('put')
                                             <div class="col-12">
                                                 <div class="mb-1">
                                                     <label class="form-label" for="salesperson_id">Sales</label>
@@ -281,11 +303,10 @@
                                             </div>
                                             <div class="mb-1 mb-2">
                                                 <label class="form-label" for="description">Deskripsi</label>
-                                                <textarea class="form-control" id="description" name="description" rows="3"
-                                                    value="{{ $outgoingGoods->description }}" placeholder="Deskripsi"></textarea>
+                                                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Deskripsi">{{ $outgoingGoods->description }}</textarea>
                                             </div>
-                                            <input id="product_count" type="number" name="product_count" value="0"
-                                                hidden>
+                                            <input id="product_count" type="number" name="product_count"
+                                                value="{{ count($outgoingGoods->products) }}" hidden>
                                             <div id="products">
                                                 @foreach ($outgoingGoods->products as $product)
                                                     <div class="row logistic">
@@ -298,7 +319,8 @@
                                                                         Produk</option>
                                                                     @foreach ($products as $p)
                                                                         <option value="{{ intval($p->id) }}"
-                                                                            data-price="{{ $p->price }}">
+                                                                            data-price="{{ $p->price }}"
+                                                                            {{ $p->id == $product->id ? 'selected' : '' }}>
                                                                             {{ $p->name }}
                                                                         </option>
                                                                     @endforeach
@@ -367,6 +389,121 @@
             $("#alert-alert").fadeTo(4000, 500).slideUp(500, function() {
                 $("#alert-alert").alert('close');
             });
+
+            // Attach event listeners to existing rows
+            $("#products .logistic").each(function() {
+                attachEventListenersToRow($(this));
+            });
+
+            function addLogisticRow() {
+                const logisticRow = `
+                      <div class="row logistic">
+                          <div class="col mb-1">
+                              <div class="form-group">
+                                  <label for="logistic_id">Produk:</label>
+                                  <select class="form-control" name="products[product_id][]" required>
+                                      <option value="" selected disabled hidden>Pilih Produk</option>
+                                      @foreach ($products as $product)
+                                          <option value="{{ intval($product->id) }}" data-price="{{ $product->price }}">{{ $product->name }}
+                                          </option>
+                                      @endforeach
+                                  </select>
+                              </div>
+                          </div>
+                          <div class="col mb-1">
+                              <label class="form-label" for="quantity_used">Jumlah:</label>
+                              <input class="form-control" type="number" name="products[quantity][]" required>
+                          </div>
+                          <div class="col mb-1">
+                              <label class="form-label" for="price">Harga Satuan:</label>
+                              <input class="form-control" type="number" name="products[price][]" required>
+                          </div>
+                          <div class="col mb-1">
+                              <label class="form-label" for="total_price">Total Harga:</label>
+                              <input class="form-control" type="number" name="products[total_price][]"
+                                  readonly>
+                          </div>
+                          <div class="col-1 mb-1">
+                              <button class="removeLogistic btn btn-danger mt-3 p-3"
+                                  onclick="removeLogisticRow(event)" type="button"><i
+                                      class="fa fa-trash"></i></button>
+                          </div>
+                      </div>`;
+                updateLogisticCount(1);
+                let count = $('#product_count').val();
+                console.log(count);
+                $("#products").append(logisticRow);
+                // Get the newly added row
+                const newRow = $("#products .logistic").last();
+                attachEventListenersToRow(newRow);
+            }
+
+            // Function to remove a logistic row
+            function removeLogisticRow(event) {
+                $(event.target).closest(".logistic").remove();
+                updateLogisticCount(-1);
+                let count = $('#product_count').val();
+                updateTotalPrice();
+                console.log(count);
+            }
+
+            function attachEventListenersToRow(row) {
+                // Add event listeners for quantity and price fields in the new row
+                row.find("input[name='products[quantity][]'], input[name='products[price][]']").on("input", function() {
+                    // Get quantity and price values from the current row
+                    const quantity = parseFloat(row.find("input[name='products[quantity][]']").val()) || 0;
+                    const price = parseFloat(row.find("input[name='products[price][]']").val()) || 0;
+
+                    // Calculate the total price
+                    const total = quantity * price;
+
+                    // Update the total price field in the current row
+                    row.find("input[name='products[total_price][]']").val(total);
+                    updateTotalPrice();
+                });
+
+                // Add event listener for the product selection dropdown
+                row.find("select[name='products[product_id][]']").on("change", function() {
+                    // Get the selected option
+                    const selectedOption = $(this).find("option:selected");
+
+                    // Get the data-price attribute value
+                    const price = parseFloat(selectedOption.data("price")) || 0;
+
+                    // Update the price input field with the selected price
+                    row.find("input[name='products[price][]']").val(price);
+
+                    // Calculate and update the total price
+                    const quantity = parseFloat(row.find("input[name='products[quantity][]']").val()) || 0;
+                    const total = quantity * price;
+                    row.find("input[name='products[total_price][]']").val(total);
+                    updateTotalPrice();
+                });
+            }
+
+            function updateLogisticCount(change) {
+                const logisticCountInput = $('#product_count');
+                const currentCount = parseInt(logisticCountInput.val());
+                const newCount = currentCount + change;
+
+                // Ensure the count is not negative
+                if (newCount >= 0) {
+                    logisticCountInput.val(newCount);
+                }
+            }
+
+            function updateTotalPrice() {
+                let totalPrice = 0;
+
+                // Iterate through all rows and sum up the total prices
+                $("#products .logistic").each(function() {
+                    const total = parseFloat($(this).find("input[name='products[total_price][]']").val()) || 0;
+                    totalPrice += total;
+                });
+
+                // Update the "Jumlah" field with the calculated total price
+                $("#total_price").val(totalPrice);
+            }
         </script>
         @include('layouts.footers.auth.footer')
     </div>

@@ -18,6 +18,10 @@ class OutgoingGoods extends Model
         'description',
     ];
 
+    public function details(){
+        return $this->hasMany(OutgoingGoodsProduks::class, 'outgoing_good_id');
+    }
+
 
     public function user(){
         return $this->belongsTo(User::class);
@@ -32,7 +36,7 @@ class OutgoingGoods extends Model
     }
 
     public function products(){
-        return $this->belongsToMany(Produk::class, 'outgoing_goods_produks', 'outgoing_good_id', 'produk_id')->withPivot('quantity', 'price', 'total_price', 'description');
+        return $this->belongsToMany(Produk::class, OutgoingGoodsProduks::class, 'outgoing_good_id', 'produk_id')->withPivot('quantity', 'price', 'total_price', 'description');
     }
 
 }

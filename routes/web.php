@@ -62,11 +62,11 @@ Route::group(['middleware' => ['auth', 'web']], function () {
 	Route::put('raw-material/{id}/update', [RawMaterialController::class, 'update'])->name('raw-material.update');
 
 	Route::get('/logistic', [LogisticController::class, 'index'])->name('logistic');
+	Route::post('/logistic', [LogisticController::class, 'create'])->name('logistic.create');
 	Route::get('/logistic/{id}', [LogisticController::class, 'detail'])->name('logistic.detail');
 	Route::get('/logistic/{id}/print/{type}', [LogisticController::class, 'print'])->name('logistic.print');
-	Route::put('/logistic', [LogisticController::class, 'create'])->name('logistic.update');
-	Route::post('/logistic', [LogisticController::class, 'create'])->name('logistic.create');
 	Route::post('/logistic/{id}', [LogisticController::class, 'finish'])->name('logistic.finish');
+	Route::put('/logistic/{id}', [LogisticController::class, 'update'])->name('logistic.update');
 
 	Route::get('/outgoing', [PageController::class, 'outgoing'])->name('outgoing');
 

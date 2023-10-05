@@ -2,6 +2,7 @@
 
 namespace App\Services\Logistic\OutgoingGoods;
 
+use Illuminate\Support\Facades\DB;
 use LaravelEasyRepository\Service;
 use App\Repositories\OutgoingGoods\OutgoingGoodsRepository;
 
@@ -13,10 +14,12 @@ class OutgoingGoodsServiceImplement extends Service implements OutgoingGoodsServ
    * because used in extends service class
    */
   protected $mainRepository;
+  protected $detailRepository;
 
-  public function __construct(OutgoingGoodsRepository $mainRepository)
+  public function __construct(OutgoingGoodsRepository $mainRepository, OutgoingGoodsRepository $detailRepository)
   {
     $this->mainRepository = $mainRepository;
+    $this->detailRepository = $detailRepository;
   }
 
   public function create($payload)
@@ -39,6 +42,36 @@ class OutgoingGoodsServiceImplement extends Service implements OutgoingGoodsServ
       ]);
     }
     $data->save();
+  }
+
+  public function update($id, array $data)
+  {
+    DB::beginTransaction();
+    try {
+      $products = $data['products'];
+      $data = [
+        'salespersons_id' => $data['salesperson_id'],
+        'user_id' => auth()->user()->id,
+        'description' => $data['description'],
+        'total_price' => $data['total_price'],
+      ];
+
+      $this->mainRepository->update($id, $data);
+      $data = $this->mainRepository->find($id);
+      $data->load('details.products');
+      $data->products()->detach();
+      foreach ($products['product_id'] as $key => $value) {
+        $data->products()->attach($value, [
+          'quantity' => $products['quantity'][$key],
+          'price' => $products['price'][$key],
+          'total_price' => $products['total_price'][$key],
+        ]);
+      }
+      DB::commit();
+    } catch (\Exception $e) {
+      DB::rollBack();
+      throw new \Exception($e->getMessage());
+    }
   }
 
 

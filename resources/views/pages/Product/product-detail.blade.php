@@ -274,8 +274,8 @@
                                             </div>
                                             <div class="mb-1">
                                                 <label for="description" class="form-label">Deskripsi Produk</label>
-                                                <textarea class="form-control" name="description" id="description" value={{ $product->description }}
-                                                    rows="3"></textarea>
+                                                <textarea class="form-control" name="description" id="description"
+                                                    rows="3">{{ $product->description }}</textarea>
                                             </div>
                                         </div>
                                         <div class="col-6"></div>
