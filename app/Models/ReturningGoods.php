@@ -17,11 +17,13 @@ class ReturningGoods extends Model
         'petty_cash_id',
         'price',
         'description',
+        'total_amount'
     ];
 
     protected $casts = [
         'price' => 'integer',
     ];
+    
 
     public function salesperson()
     {

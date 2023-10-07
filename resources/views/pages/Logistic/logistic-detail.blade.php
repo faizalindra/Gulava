@@ -16,7 +16,9 @@
             <div class="col-4 text-start">
                 @if (!$outgoingGoods->returningGoods)
                     <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
-                        data-bs-target="#editProdukModal"><i class="fa fa-pencil fa-sm"></i> Edit</button>
+                        data-bs-target="#editLogisticModal"><i class="fa fa-pencil fa-sm"></i> Edit</button>
+                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#finishLogisticModal"><i class="fa-solid fa-list-check"></i> Finish</button>
                 @endif
 
             </div>
@@ -50,6 +52,7 @@
             @endif
         </div>
 
+        {{-- Card Logistic Returing Goods --}}
         @if ($outgoingGoods->returningGoods)
             <div class="row justify-content-end">
                 <div class="col-4 text-end">
@@ -157,7 +160,7 @@
                                             <tr>
                                                 <td colspan="7" class="text-end">Total</td>
                                                 <td class="text-end text-bold text-dark">Rp.
-                                                    {{ number_format($outgoingGoods->returningGoods->total_amount, 0, '.', '.') }}
+                                                    {{ number_format($outgoingGoods->returningGoods->total_amount - $outgoingGoods->returningGoods->salesFee->price, 0, '.', '.') }}
                                                 </td>
                                             </tr>
                                         </tfoot>
@@ -262,14 +265,15 @@
             </div>
         </div>
 
-        {{-- Form Edit Logistic --}}
+        {{-- Form --}}
         @if (!$outgoingGoods->returningGoods)
-            <div class="modal fade" id="editProdukModal" tabindex="-1" role="dialog"
+            {{-- Form Edit Logistic --}}
+            <div class="modal fade" id="editLogisticModal" tabindex="-1" role="dialog"
                 aria-labelledby="editProdukModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="editProdukModalLabel">Selesaikan Logistik </h5>
+                            <h5 class="modal-title" id="editProdukModalLabel">Edit Logistik </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true" class="text-dark">&times;</span>
                             </button>
@@ -376,6 +380,159 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Form Finish Logistic --}}
+            <div class="modal fade" id="finishLogisticModal" tabindex="-1" role="dialog"
+                aria-labelledby="editProdukModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editProdukModalLabel">Selesaikan Logistik </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="text-dark">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="container">
+                                        <form id="logisticForm" method="post"
+                                            action="{{ route('logistic.finish', ['id' => $outgoingGoods->id]) }}">
+                                            @csrf
+                                            @method('post')
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="row">
+                                                        <h6><b>{{ $outgoingGoods->salesperson->name }}</b></h6>
+                                                    </div>
+                                                    <div class="row">
+                                                        <h6><b>Rp.
+                                                                {{ number_format($outgoingGoods->total_price, 0, '.', '.') }}</b>
+                                                        </h6>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-2"><b>Catatan</b></div>
+                                                        <div class="col-8"><b>: {{ $outgoingGoods->description }}</b>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-sm table-bordered">
+                                                                    <thead class="table-light">
+                                                                        <tr>
+                                                                            <th scope="col">Nama</th>
+                                                                            <th scope="col">Jumlah</th>
+                                                                            <th scope="col">Harga</th>
+                                                                            <th scope="col">Total Harga</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @foreach ($outgoingGoods->products as $product)
+                                                                            <tr>
+                                                                                <td>{{ $product->name }}</td>
+                                                                                <td class="text-end">
+                                                                                    {{ $product->pivot->quantity }}
+                                                                                    Kg</td>
+                                                                                <td class="text-end">Rp.
+                                                                                    {{ number_format($product->pivot->price, 0, '.', '.') }}
+                                                                                </td>
+                                                                                <td class="text-end">Rp.
+                                                                                    {{ number_format($product->pivot->total_price, 0, '.', '.') }}
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                    <tfoot class="th" scope="row">
+                                                                        <tr>
+                                                                            <td colspan="3" class="text-end">
+                                                                                Total</td>
+                                                                            <td class="text-end">Rp.
+                                                                                {{ number_format($outgoingGoods->total_price, 0, '.', '.') }}
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tfoot>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="col mb-1">
+                                                        <label class="form-label" for="total_price">Jumlah (Rp.) :</label>
+                                                        <input class="form-control" type="number" name="total_price_"
+                                                            value="{{ $outgoingGoods->total_price }}" id="total_price_"
+                                                            readonly>
+                                                    </div>
+                                                    <div class="col mb-1">
+                                                        <label class="form-label" for="sales_fee_">Sales Fee (Rp.) :</label>
+                                                        <input class="form-control" type="number"
+                                                            value="{{ ceil($outgoingGoods->total_price * 0.1) }}" min="0"
+                                                            name="sales_fee_" id="sales_fee__">
+                                                    </div>
+                                                    <div class="mb-1 mb-2">
+                                                        <label class="form-label" for="description">Deskripsi :</label>
+                                                        <textarea class="form-control" id="description" name="description_" rows="2" placeholder="Deskripsi"></textarea>
+                                                    </div>
+                                                    <div id="products_">
+                                                        @foreach ($outgoingGoods->products as $produk)
+                                                            {{-- @dd($produk->toArray()) --}}
+                                                            <div class="row logistic_">
+                                                                <input type="number" name="produk_id_"
+                                                                    value="{{ $produk->id }}" hidden>
+                                                                <input type="number" name="price_"
+                                                                    value="{{ $produk->pivot->price }}" hidden>
+                                                                <div class="col mb-1">
+                                                                    <label class="form-label"
+                                                                        for="products_[name][]">Produk :</label>
+                                                                    <input class="form-control" type="text"
+                                                                        value="{{ $produk->name }}"
+                                                                        name="products_[name][]" id="name" readonly>
+                                                                </div>
+                                                                <input class="form-control" type="number"
+                                                                    value="{{ $produk->pivot->price }}"
+                                                                    name="products_[price][]" required hidden>
+                                                                <div class="col mb-1">
+                                                                    <label class="form-label"
+                                                                        for="products[quantity][]">Jumlah (Kg) :</label>
+                                                                    <input class="form-control" type="number"
+                                                                        value="{{ $produk->pivot->quantity }}"
+                                                                        max="{{ $produk->pivot->quantity }}"
+                                                                        min="0"
+                                                                        name="products_[quantity][]"id="quantity">
+                                                                </div>
+                                                                <div class="col mb-1">
+                                                                    <label class="form-label"
+                                                                        for="products_[total_price][]">Total Harga
+                                                                        (Rp.):</label>
+                                                                    <input class="form-control" type="number"
+                                                                        value="{{ $produk->pivot->price * $produk->pivot->quantity }}"
+                                                                        max="{{ $produk->pivot->price * $produk->pivot->quantity }}"
+                                                                        min="0" name="products_[total_price][]"
+                                                                        required readonly>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-grid pt-4 modal-footer">
+                                                <div class="row">
+                                                    <div class="col"><button class="btn btn-secondary btn-lg"
+                                                            type="button" data-bs-dismiss="modal">Cancel</button>
+                                                    </div>
+                                                    <div class="col"><button class="btn btn-primary btn-lg"
+                                                            id="submit" type="submit">Submit</button></div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         @endif
 
 
@@ -392,6 +549,10 @@
 
             // Attach event listeners to existing rows
             $("#products .logistic").each(function() {
+                attachEventListenersToRow($(this));
+            });
+
+            $("#products_ .logistic_").each(function() {
                 attachEventListenersToRow($(this));
             });
 
@@ -449,16 +610,22 @@
 
             function attachEventListenersToRow(row) {
                 // Add event listeners for quantity and price fields in the new row
-                row.find("input[name='products[quantity][]'], input[name='products[price][]']").on("input", function() {
+                row.find(
+                    "input[name='products[quantity][]'], input[name='products[price][]'], input[name='products_[quantity][]'], input[name='products_[price][]']"
+                    ).on("input", function() {
                     // Get quantity and price values from the current row
                     const quantity = parseFloat(row.find("input[name='products[quantity][]']").val()) || 0;
+                    const quantity_ = parseFloat(row.find("input[name='products_[quantity][]']").val()) || 0;
                     const price = parseFloat(row.find("input[name='products[price][]']").val()) || 0;
+                    const price_ = parseFloat(row.find("input[name='products_[price][]']").val()) || 0;
 
                     // Calculate the total price
                     const total = quantity * price;
+                    const total_ = quantity_ * price_;
 
                     // Update the total price field in the current row
                     row.find("input[name='products[total_price][]']").val(total);
+                    row.find("input[name='products_[total_price][]']").val(total_);
                     updateTotalPrice();
                 });
 
@@ -494,15 +661,25 @@
 
             function updateTotalPrice() {
                 let totalPrice = 0;
+                let totalPrice_ = 0;
 
                 // Iterate through all rows and sum up the total prices
                 $("#products .logistic").each(function() {
                     const total = parseFloat($(this).find("input[name='products[total_price][]']").val()) || 0;
                     totalPrice += total;
                 });
+                $("#products_ .logistic_").each(function() {
+                    const total_ = parseFloat($(this).find("input[name='products_[total_price][]']").val()) || 0;
+                    totalPrice_ += total_;
+                });
 
                 // Update the "Jumlah" field with the calculated total price
                 $("#total_price").val(totalPrice);
+                $("#total_price_").val(totalPrice_);
+
+                // Update the "Sales Fee" field with the calculated total price
+                $("#sales_fee__").val(Math.ceil(parseInt($("#total_price_").val()) * 0.1));
+
             }
         </script>
         @include('layouts.footers.auth.footer')

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\OutgoingGoods;
 use App\Services\Salesperson\SalespersonService;
 use App\Http\Requests\Logistic\CreateOutgoingGoodsRequest;
+use App\Http\Requests\Logistic\CreateReturingGoodRequest;
 use App\Services\Logistic\OutgoingGoods\OutgoingGoodsService;
 use App\Services\Logistic\ReturningGoods\ReturningGoodsService;
 use App\Services\Produks\ProduksService;
@@ -58,6 +59,19 @@ class LogisticController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal mengubah data, error: ' . $e->getMessage());
         }
+    }
+
+    public function finish(CreateReturingGoodRequest $request, $id)
+    {
+
+        $request = $request->validated();
+        $request['id'] = $id;
+        $i = $this->returningGoodsService->create($request);
+        if($i){
+            return back()->with('success', 'Berhasil menambahkan data');
+        }
+        return back()->with('error', 'Gagal menambahkan data');
+        // return back()->with('success', 'Berhasil menambahkan data');
     }
 
     public function print($id)
