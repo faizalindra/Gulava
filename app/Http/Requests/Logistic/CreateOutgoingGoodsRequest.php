@@ -24,7 +24,7 @@ class CreateOutgoingGoodsRequest extends FormRequest
     {
         return [
             'salesperson_id' => 'required|integer|min:1|exists:salespersons,id',
-            'description' => 'required|string',
+            'description' => 'nullable|string',
             'total_price' => 'required|min:0|numeric|digits_between:1,12',
             'product_count' => 'required|integer|min:1',
             'products' => 'required|array',

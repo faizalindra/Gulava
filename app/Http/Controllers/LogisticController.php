@@ -28,7 +28,7 @@ class LogisticController extends Controller
 
     public function index()
     {
-        $outgoingGoods = OutgoingGoods::with(['user', 'salesperson', 'returningGoods.products', 'products'])->get();
+        $outgoingGoods = OutgoingGoods::with(['user', 'salesperson', 'returningGoods.products', 'products'])->orderBy('id','desc')->get();
         $salesperson = $this->salespersonService->getAllSalespersonForSelect();
         $products = $this->productService->getAllProduksForFormSelector();
         return view('pages.Logistic.logistic', compact('outgoingGoods', 'salesperson', 'products'));

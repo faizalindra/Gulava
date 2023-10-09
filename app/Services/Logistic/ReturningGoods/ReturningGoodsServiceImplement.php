@@ -56,7 +56,6 @@ class ReturningGoodsServiceImplement extends Service implements ReturningGoodsSe
       ReturningGoodsProduks::create($payload);
     }
 
-    //insert sales fee
     $payload = [
       'returning_goods_id' => $returningGoods->id,
       'salespersons_id' => $outgoingGoods->salespersons_id,

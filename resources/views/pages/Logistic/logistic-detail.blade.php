@@ -82,9 +82,23 @@
                                         <div class="col-8">: {{ $outgoingGoods->salesperson->name }}
                                         </div>
                                     </div>
+                                </div>
+                                <div class="col-4">
                                     <div class="row">
-                                        <div class="col-4">Durasi</div>
-                                        <div class="col-8">:
+                                        <div class="col-5">Tanggal Mulai</div>
+                                        <div class="col-7">:
+                                            {{ $outgoingGoods->created_at->format('Y-d-m H:i') }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-5">Tanggal Kembali</div>
+                                        <div class="col-7">:
+                                            {{ $outgoingGoods->returningGoods->created_at->format('Y-d-m H:i') }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-5">Durasi</div>
+                                        <div class="col-7">:
                                             @php
                                                 $start = Carbon\Carbon::parse($outgoingGoods->created_at);
                                                 $end = Carbon\Carbon::parse($outgoingGoods->returningGoods->created_at);
@@ -94,17 +108,9 @@
                                             Jam
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-4">
                                     <div class="row">
-                                        <div class="col-4">Tanggal</div>
-                                        <div class="col-8">:
-                                            {{ $outgoingGoods->returningGoods->created_at->format('Y-d-m H:i') }}
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-4">Telp</div>
-                                        <div class="col-8">:
+                                        <div class="col-5">Telp</div>
+                                        <div class="col-7">:
                                             {{ $outgoingGoods->salesperson->phone }}</div>
                                     </div>
                                 </div>
@@ -160,7 +166,7 @@
                                             <tr>
                                                 <td colspan="7" class="text-end">Total</td>
                                                 <td class="text-end text-bold text-dark">Rp.
-                                                    {{ number_format($outgoingGoods->returningGoods->total_amount - $outgoingGoods->returningGoods->salesFee->price, 0, '.', '.') }}
+                                                    {{ number_format($outgoingGoods->returningGoods->total_amount, 0, '.', '.') }}
                                                 </td>
                                             </tr>
                                         </tfoot>
@@ -461,14 +467,14 @@
                                                     <div class="col mb-1">
                                                         <label class="form-label" for="total_price">Jumlah (Rp.) :</label>
                                                         <input class="form-control" type="number" name="total_price_"
-                                                            value="{{ $outgoingGoods->total_price }}" id="total_price_"
+                                                            value="{{ $outgoingGoods->total_price - ($outgoingGoods->total_price * 0.1)  }}" id="total_price_"
                                                             readonly>
                                                     </div>
                                                     <div class="col mb-1">
                                                         <label class="form-label" for="sales_fee_">Sales Fee (Rp.) :</label>
                                                         <input class="form-control" type="number"
                                                             value="{{ ceil($outgoingGoods->total_price * 0.1) }}" min="0"
-                                                            name="sales_fee_" id="sales_fee__">
+                                                            name="sales_fee_" id="sales_fee_">
                                                     </div>
                                                     <div class="mb-1 mb-2">
                                                         <label class="form-label" for="description">Deskripsi :</label>
@@ -674,11 +680,11 @@
                 });
 
                 // Update the "Jumlah" field with the calculated total price
-                $("#total_price").val(totalPrice);
-                $("#total_price_").val(totalPrice_);
+                $("#sales_fee_").val(Math.ceil(totalPrice_ * 0.1));
+                $("#total_price").val(totalPrice) ;
+                $("#total_price_").val(totalPrice_ - parseInt($("#sales_fee_").val()));
 
                 // Update the "Sales Fee" field with the calculated total price
-                $("#sales_fee__").val(Math.ceil(parseInt($("#total_price_").val()) * 0.1));
 
             }
         </script>
