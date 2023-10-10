@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CashflowController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -68,7 +69,9 @@ Route::group(['middleware' => ['auth', 'web']], function () {
 	Route::put('/logistic/{id}/update', [LogisticController::class, 'update'])->name('logistic.update');
 	Route::post('/logistic/{id}/finish', [LogisticController::class, 'finish'])->name('logistic.finish');
 
-	Route::get('/outgoing', [PageController::class, 'outgoing'])->name('outgoing');
+	Route::get('/cashflow', [CashflowController::class, 'index'])->name('cashflow');
+	Route::get('/cashflow-category/{type}', [CashflowController::class, 'category'])->name('cashflow.category');
+	Route::post('/cashflow', [CashflowController::class, 'create'])->name('cashflow.create');
 
 	Route::get('/production', [ProductionController::class, 'index'])->name('production');
 	Route::get('/production/{id}', [ProductionController::class, 'detail'])->name('production.detail');

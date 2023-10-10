@@ -13,6 +13,6 @@ class PettyCashSeed extends Seeder
      */
     public function run(): void
     {
-        \App\Models\PettyCash::insert(['balance' => 0]);
+        \App\Models\PettyCash::create(['balance' => 40000000]);
     }
 }

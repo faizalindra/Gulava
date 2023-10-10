@@ -82,6 +82,11 @@
                                         <div class="col-8">: {{ $outgoingGoods->salesperson->name }}
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-4">Telp</div>
+                                        <div class="col-8">:
+                                            {{ $outgoingGoods->salesperson->phone }}</div>
+                                    </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="row">
@@ -107,11 +112,6 @@
                                             @endphp
                                             Jam
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-5">Telp</div>
-                                        <div class="col-7">:
-                                            {{ $outgoingGoods->salesperson->phone }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -205,15 +205,15 @@
                                     <div class="col-4">Sales</div>
                                     <div class="col-8">: {{ $outgoingGoods->salesperson->name }}</div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-4">Telp</div>
+                                    <div class="col-8">: {{ $outgoingGoods->salesperson->phone }}</div>
+                                </div>
                             </div>
                             <div class="col-4">
                                 <div class="row">
                                     <div class="col-4">Tanggal</div>
                                     <div class="col-8">: {{ $outgoingGoods->created_at->format('Y-d-m H:i') }}</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-4">Telp</div>
-                                    <div class="col-8">: {{ $outgoingGoods->salesperson->phone }}</div>
                                 </div>
                             </div>
                         </div>

@@ -37,7 +37,9 @@ class DatabaseSeeder extends Seeder
                 ProduksGradeSeed::class,
                 ProductionBatchSeed::class,
                 LogisticSeed::class,
-            ]
+                IncomeSeed::class,
+                ExpenseSeed::class,
+                ]
         );
     }
 }

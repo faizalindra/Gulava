@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('petty_cash', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('balance');
+            $table->timestamps();
         });
     }
 
