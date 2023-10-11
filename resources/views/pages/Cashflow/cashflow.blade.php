@@ -6,7 +6,10 @@
     <link rel="stylesheet" href="{{ asset('assets/css/select2.min.css') }}" />
 
     <script src="{{ asset('assets/js/core/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('assets/js/core/sweetalert2.all.min.js') }}"></script>
     <script src="{{ asset('assets/js/core/jQuery_dataTables_1.13.6.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('assets/css/sweetalert2.min.css') }}" />
+
     {{-- <script src="{{ asset('assets/js/core/select2.min.js') }}"></script> --}}
 
 
@@ -62,200 +65,187 @@
             </div>
         </div>
         <div class="row pt-4">
-            <div class="col-6">
-                <div class="row">
-                    <div class="col">
-                        <div class="col-3">
-                        </div>
-                        <div class="card mb-4">
-                            <div class="card-header pb-0">
-                                <h6>Pemasukan</h6>
-                                <button type="button" class="btn btn-sm bg-gradient-primary p-2" data-bs-toggle="modal"
-                                    data-bs-target="#createModal" data-transaction-type="income">
-                                    <i class="fas fa-plus"></i> Tambah
-                                </button>
-                            </div>
-                            <div class="card-body px-0 pt-0 pb-2">
-                                <div class="table-responsive p-0">
-                                    <table id="tablePemasukan" class="table table-sm align-items-center mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th
-                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7  text-center">
-                                                    #</th>
-                                                <th
-                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                    Tanggal</th>
-                                                <th
-                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                                    Kategori</th>
-                                                <th
-                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                                    Jumlah</th>
-                                                <th
-                                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                    Catatan</th>
-                                                {{-- <th class="text-secondary opacity-7"></th> --}}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($incomes as $income)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ Carbon\Carbon::parse($income->created_at)->format('Y-m-d H:i') }}
-                                                    </td>
-                                                    <td>{{ $income->category->name }}</td>
-                                                    <td>Rp. {{ number_format($income->amount, 0, '.', '.') }}</td>
-                                                    <td>{{ $income->description }}</td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+            <div class="col">
+                <div class="card mb-4">
+                    <div class="card-header pb-0">
+                        <h6>Pemasukan</h6>
+                        <button type="button" class="btn btn-sm bg-gradient-primary p-2" data-bs-toggle="modal"
+                            data-bs-target="#createModal" data-transaction-type="income">
+                            <i class="fas fa-plus"></i> Tambah
+                        </button>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <div class="card">
-                            <div class="card-header pb-0">
-                                <h6>Kategori Pemasukan</h6>
-                                <button type="button" class="btn btn-sm bg-gradient-primary p-2" data-bs-toggle="modal"
-                                    data-bs-target="#createModalCategoryPemasukan">
-                                    <i class="fas fa-plus"></i> Tambah
-                                </button>
-                            </div>
-                            <div class="card-body px-0 pt-0 pb-2">
-                                <div class="container">
-                                    <div class="table-responsive-sm">
-                                        <table class="table table-sm">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Nama</th>
-                                                    <th scope="col"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($incomeCategory as $category)
-                                                    <tr>
-                                                        <td>{{ $category->name }}</td>
-                                                        <td class="text-end"> {{-- <a href="#" class="text-danger" data-bs-toggle="modal"
-                                                            data-bs-target="#deleteModal"> --}}
-                                                            <i class="fas fa-trash"></i>
-                                                            {{-- </a> --}}
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="container">
+                            <div class="table-responsive p-0">
+                                <table id="tablePemasukan" class="table table-sm align-items-center mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7  text-center">
+                                                #</th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 p-0">
+                                                Tanggal</th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 p-0">
+                                                Kategori</th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 p-0">
+                                                Jumlah</th>
+                                            <th
+                                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                Catatan</th>
+                                            {{-- <th class="text-secondary opacity-7"></th> --}}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($incomes as $income)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ Carbon\Carbon::parse($income->created_at)->format('Y-m-d H:i') }}
+                                                </td>
+                                                <td>{{ $income->category->name }}</td>
+                                                <td class="text-end">Rp. {{ number_format($income->amount, 0, '.', '.') }}
+                                                </td>
+                                                <td>{{ $income->description }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-6">
-                <div class="row">
-                    <div class="col">
-                        <div class="col-3">
-
-                        </div>
-                        <div class="card mb-4">
-                            <div class="card-header pb-0 justify-content-between">
-                                <h6>Pengeluaran</h6>
-                                <button type="button" class="btn btn-sm bg-gradient-primary p-2" data-bs-toggle="modal"
-                                    data-bs-target="#createModal" data-transaction-type="expense">
-                                    <i class="fas fa-plus"></i> Tambah
-                                </button>
-                            </div>
-                            <div class="card-body px-0 pt-0 pb-2">
-                                <div class="table-responsive p-0">
-                                    <table id="tablePengeluaran" class="table table-sm align-items-center mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th
-                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7  text-center">
-                                                    #</th>
-                                                <th
-                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                    Tanggal</th>
-                                                <th
-                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                                    Kategori</th>
-                                                <th
-                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                                    Jumlah</th>
-                                                <th
-                                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                    Catatan</th>
-                                                {{-- <th class="text-secondary opacity-7"></th> --}}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($expenses as $expense)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ Carbon\Carbon::parse($expense->created_at)->format('Y-m-d H:i') }}
-                                                    </td>
-                                                    <td>{{ $expense->category->name }}</td>
-                                                    <td>Rp. {{ number_format($expense->amount, 0, '.', '.') }}</td>
-                                                    <td>{{ $expense->description }}</td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+            <div class="col-3">
+                <div class="card">
+                    <div class="card-header pb-0">
+                        <h6>Kategori Pemasukan</h6>
+                        <button type="button" class="btn btn-sm bg-gradient-primary p-2" data-bs-toggle="modal"
+                            data-bs-target="#createModalCashflowCategory" data-transaction-type="income">
+                            <i class="fas fa-plus"></i> Tambah
+                        </button>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <div class="card">
-                            <div class="card-header pb-0">
-                                <h6>Kategori Pengeluaran</h6>
-                                <button type="button" class="btn btn-sm bg-gradient-primary p-2" data-bs-toggle="modal"
-                                    data-bs-target="#createModalCategory">
-                                    <i class="fas fa-plus"></i> Tambah
-                                </button>
-                            </div>
-                            <div class="card-body px-0 pt-0 pb-2">
-                                <div class="container">
-                                    <div class="table-responsive-sm">
-                                        <table class="table table-sm">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Nama</th>
-                                                    <th scope="col"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($expenseCategory as $category)
-                                                    <tr>
-                                                        <td>{{ $category->name }}</td>
-                                                        <td class="text-end">
-                                                            {{-- <a href="#" class="text-danger" data-bs-toggle="modal"
-                                                                data-bs-target="#deleteModal"> --}}
-                                                            <i class="fas fa-trash"></i>
-                                                            {{-- </a> --}}
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="container">
+                            <div class="table-responsive-sm">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Nama</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($incomeCategory as $category)
+                                            <tr>
+                                                <td>{{ $category->name }}</td>
+                                                <td class="text-end"> {{-- <a href="#" class="text-danger" data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal"> --}}
+                                                    <i class="fas fa-trash"></i>
+                                                    {{-- </a> --}}
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
-
-
+        <div class="row">
+            <div class="col">
+                <div class="card mb-4">
+                    <div class="card-header pb-0 justify-content-between">
+                        <h6>Pengeluaran</h6>
+                        <button type="button" class="btn btn-sm bg-gradient-primary p-2" data-bs-toggle="modal"
+                            data-bs-target="#createModal" data-transaction-type="expense">
+                            <i class="fas fa-plus"></i> Tambah
+                        </button>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="container">
+                            <div class="table-responsive p-0">
+                                <table id="tablePengeluaran" class="table table-sm align-items-center mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7  text-center">
+                                                #</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                Tanggal</th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Kategori</th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Jumlah</th>
+                                            <th
+                                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                Catatan</th>
+                                            {{-- <th class="text-secondary opacity-7"></th> --}}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($expenses as $expense)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>
+                                                    {{ Carbon\Carbon::parse($expense->created_at)->format('Y-m-d H:i') }}
+                                                </td>
+                                                <td>{{ $expense->category->name }}</td>
+                                                <td class="text-end">Rp.
+                                                    {{ number_format($expense->amount, 0, '.', '.') }}</td>
+                                                <td>{{ $expense->description }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card">
+                    <div class="card-header pb-0">
+                        <h6>Kategori Pengeluaran</h6>
+                        <button type="button" class="btn btn-sm bg-gradient-primary p-2" data-bs-toggle="modal"
+                            data-bs-target="#createModalCashflowCategory" data-transaction-type="expense">
+                            <i class="fas fa-plus"></i> Tambah
+                        </button>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="container">
+                            <div class="table-responsive-sm">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Nama</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($expenseCategory as $category)
+                                            <tr>
+                                                <td>{{ $category->name }}</td>
+                                                <td class="text-end">
+                                                    <i class="fas fa-trash" id="deleteCategory"
+                                                        data-url="{{ route('cashflow.category.delete', ['type' => 'expense', 'id' => $category->id]) }}"
+                                                        data-method="delete" onclick="triggerSweetAlert(this)"></i>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Modal Body-->
         <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalTitle"
@@ -301,13 +291,61 @@
             </div>
         </div>
 
+        <!-- Modal Body-->
+        <div class="modal fade" id="createModalCashflowCategory" tabindex="-1" role="dialog"
+            aria-labelledby="createModalCashflowCategoryTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createModalCashflowCategoryTitle">Cashflow Category <span
+                                id="category_type_text"></span></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="text-dark">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="createCashflowCategory" method="POST"
+                            action="{{ route('cashflow.category.create') }}">
+                            @csrf
+                            @method('POST')
+
+                            <!-- Hidden input field for transaction_type -->
+                            <input type="hidden" name="category_type" id="category_type">
+                            <div class="mb-3">
+                                <label class="form-label" for="category_name">Nama Kategori</label>
+                                <input class="form-control" id="category_name" name="category_name" type="text"
+                                    value="" required>
+                            </div>
+                            <div class="d-grid pt-4">
+                                <button class="btn btn-primary btn-lg" id="editSubmitButton"
+                                    type="submit">Simpan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script>
             $(document).ready(function() {
                 $('#tablePemasukan').DataTable();
-            });
-            $(document).ready(function() {
                 $('#tablePengeluaran').DataTable();
             });
+
+            $('#createModalCashflowCategory').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                var transactionType = button.data('transaction-type');
+                var modal = $(this);
+                var categorySelect = modal.find('select#category_name');
+
+                if (transactionType == 'income') {
+                    modal.find('input[name="category_type"]').val('income');
+                    modal.find('span#category_type_text').text('Pemasukan');
+                } else {
+                    modal.find('input[name="category_type"]').val('expense');
+                    modal.find('span#category_type_text').text('Pengeluaran');
+                }
+            })
 
             $('#createModal').on('show.bs.modal', function(event) {
                 var button = $(event.relatedTarget);
@@ -337,11 +375,40 @@
                     }
                 });
             });
-            // $('.select2').select2({
-            //     width: '100%', // Set the width to 100% of its container
-            //     dropdownCssClass: 'select2-dropdown-big', // Apply custom CSS class to the dropdown
 
-            // });
+            function triggerSweetAlert(event) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You will not be able to recover this category!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const deleteUrl = $(event).data('url');
+                        // Use jQuery to send a DELETE request to the specified URL
+                        $.ajax({
+                            url: deleteUrl,
+                            type: 'DELETE',
+                            data: {
+                                _token: '{{ csrf_token() }}', // You may need to include a CSRF token
+                                _method: 'DELETE' // This is Laravel-specific
+                            },
+                            success: function(data) {
+                                Swal.fire('Deleted!', 'Your category has been deleted.', 'success');
+                                location.reload();
+                            },
+                            error: function() {
+                                console.error(xhr.responseText);
+                                Swal.fire('Error', 'An error occurred while processing your request.',
+                                    'error');
+                            }
+                        });
+                    }
+                });
+            }
         </script>
 
         @include('layouts.footers.auth.footer')

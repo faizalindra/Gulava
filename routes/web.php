@@ -70,8 +70,10 @@ Route::group(['middleware' => ['auth', 'web']], function () {
 	Route::post('/logistic/{id}/finish', [LogisticController::class, 'finish'])->name('logistic.finish');
 
 	Route::get('/cashflow', [CashflowController::class, 'index'])->name('cashflow');
-	Route::get('/cashflow-category/{type}', [CashflowController::class, 'category'])->name('cashflow.category');
 	Route::post('/cashflow', [CashflowController::class, 'create'])->name('cashflow.create');
+	Route::get('/cashflow-category/{type}', [CashflowController::class, 'category'])->name('cashflow.category');
+	Route::post('/cashflow-category', [CashflowController::class, 'createCategory'])->name('cashflow.category.create');
+	Route::delete('/cashflow-category/{type}/{id}', [CashflowController::class, 'deleteCategory'])->name('cashflow.category.delete');
 
 	Route::get('/production', [ProductionController::class, 'index'])->name('production');
 	Route::get('/production/{id}', [ProductionController::class, 'detail'])->name('production.detail');

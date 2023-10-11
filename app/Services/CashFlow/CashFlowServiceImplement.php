@@ -2,10 +2,11 @@
 
 namespace App\Services\CashFlow;
 
+use App\Models\PettyCash;
 use LaravelEasyRepository\Service;
-use App\Repositories\CashFlow\CashFlowRepository;
-use App\Repositories\Expense\ExpenseRepository;
 use App\Repositories\Income\IncomeRepository;
+use App\Repositories\Expense\ExpenseRepository;
+use App\Repositories\CashFlow\CashFlowRepository;
 
 class CashFlowServiceImplement extends Service implements CashFlowService
 {
@@ -26,6 +27,7 @@ class CashFlowServiceImplement extends Service implements CashFlowService
 
   public function create($payload)
   {
+    $cash = PettyCash::first();
     $type = $payload['type'];
     $data = [
       'user_id' => auth()->user()->id,
@@ -37,9 +39,12 @@ class CashFlowServiceImplement extends Service implements CashFlowService
     if ($type == 'income') {
       $data['income_category_id'] = $payload['category_id'];
       $this->incomeRepository->create($data);
+      $cash->balance += $data['amount'];
     } else {
       $data['expense_categories_id'] = $payload['category_id'];
       $this->expenseRepository->create($data);
+      $cash->balance -= $data['amount'];
     }
+    $cash->save();
   }
 }

@@ -7,9 +7,9 @@
     ])
     <script src="{{ asset('assets/js/core/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('assets/js/core/jQuery_dataTables_1.13.6.min.js') }}"></script>
-    <script src="{{ asset('assets/js/core/sweetalert2.all.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/core/sweetalert2.all.min.js') }}"></script> --}}
     <link rel="stylesheet" href="{{ asset('assets/css/jQuery_dataTables_1.13.6.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/css/sweetalert2.min.css') }}" />
+    {{-- <link rel="stylesheet" href="{{ asset('assets/css/sweetalert2.min.css') }}" /> --}}
     {{-- <div id="prod_id" value="{{ $product->id }}"></div> --}}
     <div class="container-fluid py-4">
         <div class="row">

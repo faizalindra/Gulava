@@ -55,121 +55,123 @@
                         <h6>Tabel Logistik</h6>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
-                        <div class="table-responsive p-0">
-                            <table id="tableLogistic" class="table align-items-center mb-0">
-                                <thead>
-                                    <tr>
-                                        <th rowspan="2"
-                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7  text-center">
-                                            #</th>
-                                        <th rowspan="2"
-                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Kode</th>
-                                        <th rowspan="2"
-                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Sales</th>
-                                        <th colspan="3"
-                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 text-center">
-                                            Periode</th>
-                                        <th rowspan="2"
-                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Total Harga</th>
-                                        <th rowspan="2"
-                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            List Produk</th>
-                                        <th rowspan="2"
-                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Status</th>
-                                        <th rowspan="2" class="text-secondary opacity-7"></th>
-                                    </tr>
-                                    <tr>
-                                        <th
-                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Mulai</th>
-                                        <th
-                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Berakhir</th>
-                                        <th
-                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Durasi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($outgoingGoods as $og)
+                        <div class="container">
+                            <div class="table-responsive p-0">
+                                <table id="tableLogistic" class="table align-items-center mb-0">
+                                    <thead>
                                         <tr>
-                                            <td class="text-xs font-weight-bold mb-0">{{ $loop->iteration }}</td>
-                                            <td class="text-xs font-weight-bold mb-0">{{ $og->code }}</td>
-                                            <td class="text-xs font-weight-bold mb-0">{{ $og->salesperson->name }}</td>
-
-                                            <td class="text-xs font-weight-bold mb-0 text-center">
-                                                {{ date('Y-m-d', strtotime($og->created_at)) }}<br>
-                                                {{ date('H:i:s', strtotime($og->created_at)) }}
-                                            </td>
-
-                                            <td class="text-xs font-weight-bold mb-0 text-center">
-                                                @if ($og->returningGoods)
-                                                    {{ date('Y-m-d', strtotime($og->returningGoods->created_at)) }}<br>
-                                                    {{ date('H:i:s', strtotime($og->returningGoods->created_at)) }}
-                                                @else
-                                                    -
-                                                @endif
-                                            </td>
-
-                                            <td class="text-xs font-weight-bold mb-0 text-center">
-                                                @if ($og->returningGoods)
-                                                    @php
-                                                        $start = Carbon\Carbon::parse($og->created_at);
-                                                        $end = Carbon\Carbon::parse($og->returningGoods->created_at);
-                                                        $diff = $start->diffInHours($end);
-                                                        echo $diff;
-                                                    @endphp
-                                                    Jam
-                                                @else
-                                                    -
-                                                @endif
-                                            </td>
-
-                                            <td class="text-xs font-weight-bold mb-0 text-end">
-                                                @if ($og->returningGoods)
-                                                    Rp. {{ number_format($og->returningGoods->total_amount, 0, ',', '.') }}
-                                                @else
-                                                    -
-                                                @endif
-                                            </td>
-
-                                            <td class="text-xs font-weight-bold mb-0">
-                                                <ul>
-                                                    @foreach ($og->products as $product)
-                                                        <li>{{ $product->name }}</li>
-                                                    @endforeach
-                                                </ul>
-                                            </td>
-
-                                            <td class="text-xs font-weight-bold mb-0">
-                                                @if ($og->returningGoods)
-                                                    <span class="badge badge-sm bg-gradient-success">
-                                                        Selesai
-                                                    </span>
-                                                @else
-                                                    <span class="badge badge-sm bg-gradient-info">
-                                                        Proses
-                                                    </span>
-                                                @endif
-                                            </td>
-
-                                            <td class="text-xs font-weight-bold mb-0">
-                                                <a href="{{ route('logistic.detail', ['id' => $og->id]) }}"
-                                                    class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
-                                                    data-original-title="Edit user">
-                                                    <i class=" fas fa-eye text-secondary font-weight-bold text-xs"
-                                                        data-toggle="tooltip" data-original-title="Lihat Detail"></i>
-                                                </a>
-                                            </td>
-
+                                            <th rowspan="2"
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7  text-center">
+                                                #</th>
+                                            <th rowspan="2"
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                Kode</th>
+                                            <th rowspan="2"
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Sales</th>
+                                            <th colspan="3"
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 text-center">
+                                                Periode</th>
+                                            <th rowspan="2"
+                                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Total Harga</th>
+                                            <th rowspan="2"
+                                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                List Produk</th>
+                                            <th rowspan="2"
+                                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                Status</th>
+                                            <th rowspan="2" class="text-secondary opacity-7"></th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                        <tr>
+                                            <th
+                                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Mulai</th>
+                                            <th
+                                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Berakhir</th>
+                                            <th
+                                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Durasi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($outgoingGoods as $og)
+                                            <tr>
+                                                <td class="text-xs font-weight-bold mb-0">{{ $loop->iteration }}</td>
+                                                <td class="text-xs font-weight-bold mb-0">{{ $og->code }}</td>
+                                                <td class="text-xs font-weight-bold mb-0">{{ $og->salesperson->name }}</td>
+    
+                                                <td class="text-xs font-weight-bold mb-0 text-center">
+                                                    {{ date('Y-m-d', strtotime($og->created_at)) }}<br>
+                                                    {{ date('H:i:s', strtotime($og->created_at)) }}
+                                                </td>
+    
+                                                <td class="text-xs font-weight-bold mb-0 text-center">
+                                                    @if ($og->returningGoods)
+                                                        {{ date('Y-m-d', strtotime($og->returningGoods->created_at)) }}<br>
+                                                        {{ date('H:i:s', strtotime($og->returningGoods->created_at)) }}
+                                                    @else
+                                                        -
+                                                    @endif
+                                                </td>
+    
+                                                <td class="text-xs font-weight-bold mb-0 text-center">
+                                                    @if ($og->returningGoods)
+                                                        @php
+                                                            $start = Carbon\Carbon::parse($og->created_at);
+                                                            $end = Carbon\Carbon::parse($og->returningGoods->created_at);
+                                                            $diff = $start->diffInHours($end);
+                                                            echo $diff;
+                                                        @endphp
+                                                        Jam
+                                                    @else
+                                                        -
+                                                    @endif
+                                                </td>
+    
+                                                <td class="text-xs font-weight-bold mb-0 text-end">
+                                                    @if ($og->returningGoods)
+                                                        Rp. {{ number_format($og->returningGoods->total_amount, 0, ',', '.') }}
+                                                    @else
+                                                        -
+                                                    @endif
+                                                </td>
+    
+                                                <td class="text-xs font-weight-bold mb-0">
+                                                    <ul>
+                                                        @foreach ($og->products as $product)
+                                                            <li>{{ $product->name }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                </td>
+    
+                                                <td class="text-xs font-weight-bold mb-0">
+                                                    @if ($og->returningGoods)
+                                                        <span class="badge badge-sm bg-gradient-success">
+                                                            Selesai
+                                                        </span>
+                                                    @else
+                                                        <span class="badge badge-sm bg-gradient-info">
+                                                            Proses
+                                                        </span>
+                                                    @endif
+                                                </td>
+    
+                                                <td class="text-xs font-weight-bold mb-0">
+                                                    <a href="{{ route('logistic.detail', ['id' => $og->id]) }}"
+                                                        class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
+                                                        data-original-title="Edit user">
+                                                        <i class=" fas fa-eye text-secondary font-weight-bold text-xs"
+                                                            data-toggle="tooltip" data-original-title="Lihat Detail"></i>
+                                                    </a>
+                                                </td>
+    
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

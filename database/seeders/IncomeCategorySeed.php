@@ -12,6 +12,6 @@ class IncomeCategorySeed extends Seeder
      */
     public function run(): void
     {
-        \App\Models\IncomeCategory::insert([['name' => 'Modal'], ['name' => 'Lainnya']]);
+        \App\Models\IncomeCategory::insert([['name' => 'Lainnya'], ['name' => 'Modal'],['name' => 'Penjualan'], ['name' => 'Pendapatan Lainnya']]);
     }
 }

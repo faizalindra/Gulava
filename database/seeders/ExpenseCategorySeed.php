@@ -12,6 +12,6 @@ class ExpenseCategorySeed extends Seeder
      */
     public function run(): void
     {
-        \App\Models\ExpenseCategory::insert([['name' => 'Denda'], ['name' => 'Operasional'], ['name' => 'Lainnya']]);
+        \App\Models\ExpenseCategory::insert([['name' => 'Lainnya'], ['name' => 'Denda'], ['name' => 'Operasional'],['name' => 'Pajak'], ['name' => 'Gaji'], ['name' => 'Bahan Baku']]);
     }
 }

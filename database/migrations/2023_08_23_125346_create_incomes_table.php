@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('incomes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('income_category_id')->constrained('income_categories');
+            $table->foreignId('income_category_id')->default(1)->constrained('income_categories')->onDelete('set default');
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('petty_cash_id')->constrained('petty_cash');
             $table->bigInteger('amount');
