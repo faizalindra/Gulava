@@ -26,7 +26,7 @@ class ProductionRepositoryImplement extends Eloquent implements ProductionReposi
         $data = $this->model->with(['product', 'detail']);
 
         // Add a calculated field 'time_difference' to the query
-        $data = $data->selectRaw('*, TIMESTAMPDIFF(HOUR, updated_at, created_at) AS period');
+        $data = $data->selectRaw('*, TIMESTAMPDIFF(HOUR, updated_at, created_at) AS period')->orderBy('id', 'desc');
 
         $data = $params && isset($params['paginate'])
             ? $data->paginate($params['paginate'])

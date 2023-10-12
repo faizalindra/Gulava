@@ -61,9 +61,11 @@
                                     <tr>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7  text-center">
-                                            ID</th>
+                                            #</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Kode</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                            Tanggal Produksi</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Produk</th>
@@ -86,13 +88,17 @@
                                     @foreach ($productions as $production)
                                         <tr>
                                             <td>
-                                                <p class="text-xs font-weight-bold mb-0  text-center">{{ $production->id }}
+                                                <p class="text-xs font-weight-bold mb-0  text-center">{{ $loop->iteration }}
                                                 </p>
                                             </td>
                                             <td>
                                                 <div class="d-flex flex-column justify-content-center">
                                                     <h6 class="mb-0 text-sm">{{ $production->code }}</h6>
                                                 </div>
+                                            </td>
+                                            <td>
+                                                <p class="text-xs font-weight-bold mb-0">{{ $production->created_at }}
+                                                </p>
                                             </td>
                                             <td>
                                                 <p class="text-xs font-weight-bold mb-0">{{ $production->product->name }}
@@ -176,7 +182,14 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <input id="material_count" type="number" name="material_count" value="0" hidden>
+                                    <div class="mb-1">
+                                        <label for="material_total_price" class="form-label">Estimasi Total Biaya
+                                            Produksi</label>
+                                        <input type="number" class="form-control" id="material_total_price"
+                                            name="material_total_price" readonly>
+                                    </div>
+                                    <input id="material_count" type="number" name="material_count" value="0"
+                                        hidden>
                                     <div class="mb-1 mb-2">
                                         <label class="form-label" for="description">Deskripsi</label>
                                         <textarea class="form-control" id="description" name="description" rows="3"
@@ -228,7 +241,7 @@
                             <select class="form-control" name="materials[id][]" required>
                                 <option value=""  selected disabled hidden>Pilih Bahan Baku</option>
                                 @foreach ($materials as $material)
-                                    <option value="{{ $material->id }}" data-unit="{{ $material->unit }}">{{ $material->name }}</option>
+                                    <option value="{{ $material->id }}" data-unit="{{ $material->unit }}" data-price="{{ $material->price }}" data-stock="{{ $material->stock }}">{{ $material->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -236,6 +249,10 @@
                     <div class="col mb-1">
                         <label class="form-label" for="quantity_used">Jumlah:</label>
                         <input class="form-control" type="number" name="materials[quantity_used][]" required>
+                    </div>
+                    <div class="col mb-1">
+                        <label class="form-label" for="price">Harga Per-Unit:</label>
+                        <input class="form-control" type="number" name="materials[price][]" required>
                     </div>
                     <div class="col mb-1">
                         <label class="form-label" for="estimated_cost">Estimasi Biaya:</label>
@@ -248,8 +265,42 @@
             `;
             updateMaterialCount(1);
             let count = $('#material_count').val();
-            console.log(count);
             $("#materials").append(materialRow);
+            const newRow = $("#materials .material").last();
+
+            // Add event listeners for quantity and price fields in the new row
+            newRow.find("input[name='materials[quantity_used][]'], input[name='materials[price][]']").on("input",
+                function() {
+                    // Get quantity and price values from the current row
+                    const quantity = parseFloat(newRow.find("input[name='materials[quantity_used][]']").val()) || 0;
+                    const price = parseFloat(newRow.find("input[name='materials[price][]']").val()) || 0;
+
+                    // Calculate the total price
+                    const total = quantity * price;
+
+                    // Update the total price field in the current row
+                    newRow.find("input[name='materials[estimated_cost][]']").val(total);
+                    updateTotalPrice();
+                });
+
+            // Add event listener for the product selection dropdown
+            newRow.find("select[name='materials[id][]']").on("change", function() {
+                console.log("change");
+                // Get the selected option
+                const selectedOption = $(this).find("option:selected");
+
+                // Get the data-price attribute value
+                const price = parseFloat(selectedOption.data("price")) || 0;
+
+                // Update the price input field with the selected price
+                newRow.find("input[name='materials[price][]']").val(price);
+
+                // Calculate and update the total price
+                const quantity = parseFloat(newRow.find("input[name='materials[quantity_used][]']").val()) || 0;
+                const total = quantity * price;
+                newRow.find("input[name='materials[estimated_cost][]']").val(total);
+                updateTotalPrice();
+            });
         }
 
         // Function to remove a material row
@@ -257,7 +308,7 @@
             $(event.target).closest(".material").remove();
             updateMaterialCount(-1);
             let count = $('#material_count').val();
-            console.log(count);
+            updateTotalPrice();
         }
 
         function updateMaterialCount(change) {
@@ -269,6 +320,19 @@
             if (newCount >= 0) {
                 materialCountInput.val(newCount);
             }
+        }
+
+        function updateTotalPrice() {
+            let totalPrice = 0;
+
+            // Iterate through all rows and sum up the total prices
+            $("#materials .material").each(function() {
+                console.log("each");
+                const total = parseFloat($(this).find("input[name='materials[estimated_cost][]']").val()) || 0;
+                totalPrice += total;
+            });
+            // Update the "Jumlah" field with the calculated total price
+            $("#material_total_price").val(totalPrice);
         }
     </script>
 

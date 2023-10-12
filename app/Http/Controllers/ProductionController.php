@@ -29,6 +29,7 @@ class ProductionController extends Controller
     public function index()
     {
         $productions = $this->mainService->getAllProductionForTable();
+        // return $productions->toArray();
         $products = $this->produksService->getAllProduksForFormSelector();
         $materials = $this->rawMaterialService->getAllRawMaterialForFormSelector();
         return view("pages.Production.production", compact('productions', 'products', 'materials'));
