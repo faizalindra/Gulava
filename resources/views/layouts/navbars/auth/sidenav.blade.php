@@ -75,7 +75,7 @@
                     <span class="nav-link-text ms-1">Cashflow</span>
                 </a>
             </li>
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link {{ str_contains(request()->url(), 'tables') == true ? 'active' : '' }}"
                     href="{{ route('page', ['page' => 'tables']) }}">
                     <div
@@ -94,8 +94,8 @@
                     </div>
                     <span class="nav-link-text ms-1">Billing</span>
                 </a>
-            </li>
-            <li class="nav-item mt-3">
+            </li> --}}
+            {{-- <li class="nav-item mt-3">
                 <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>
             </li>
             <li class="nav-item">
@@ -107,8 +107,8 @@
                     </div>
                     <span class="nav-link-text ms-1">Profile</span>
                 </a>
-            </li>
-            <li class="nav-item mt-3 d-flex align-items-center">
+            </li> --}}
+            {{-- <li class="nav-item mt-3 d-flex align-items-center">
                 <div class="ps-4">
                     <i class="fab fa-laravel" style="color: #f4645f;"></i>
                 </div>
@@ -124,7 +124,7 @@
                     </div>
                     <span class="nav-link-text ms-1">User Management</span>
                 </a>
-            </li>
+            </li> --}}
         </ul>
     </div>
 </aside>

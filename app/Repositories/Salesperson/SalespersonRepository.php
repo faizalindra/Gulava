@@ -7,4 +7,5 @@ use LaravelEasyRepository\Repository;
 interface SalespersonRepository extends Repository{
 
     public function getAllSalespersonForSelect();
+    public function get5TopSalesperson();
 }

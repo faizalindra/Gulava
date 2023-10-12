@@ -22,4 +22,9 @@ class SalespersonServiceImplement extends Service implements SalespersonService{
     {
         return $this->mainRepository->getAllSalespersonForSelect();
     }
+
+    public function get5TopSalesperson()
+    {
+        return $this->mainRepository->get5TopSalesperson();
+    }
 }

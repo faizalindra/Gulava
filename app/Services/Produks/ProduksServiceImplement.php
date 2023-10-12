@@ -37,6 +37,11 @@ class ProduksServiceImplement extends Service implements ProduksService{
       return $data;
     }
 
+    public function get5TopProduks(){
+      $data = $this->mainRepository->get5TopProduks();
+      return $data;
+    }
+
     private function generateCode(){
       return 'PRD' . date('YmdHis');
     }

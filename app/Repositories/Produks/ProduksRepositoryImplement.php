@@ -3,6 +3,7 @@
 namespace App\Repositories\Produks;
 
 use App\Models\Produk;
+use Illuminate\Support\Facades\DB;
 use LaravelEasyRepository\Implementations\Eloquent;
 
 class ProduksRepositoryImplement extends Eloquent implements ProduksRepository
@@ -61,5 +62,25 @@ class ProduksRepositoryImplement extends Eloquent implements ProduksRepository
     {
         $data = $this->model->selectRaw('CONCAT(code, " - ", name) as name, id, price')->where('is_active', true)->get();
         return $data;
+    }
+
+    public function get5TopProduks()
+    {
+        $currentMonth = now()->month;
+
+        $topProducts = $this->model->select(
+            'produks.id',
+            'produks.name',
+            'produks.stock',
+            DB::raw('SUM(produks_returning_goods.quantity) as total_sold_quantity')
+        )
+            ->join('produks_returning_goods', 'produks.id', '=', 'produks_returning_goods.produk_id')
+            ->join('returning_goods', 'produks_returning_goods.returning_goods_id', '=', 'returning_goods.id')
+            ->whereMonth('returning_goods.created_at', $currentMonth)
+            ->groupBy('produks.id', 'produks.name')
+            ->orderByDesc('total_sold_quantity')
+            ->take(5)
+            ->get();
+        return $topProducts;
     }
 }
