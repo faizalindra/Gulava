@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\CashflowController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ResetPassword;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,18 +18,19 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-use App\Http\Controllers\ResetPassword;
 use App\Http\Controllers\ChangePassword;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ProduksController;
+use App\Http\Controllers\CashflowController;
 use App\Http\Controllers\LogisticController;
+use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\ProdukGradeController;
-use App\Http\Controllers\ProduksController;
 use App\Http\Controllers\RawMaterialController;
-use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\RawMaterialFlowController;
 
 
 Route::get('/', function () {
@@ -61,6 +62,8 @@ Route::group(['middleware' => ['auth', 'web']], function () {
 	Route::post('raw-material', [RawMaterialController::class, 'create'])->name('raw-material.create');
 	Route::get('raw-material/{id}', [RawMaterialController::class, 'detail'])->name('raw-material.detail');
 	Route::put('raw-material/{id}/update', [RawMaterialController::class, 'update'])->name('raw-material.update');
+
+	Route::post('/raw-material-flow', [RawMaterialFlowController::class, 'create'])->name('raw-material-flow.create');
 
 	Route::get('/logistic', [LogisticController::class, 'index'])->name('logistic');
 	Route::post('/logistic', [LogisticController::class, 'create'])->name('logistic.create');

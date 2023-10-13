@@ -33,12 +33,12 @@ class DatabaseSeeder extends Seeder
                 SalespersonSeeds::class,
                 RawMaterialsSeed::class,
                 RawMaterialSupplierSeed::class,
-                RawMaterialFlowSeed::class,
-                ProduksGradeSeed::class,
-                ProductionBatchSeed::class,
-                LogisticSeed::class,
-                IncomeSeed::class,
-                ExpenseSeed::class,
+                // RawMaterialFlowSeed::class,
+                // ProduksGradeSeed::class,
+                // ProductionBatchSeed::class,
+                // LogisticSeed::class,
+                // IncomeSeed::class,
+                // ExpenseSeed::class,
                 ]
         );
     }

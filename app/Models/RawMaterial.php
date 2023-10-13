@@ -35,7 +35,7 @@ class RawMaterial extends Model
 
     public function flows()
     {
-        return $this->hasMany(RawMaterialFlow::class);
+        return $this->hasMany(RawMaterialFlow::class)->orderBy('created_at', 'desc');
     }
 
     

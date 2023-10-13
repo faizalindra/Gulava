@@ -69,7 +69,7 @@
                                 <hr class="hr">
                                 <div class="row text-center">
                                     <div class="col">Stok</div>
-                                    <div class="col">harga Bahan Baku</div>
+                                    <div class="col">Harga Bahan Baku</div>
                                 </div>
                                 <div class="row text-center">
                                     <div class="col">
@@ -98,8 +98,20 @@
                             </div>
                             <div class="col-7">
                                 <div class="card border border-primary shadow-0 ">
+                                    <div class="card-header">
+                                        <div class="row justify-content-between">
+                                            <div class="col">
+                                                <h5 class="card-title">Histori Bahan Baku</h5>
+                                            </div>
+                                            <div class="col text-end">
+                                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                                    data-bs-target="#addNewFlow">
+                                                    Tambah
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="card-body">
-                                        <h5 class="card-title">Histori Bahan Baku</h5>
                                         <div class="table-responsive">
                                             <table id="flowsTable" class="table">
                                                 <thead>
@@ -209,9 +221,67 @@
                                     @endforeach
                                 </select>
                             </div>
-                            
+
                             <div class="d-grid pt-4">
-                                <button class="btn btn-primary btn-lg" id="editSubmitButton" type="submit">Simpan</button>
+                                <button class="btn btn-primary btn-lg" id="editSubmitButton"
+                                    type="submit">Simpan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="addNewFlow" tabindex="-1" role="dialog" aria-labelledby="addNewFlowTitle"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addNewFlowTitle">Tambah Stok</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="text-dark">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editRawMaterial" method="POST" action="{{ route('raw-material-flow.create') }}">
+                            @csrf
+                            @method('POST')
+                            <input type="hidden" name="raw_material_id_" value="{{$material->id}}">
+                            <div class="mb-3">
+                                <label class="form-label" for="supplier_id_">Supplier</label>
+                                <select class="form-select" name="supplier_id_" id="supplier_id_" aria-label="Supplier"
+                                    required>
+                                    @foreach ($material->suppliers as $m)
+                                        <option value="{{ $m->id }}" {{ $m->id == 1 ? 'selected' : '' }}>
+                                            {{ $m->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" id="is_in_" name="is_in_" checked>
+                                    <label class="custom-control-label" for="is_in_">Barang Masuk</label>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label" for="quantity_">Jumlah</label>
+                                <input class="form-control" id="quantity_" name="quantity_" type="number"
+                                    value="" min="1" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="price_">Harga Satuan</label>
+                                <input class="form-control" id="price_" name="price_" type="number"
+                                    value="{{ $material->price }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="total_price_">Total Harga</label>
+                                <input class="form-control" id="total_price_" name="total_price_" type="number"
+                                    value="0" required>
+                            </div>
+                            <div class="d-grid pt-4">
+                                <button class="btn btn-primary btn-lg" id="addFlowSubmitButton"
+                                    type="submit">Simpan</button>
                             </div>
                         </form>
                     </div>
@@ -234,12 +304,48 @@
 
                 });
 
-                //send editRawMaterial via ajax
-
-
                 $("#alert-alert").fadeTo(4000, 500).slideUp(500, function() {
                     $("#alert-alert").alert('close');
                 });
+
+
+                const quantityInput = $('#quantity_');
+                const priceInput = $('#price_');
+                const totalPriceInput = $('#total_price_');
+
+                // Function to calculate the total price
+                function calculateTotalPrice() {
+                    const quantity = parseFloat(quantityInput.val()) || 0;
+                    const price = parseFloat(priceInput.val()) || 0;
+                    const total = quantity * price;
+                    totalPriceInput.val(total);
+                }
+
+                // Function to calculate the price
+                function calculatePrice() {
+                    const quantity = parseFloat(quantityInput.val()) || 0;
+                    const total = parseFloat(totalPriceInput.val()) || 0;
+
+                    if (quantity > 0) {
+                        const price = total / quantity;
+                        priceInput.val(price);
+                    } else {
+                        priceInput.val('0.00');
+                    }
+                }
+
+                // Add event listeners to quantity, price, and total_price inputs
+                quantityInput.on('input', function() {
+                    calculateTotalPrice();
+                    calculatePrice();
+                });
+                priceInput.on('input', function() {
+                    calculateTotalPrice();
+                });
+                totalPriceInput.on('input', function() {
+                    calculatePrice();
+                });
+
             });
         </script>
         @include('layouts.footers.auth.footer')

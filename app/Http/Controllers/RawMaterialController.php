@@ -32,6 +32,7 @@ class RawMaterialController extends Controller
         $material->load(['suppliers', 'flows.supplier']);
         $suppliers = $this->supplierService->getAllSupplierForSelect();
         // dd($material);
+        // return $material->toArray();
         return view('pages.RawMaterial.rawmaterial-detail', compact('material', 'suppliers'));
     }
 
