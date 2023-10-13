@@ -28,7 +28,7 @@ class LogisticController extends Controller
 
     public function index()
     {
-        $outgoingGoods = OutgoingGoods::with(['user', 'salesperson', 'returningGoods.products', 'products'])->orderBy('id','desc')->get();
+        $outgoingGoods = OutgoingGoods::with(['user', 'salesperson', 'returningGoods.products', 'products'])->orderBy('id', 'desc')->get();
         $salesperson = $this->salespersonService->getAllSalespersonForSelect();
         $products = $this->productService->getAllProduksForFormSelector();
         return view('pages.Logistic.logistic', compact('outgoingGoods', 'salesperson', 'products'));
@@ -63,15 +63,14 @@ class LogisticController extends Controller
 
     public function finish(CreateReturingGoodRequest $request, $id)
     {
-
         $request = $request->validated();
-        $request['id'] = $id;
-        $i = $this->returningGoodsService->create($request);
-        if($i){
+        try {
+            $request['id'] = $id;
+            $this->returningGoodsService->create($request);
             return back()->with('success', 'Berhasil menambahkan data');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal menambahkan data, error: ' . $e->getMessage());
         }
-        return back()->with('error', 'Gagal menambahkan data');
-        // return back()->with('success', 'Berhasil menambahkan data');
     }
 
     public function print($id)

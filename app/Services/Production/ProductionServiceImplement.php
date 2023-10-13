@@ -5,6 +5,7 @@ namespace App\Services\Production;
 use App\Models\ProductionDetail;
 use Illuminate\Support\Facades\DB;
 use LaravelEasyRepository\Service;
+use App\Repositories\Produks\ProduksRepository;
 use App\Repositories\Production\ProductionRepository;
 
 class ProductionServiceImplement extends Service implements ProductionService
@@ -16,13 +17,16 @@ class ProductionServiceImplement extends Service implements ProductionService
    */
   protected $mainRepository;
   protected $detailRepository;
+  protected $productRepository;
 
   public function __construct(
     ProductionRepository $mainRepository,
-    ProductionDetail $detailRepository)
+    ProductionDetail $detailRepository,
+    ProduksRepository $productRepository)
   {
     $this->mainRepository = $mainRepository;
     $this->detailRepository = $detailRepository;
+    $this->productRepository = $productRepository;
   }
 
   public function create($data)
@@ -62,6 +66,29 @@ class ProductionServiceImplement extends Service implements ProductionService
     } catch (\Exception $e) {
       DB::rollBack();
       dd($e->getMessage());
+      throw new \Exception($e->getMessage());
+    }
+  }
+
+  public function finishProduction(int $id, array $data)
+  {
+    DB::beginTransaction();
+    try {
+      $production = $this->mainRepository->find($id);
+      $production->quantity_produced = $data['quantity_produced'];
+      $production->estimated_cost = $data['estimated_cost'];
+      $production->completed_at = $data['completed_at'];
+      $production->is_active = $data['is_active'];
+      $production->save();
+
+      $product = $this->productRepository->find($production->produks_id);
+      $product->stock += $data['quantity_produced'];
+      $product->save();
+
+      DB::commit();
+      return true;
+    } catch (\Exception $e) {
+      DB::rollBack();
       throw new \Exception($e->getMessage());
     }
   }

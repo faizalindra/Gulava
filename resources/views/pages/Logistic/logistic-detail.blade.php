@@ -484,9 +484,9 @@
                                                         @foreach ($outgoingGoods->products as $produk)
                                                             {{-- @dd($produk->toArray()) --}}
                                                             <div class="row logistic_">
-                                                                <input type="number" name="produk_id_"
+                                                                <input type="number" name="products_[produk_id][]"
                                                                     value="{{ $produk->id }}" hidden>
-                                                                <input type="number" name="price_"
+                                                                <input type="number" name="products_[price][]"
                                                                     value="{{ $produk->pivot->price }}" hidden>
                                                                 <div class="col mb-1">
                                                                     <label class="form-label"

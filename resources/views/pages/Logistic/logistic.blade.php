@@ -210,7 +210,7 @@
                                 </div>
                                 <div class="col mb-1">
                                     <label class="form-label" for="total_price">Jumlah (Rp.) :</label>
-                                    <input class="form-control" type="number" name="total_price" id="total_price"
+                                    <input class="form-control" type="number" name="total_price" id="total_price" min="0"
                                         readonly>
                                 </div>
                                 <div class="mb-1 mb-2">
@@ -262,7 +262,7 @@
                         <select class="form-control" name="products[product_id][]" required>
                             <option value="" selected disabled hidden>Pilih Produk</option>
                             @foreach ($products as $product)
-                                <option value="{{ intval($product->id) }}" data-price="{{ $product->price }}">{{ $product->name }}
+                                <option value="{{ intval($product->id) }}" data-price="{{ $product->price }}" data-stock="{{ $product->stock }}">{{ $product->name }}
                                 </option>
                             @endforeach
                         </select>
@@ -270,15 +270,15 @@
                 </div>
                 <div class="col mb-1">
                     <label class="form-label" for="quantity_used">Jumlah:</label>
-                    <input class="form-control" type="number" name="products[quantity][]" required>
+                    <input class="form-control" type="number" name="products[quantity][]" min="0" max="0" required>
                 </div>
                 <div class="col mb-1">
                     <label class="form-label" for="price">Harga Satuan:</label>
-                    <input class="form-control" type="number" name="products[price][]" required>
+                    <input class="form-control" type="number" name="products[price][]" min="0" required>
                 </div>
                 <div class="col mb-1">
                     <label class="form-label" for="total_price">Total Harga:</label>
-                    <input class="form-control" type="number" name="products[total_price][]"
+                    <input class="form-control" type="number" name="products[total_price][]" min="0"
                         readonly>
                 </div>
                 <div class="col-1 mb-1">
@@ -290,11 +290,10 @@
         `;
             updateLogisticCount(1);
             let count = $('#product_count').val();
-            console.log(count);
             $("#products").append(logisticRow);
             // Get the newly added row
             const newRow = $("#products .logistic").last();
-
+            
             // Add event listeners for quantity and price fields in the new row
             newRow.find("input[name='products[quantity][]'], input[name='products[price][]']").on("input", function() {
                 // Get quantity and price values from the current row
@@ -316,9 +315,14 @@
 
                 // Get the data-price attribute value
                 const price = parseFloat(selectedOption.data("price")) || 0;
+                const stock = parseFloat(selectedOption.data("stock")) || 0;
 
                 // Update the price input field with the selected price
                 newRow.find("input[name='products[price][]']").val(price);
+                newRow.find("input[name='products[quantity][]']").attr({
+                    "max" : stock,
+                    "min" : 0
+                });
 
                 // Calculate and update the total price
                 const quantity = parseFloat(newRow.find("input[name='products[quantity][]']").val()) || 0;

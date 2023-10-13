@@ -97,7 +97,8 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $production->created_at }}
+                                                <p class="text-xs font-weight-bold mb-0">
+                                                    {{ Carbon\Carbon::parse($production->created_at)->format('Y-m-d H:i') }}
                                                 </p>
                                             </td>
                                             <td>
@@ -105,16 +106,19 @@
                                                 </p>
                                             </td>
                                             <td>
-                                                <p class="text-xs font-weight-bold mb-0">
-                                                    {{ $production->quantity_produced }} Kg</p>
+                                                <p class="text-xs font-weight-bold mb-0 text-end">
+                                                    @if ($production->quantity_produced != 0)
+                                                        {{ $production->quantity_produced }} Kg
+                                                    @endif
+                                                </p>
                                             </td>
                                             <td>
-                                                <p class="text-xs text-center font-weight-bold mb-0">
+                                                <p class="text-xs text-end font-weight-bold mb-0">
                                                     Rp. {{ number_format($production->estimated_cost, 0, '.', '.') }}
                                                 </p>
                                             </td>
                                             <td>
-                                                <p class="text-xs text-center font-weight-bold mb-0">
+                                                <p class="text-xs text-end font-weight-bold mb-0">
                                                     @if (!$production->is_active)
                                                         {{ $production->period }} Jam
                                                     @else

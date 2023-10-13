@@ -62,7 +62,7 @@ class ProductionController extends Controller
     public function finish(FinishProductionRequest $request, $id)
     {
         $request = $request->validated();
-        $this->mainService->update($id, $request);
+        $this->mainService->finishProduction($id, $request);
         return back()->with('success', 'Produksi berhasil diselesaikan');
     }
 }

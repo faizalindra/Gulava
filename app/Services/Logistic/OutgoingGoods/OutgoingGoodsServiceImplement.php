@@ -5,6 +5,7 @@ namespace App\Services\Logistic\OutgoingGoods;
 use Illuminate\Support\Facades\DB;
 use LaravelEasyRepository\Service;
 use App\Repositories\OutgoingGoods\OutgoingGoodsRepository;
+use App\Repositories\Produks\ProduksRepository;
 
 class OutgoingGoodsServiceImplement extends Service implements OutgoingGoodsService
 {
@@ -15,11 +16,15 @@ class OutgoingGoodsServiceImplement extends Service implements OutgoingGoodsServ
    */
   protected $mainRepository;
   protected $detailRepository;
+  protected $productsRepository;
 
-  public function __construct(OutgoingGoodsRepository $mainRepository, OutgoingGoodsRepository $detailRepository)
+  public function __construct(OutgoingGoodsRepository $mainRepository, 
+  OutgoingGoodsRepository $detailRepository,
+  ProduksRepository $productsRepository)
   {
     $this->mainRepository = $mainRepository;
     $this->detailRepository = $detailRepository;
+    $this->productsRepository = $productsRepository;
   }
 
   public function create($payload)
@@ -40,6 +45,9 @@ class OutgoingGoodsServiceImplement extends Service implements OutgoingGoodsServ
         'price' => $payload['products']['price'][$key],
         'total_price' => $payload['products']['total_price'][$key],
       ]);
+      $product = $this->productsRepository->find($value);
+      $product->stock -= $payload['products']['quantity'][$key];
+      $product->save();
     }
     $data->save();
   }
