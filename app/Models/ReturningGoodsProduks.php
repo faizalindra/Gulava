@@ -22,4 +22,14 @@ class ReturningGoodsProduks extends Model
         'price' => 'integer',
         'total_price' => 'integer',
     ];
+
+    public function products()
+    {
+        return $this->belongsTo(Produk::class, 'produk_id');
+    }
+
+    public function returningGoods()
+    {
+        return $this->belongsTo(ReturningGoods::class);
+    }
 }

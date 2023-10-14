@@ -19,7 +19,7 @@ class OutgoingGoods extends Model
     ];
 
     public function details(){
-        return $this->hasMany(OutgoingGoodsProduks::class, 'outgoing_good_id');
+        return $this->hasMany(OutgoingGoodsProduks::class, 'outgoing_good_id', 'id', 'produk_id');
     }
 
 

@@ -23,7 +23,8 @@ class ProductionBatchSeed extends Seeder
     public function run(): void
     {
         $faker = $this->faker;
-        $count = Produk::count();
+        $produks = Produk::all();
+        $count = count($produks);
         $rawMaterials = RawMaterial::all();
         $data = [];
 
@@ -33,17 +34,20 @@ class ProductionBatchSeed extends Seeder
                 $result = $this->batchgenerator($j, $randomNumberOfBatch, $faker);
                 $data[] = [
                     'code' => 'PB' . str_pad($i, 3, '0', STR_PAD_LEFT) . str_pad($j, 3, '0', STR_PAD_LEFT),
-                    'produks_id' => rand(1, $count),
-                    'quantity_produced' => $faker->numberBetween(500, 1000),
-                    'estimated_cost' => $faker->numberBetween(100000, 1000000),
+                    'produks_id' => $produkID = rand(1, $count),
+                    'quantity_produced' => $qty = $faker->numberBetween(500, 1000),
+                    'estimated_cost' => $est = $produks[$produkID - 1]->price * $qty,
                     'description' => $faker->sentence(10),
                     'completed_at' => $result['completed_at'],
                     'is_active' => $result['is_active'],
                     'created_at' => $faker->dateTimeBetween('-1 year', 'now'),
                     'updated_at' => $faker->dateTimeBetween('-1 year', 'now'),
                 ];
+                $produks[$produkID - 1]->stock += $qty;
+                $produks[$produkID - 1]->estimated_sales += $est;
             }
         }
+        $produks->each->save();
         ProductionBatch::insert($data);
         $batchId = ProductionBatch::pluck('id')->toArray();
 

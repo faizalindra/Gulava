@@ -28,11 +28,12 @@ class ProduksController extends Controller
     public function detail($id)
     {
         $product = $this->mainService->find($id);
-        $product->load(['production' => function ($q) {
-            $q->orderBy('created_at', 'desc');
-        }]);
+        $product->load(['outgoingGoods' => function($q){ $q->take(5)->orderBy('id','desc'); }]);
+        $product->outgoingGoods->load('salesperson', 'returningGoods.details');
+        
         $grades = $this->produksGradeService->getAllProduksGrade();
 
+        // return $product->toArray();
         return view('pages.Product.product-detail', compact('product', 'grades'));
     }
 

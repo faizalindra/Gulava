@@ -21,7 +21,7 @@ class LogisticSeed extends Seeder
      */
     public function run(): void
     {
-        $count = 200;
+        $count = 20;
         $salespersonID = Salesperson::all();
         $data = [];
         for ($i = 0; $i < $count; $i++) {

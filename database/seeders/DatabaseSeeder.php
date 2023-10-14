@@ -26,19 +26,19 @@ class DatabaseSeeder extends Seeder
         $this->call(
             [
                 ProduksSeed::class,
+                ProduksGradeSeed::class,
                 ExpenseCategorySeed::class,
                 IncomeCategorySeed::class,
                 PettyCashSeed::class,
+                RawMaterialsSeed::class,
                 SuppliersSeed::class,
                 SalespersonSeeds::class,
-                RawMaterialsSeed::class,
                 RawMaterialSupplierSeed::class,
-                // RawMaterialFlowSeed::class,
-                // ProduksGradeSeed::class,
-                // ProductionBatchSeed::class,
-                // LogisticSeed::class,
-                // IncomeSeed::class,
-                // ExpenseSeed::class,
+                RawMaterialFlowSeed::class,
+                ProductionBatchSeed::class,
+                LogisticSeed::class,
+                IncomeSeed::class,
+                ExpenseSeed::class,
                 ]
         );
     }

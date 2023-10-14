@@ -44,6 +44,11 @@ class Produk extends Model
 
     public function outgoingGoods()
     {
-        return $this->belongsToMany(OutgoingGoods::class, 'outgoing_goods_produks', 'outgoing_good_id', 'produk_id');
+        return $this->belongsToMany(OutgoingGoods::class, 'outgoing_goods_produks', 'produk_id', 'outgoing_good_id');
+    }
+
+    public function returningGoods()
+    {
+        return $this->belongsToMany(ReturningGoods::class, 'produks_returning_goods', 'returning_goods_id', 'produk_id');
     }
 }

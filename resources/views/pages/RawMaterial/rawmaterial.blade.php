@@ -78,23 +78,23 @@
                                         {{-- @dd($rawMaterials) --}}
                                         <tr>
                                             <td>
-                                                <p class="text-xs font-weight-bold mb-0  text-center">{{ $rawMaterial->id }}
+                                                <p class="text-lg font-weight-bold mb-0  text-center">{{ $rawMaterial->id }}
                                                 </p>
                                             </td>
                                             <td>
                                                 <div class="d-flex flex-column justify-content-center">
-                                                    <h6 class="mb-0 text-sm">{{ $rawMaterial->name }}</h6>
+                                                    <h6 class="mb-0 text-lg">{{ $rawMaterial->name }}</h6>
                                                 </div>
                                             </td>
                                             <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $rawMaterial->code }}</p>
+                                                <p class="text-lg font-weight-bold mb-0">{{ $rawMaterial->code }}</p>
                                             </td>
                                             <td>
-                                                <p class="text-xs font-weight-bold mb-0">Rp.
+                                                <p class="text-lg font-weight-bold mb-0">Rp.
                                                     {{ number_format($rawMaterial->price, 0, '.', '.') }}</p>
                                             </td>
                                             <td>
-                                                <p class="text-xs text-center font-weight-bold mb-0">
+                                                <p class="text-lg text-center font-weight-bold mb-0">
                                                     @if ($rawMaterial->stock > $rawMaterial->stock_min + $rawMaterial->stock_min * 0.3)
                                                         <span
                                                             class="badge badge-pill badge-success bg-success">{{ $rawMaterial->stock . ' ' . $rawMaterial->unit }}</span>

@@ -95,53 +95,44 @@
                                             <th scope="col">Sales</th>
                                             <th scope="col">Jumlah</th>
                                             <th scope="col">Pendapatan</th>
-                                            {{-- <th scope="col">Start</th> --}}
-                                            {{-- <th scope="col">End</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="">
-                                            <td scope="row">
-                                                <div class="align-items-center justify-content-center"
-                                                    style="color: #00ff33;">
-                                                    <i class="far fa-check-circle fa-lg"></i> Success
-                                                </div>
-                                            </td>
-                                            <td>SG001</td>
-                                            <td>Sukirno</td>
-                                            <td>150Kg</td>
-                                            <td class="text-end">Rp. 1.500.000</td>
-                                            {{-- <td>2023-09-10 12:00:00</td>
-                                            <td>2023-09-11 09:00:00</td> --}}
-                                        </tr>
-                                        <tr class="">
-                                            <td scope="row">
-                                                <div class="align-items-center justify-content-center"
-                                                    style="color: #00ff33;">
-                                                    <i class="far fa-check-circle fa-lg"></i> Success
-                                                </div>
-                                            </td>
-                                            <td>SG002</td>
-                                            <td>Putri</td>
-                                            <td>50Kg</td>
-                                            <td class="text-end">Rp. 500.000</td>
-                                            {{-- <td>2023-09-10 07:45:00</td>
-                                            <td>2023-09-11 12:00:00</td> --}}
-                                        </tr>
-                                        <tr class="">
-                                            <td scope="row">
-                                                <div class="align-items-center justify-content-center"
-                                                    style="color: #00ff33;">
-                                                    <i class="far fa-check-circle fa-lg"></i> Success
-                                                </div>
-                                            </td>
-                                            <td>SG003</td>
-                                            <td>Mahroni</td>
-                                            <td>300Kg</td>
-                                            <td class="text-end">Rp. 3.000.000</td>
-                                            {{-- <td>2023-09-10 10:13:00</td>
-                                            <td>2023-09-10 12:04:00</td> --}}
-                                        </tr>
+                                        @foreach ($product->outgoingGoods as $og)
+                                            <tr>
+                                                <td scope="row">
+                                                    <div class="align-items-center justify-content-center"
+                                                        style="color: {{ !is_null($og->returningGoods) ? '#00ff33' : '#ffef42' }}">
+                                                        <i
+                                                            class="far {{ !is_null($og->returningGoods) ? 'fa-check-right' : '#ffef42' }} fa-lg"></i>
+                                                        Success
+                                                    </div>
+                                                </td>
+                                                <td><a
+                                                        href="{{ route('logistic.detail', ['id' => $og->id]) }}">{{ $og->code }}</a>
+                                                </td>
+                                                <td>
+                                                    @if (strlen($og->salesperson->name) > 12)
+                                                        {{ substr($og->salesperson->name, 0, 12) . '...' }}
+                                                    @else
+                                                        {{ $og->salesperson->name }}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @foreach ($og->returningGoods->details as $detail)
+                                                        {{ $detail->produk_id == $product->id ? $detail->quantity . ' Kg' : '' }}
+                                                    @endforeach
+                                                </td>
+                                                <td>
+                                                    @if (!is_null($og->returningGoods))
+                                                        Rp.
+                                                        {{ number_format($og->returningGoods->total_amount, 0, '.', '.') }}
+                                                    @else
+                                                        ''
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -274,8 +265,7 @@
                                             </div>
                                             <div class="mb-1">
                                                 <label for="description" class="form-label">Deskripsi Produk</label>
-                                                <textarea class="form-control" name="description" id="description"
-                                                    rows="3">{{ $product->description }}</textarea>
+                                                <textarea class="form-control" name="description" id="description" rows="3">{{ $product->description }}</textarea>
                                             </div>
                                         </div>
                                         <div class="col-6"></div>

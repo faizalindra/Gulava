@@ -13,22 +13,25 @@ class RawMaterialFlowSeed extends Seeder
     public function run(): void
     {
         $count = 20;
-        $rawMaterialCount = \App\Models\RawMaterial::count();
+        $rawMaterials = \App\Models\RawMaterial::all();
+        $rawMaterialCount = count($rawMaterials);
         $supplierCount = \App\Models\Supplier::count();
         $cash = \App\Models\PettyCash::first();
         $data = [];
         for($i = 0; $i < $count; $i++) {
             $data[] = [
-                'raw_material_id' => rand(1, $rawMaterialCount),
+                'raw_material_id' => $rawMaterialID = rand(1, $rawMaterialCount),
                 'supplier_id' => rand(1, $supplierCount),
-                'quantity' => rand(1, 100),
-                'price' => $price = rand(1000, 100000),
-                'is_in' => rand(1, 100) > 2 ? true : false,
+                'quantity' => $qty = rand(1, 100),
+                'price' => $price = $rawMaterials[$rawMaterialID - 1]->price,
+                'is_in' => $is_in = rand(1, 100) > 2 ? true : false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
+            $rawMaterials[$rawMaterialID - 1]->stock += $is_in ? $qty : -$qty;
             $cash->balance += $price;
         }
+        $rawMaterials->each->save();
         $cash->save();
         \App\Models\RawMaterialFlow::insert($data);
     }

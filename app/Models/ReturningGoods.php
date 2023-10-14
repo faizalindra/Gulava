@@ -23,7 +23,11 @@ class ReturningGoods extends Model
     protected $casts = [
         'price' => 'integer',
     ];
-    
+
+    public function details()
+    {
+        return $this->hasMany(ReturningGoodsProduks::class, 'returning_goods_id', 'id');
+    }
 
     public function salesperson()
     {
@@ -34,8 +38,9 @@ class ReturningGoods extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
-    public function salesFee(){
+
+    public function salesFee()
+    {
         return $this->hasOne(SalesFee::class);
     }
 
@@ -49,7 +54,8 @@ class ReturningGoods extends Model
         return $this->belongsTo(PettyCash::class);
     }
 
-    public function products(){
+    public function products()
+    {
         return $this->belongsToMany(Produk::class, 'produks_returning_goods', 'returning_goods_id', 'produk_id')->withPivot('quantity', 'price', 'total_price');
     }
 }
