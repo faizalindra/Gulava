@@ -245,7 +245,13 @@
                             <select class="form-control" name="materials[id][]" required>
                                 <option value=""  selected disabled hidden>Pilih Bahan Baku</option>
                                 @foreach ($materials as $material)
-                                    <option value="{{ $material->id }}" data-unit="{{ $material->unit }}" data-price="{{ $material->price }}" data-stock="{{ $material->stock }}">{{ $material->name }}</option>
+                                    <option value="{{ $material->id }}" 
+                                        data-unit="{{ $material->unit }}" 
+                                        data-price="{{ $material->price }}"
+                                        data-stock="{{ $material->stock }}" 
+                                        {{$material->stock < 1 ? 'disabled' : ''}}
+                                        
+                                    >{{ $material->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -295,9 +301,11 @@
 
                 // Get the data-price attribute value
                 const price = parseFloat(selectedOption.data("price")) || 0;
+                const stock = parseFloat(selectedOption.data("stock")) || 0;
 
                 // Update the price input field with the selected price
                 newRow.find("input[name='materials[price][]']").val(price);
+                newRow.find("input[name='materials[price][]']").attr('max', stock);
 
                 // Calculate and update the total price
                 const quantity = parseFloat(newRow.find("input[name='materials[quantity_used][]']").val()) || 0;

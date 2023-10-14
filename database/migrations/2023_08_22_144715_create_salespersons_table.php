@@ -17,18 +17,12 @@ return new class extends Migration
             $table->string('nik')->unique();
             $table->string('name');
             $table->string('address');
-            $table->string('villege');
-            $table->string('district');
-            $table->string('city');
-            $table->string('phone', 20);
+            $table->string('phone', 20)->unique();
             $table->string('email')->unique()->nullable();
             $table->enum('gender',['M','F']);
-            $table->date('birth_date');
-            $table->string('birth_place');
             $table->string('bank_name')->nullable();
             $table->string('bank_account')->nullable();
             $table->string('bank_account_name')->nullable();
-            $table->string('npwp')->nullable();
             $table->timestamps();
         });
     }

@@ -24,18 +24,12 @@ class SalespersonSeeds extends Seeder
                 'nik' => '',
                 'name' => 'Guest',
                 'address' => '',
-                'villege' => '',
-                'district' => '',
-                'city' => '',
                 'phone' => '',
                 'email' => '',
                 'gender' => 'M',
-                'birth_date' => '2000-01-01',
-                'birth_place' => '',
                 'bank_name' => '',
                 'bank_account' => '',
                 'bank_account_name' => '',
-                'npwp' => '',
             ],
         ];
         $count = 20;
@@ -45,18 +39,12 @@ class SalespersonSeeds extends Seeder
                 'nik' => $this->faker->nik(),
                 'name' => $this->faker->name(),
                 'address' => $this->faker->address(),
-                'villege' => $this->faker->city(),
-                'district' => $this->faker->city(),
-                'city' => $this->faker->city(),
                 'phone' => $this->faker->phoneNumber(),
                 'email' => $this->faker->email(),
                 'gender' => $this->faker->randomElement(['M', 'F']),
-                'birth_date' => $this->faker->date(),
-                'birth_place' => $this->faker->city(),
                 'bank_name' => $this->faker->randomElement(['BNI', 'BRI', 'BCA', 'Mandiri']),
                 'bank_account' => $this->faker->bankAccountNumber(),
                 'bank_account_name' => $this->faker->name(),
-                'npwp' => $this->faker->numerify('#############'),
             ];
         }
 

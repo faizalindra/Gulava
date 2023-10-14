@@ -21,6 +21,24 @@ class SalespersonRepositoryImplement extends Eloquent implements SalespersonRepo
         $this->model = $model;
     }
 
+    public function generateCode()
+    {
+        //code format: SP020
+        $lastCode = $this->model->select('code')->orderBy('code', 'desc')->first();
+        if ($lastCode) {
+            $lastCode = $lastCode->code;
+            $lastCode = explode('SP', $lastCode);
+            $lastCode = $lastCode[1];
+            $lastCode = (int) $lastCode;
+            $lastCode++;
+            $lastCode = str_pad($lastCode, 3, '0', STR_PAD_LEFT);
+            $lastCode = 'SP' . $lastCode;
+        } else {
+            $lastCode = 'SP001';
+        }
+        return $lastCode;
+    }
+
     public function getAllSalespersonForSelect()
     {
         return $this->model->selectRaw('id, CONCAT(code, "-", name) as name')->get();

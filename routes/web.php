@@ -31,7 +31,7 @@ use App\Http\Controllers\ProdukGradeController;
 use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\RawMaterialFlowController;
-
+use App\Http\Controllers\SalespersonController;
 
 Route::get('/', function () {
 	return redirect('/dashboard');
@@ -62,8 +62,11 @@ Route::group(['middleware' => ['auth', 'web']], function () {
 	Route::post('raw-material', [RawMaterialController::class, 'create'])->name('raw-material.create');
 	Route::get('raw-material/{id}', [RawMaterialController::class, 'detail'])->name('raw-material.detail');
 	Route::put('raw-material/{id}/update', [RawMaterialController::class, 'update'])->name('raw-material.update');
-
 	Route::post('/raw-material-flow', [RawMaterialFlowController::class, 'create'])->name('raw-material-flow.create');
+
+	Route::get('/salesperson', [SalespersonController::class, 'index'])->name('salesperson');
+	Route::post('/salesperson', [SalespersonController::class, 'create'])->name('salesperson.create');
+	Route::get('/salesperson/{id}', [SalespersonController::class, 'detail'])->name('salesperson.detail');
 
 	Route::get('/logistic', [LogisticController::class, 'index'])->name('logistic');
 	Route::post('/logistic', [LogisticController::class, 'create'])->name('logistic.create');

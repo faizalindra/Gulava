@@ -17,7 +17,7 @@ class RawMaterialsSeed extends Seeder
                 'code' => 'RM000',
                 'name' => 'Tebu',
                 'price' => 10000,
-                'stock' => 100,
+                'stock' => 0,
                 'unit' => 'kg', // tambahkan field unit di migration 'raw_materials
                 'stock_min' => 10,
             ],
@@ -25,7 +25,7 @@ class RawMaterialsSeed extends Seeder
                 'code' => 'RM001',
                 'name' => 'Nira',
                 'price' => 20000,
-                'stock' => 200,
+                'stock' => 0,
                 'unit' => 'kg', // tambahkan field unit di migration 'raw_materials
                 'stock_min' => 20,
             ],
@@ -33,7 +33,7 @@ class RawMaterialsSeed extends Seeder
                 'code' => 'RM002',
                 'name' => 'Air',
                 'price' => 30000,
-                'stock' => 300,
+                'stock' => 0,
                 'unit' => 'kg', // tambahkan field unit di migration 'raw_materials
                 'stock_min' => 30,
             ],
@@ -41,7 +41,7 @@ class RawMaterialsSeed extends Seeder
                 'code' => 'RM003',
                 'name' => 'LPG',
                 'price' => 40000,
-                'stock' => 400,
+                'stock' => 0,
                 'unit' => 'pcs', // tambahkan field unit di migration 'raw_materials
                 'stock_min' => 40,
             ],

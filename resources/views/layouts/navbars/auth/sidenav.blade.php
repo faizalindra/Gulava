@@ -75,6 +75,16 @@
                     <span class="nav-link-text ms-1">Cashflow</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link {{ Route::currentRouteName() == 'salesperson' ? 'active' : '' }}"
+                    href="{{ route('salesperson') }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fa-solid fa-address-card text-secondary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Sales</span>
+                </a>
+            </li>
             {{-- <li class="nav-item">
                 <a class="nav-link {{ str_contains(request()->url(), 'tables') == true ? 'active' : '' }}"
                     href="{{ route('page', ['page' => 'tables']) }}">

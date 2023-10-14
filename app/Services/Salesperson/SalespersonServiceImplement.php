@@ -18,6 +18,12 @@ class SalespersonServiceImplement extends Service implements SalespersonService{
       $this->mainRepository = $mainRepository;
     }
 
+    public function create($request)
+    {
+        $request['code'] = $this->mainRepository->generateCode();
+        $this->mainRepository->create($request);
+    }
+
     public function getAllSalespersonForSelect()
     {
         return $this->mainRepository->getAllSalespersonForSelect();
