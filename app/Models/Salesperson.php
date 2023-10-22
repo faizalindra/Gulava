@@ -31,7 +31,6 @@ class Salesperson extends Model
 
     protected $casts = [
         'nik' => 'integer',
-        'phone' => 'integer',
         'birth_date' => 'date',
         'npwp' => 'integer',
         'bank_account' => 'integer',

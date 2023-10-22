@@ -6,5 +6,5 @@ use LaravelEasyRepository\Repository;
 
 interface OutgoingGoodsRepository extends Repository{
 
-    // Write something awesome :)
+    public function generateCode();
 }

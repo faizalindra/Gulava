@@ -2,6 +2,7 @@
 
 namespace App\Services\Logistic\ReturningGoods;
 
+use App\Models\PettyCash;
 use Illuminate\Support\Facades\DB;
 use LaravelEasyRepository\Service;
 use App\Models\ReturningGoodsProduks;
@@ -34,6 +35,9 @@ class ReturningGoodsServiceImplement extends Service implements ReturningGoodsSe
   {
     DB::beginTransaction();
     try{
+      $cash = PettyCash::first();
+      $cash->balance += $data['total_price_'];
+      $cash->save();
       $outgoingGoods = $this->outgoingGoodsRepository->find($data['id']);
       $payload = [
         'code' => $this->generateCode(),

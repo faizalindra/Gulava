@@ -85,7 +85,7 @@ class OutgoingGoodsServiceImplement extends Service implements OutgoingGoodsServ
 
   private function generateCode()
   {
-    $code = 'OG-' . date('Ymd') . '-' . rand(1000, 9999);
+    $code = $this->mainRepository->generateCode();
     return $code;
   }
 }

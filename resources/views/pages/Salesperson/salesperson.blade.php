@@ -57,22 +57,23 @@
                                 <table id="salesTable" class="table align-items-center mb-0">
                                     <thead>
                                         <tr>
-                                            <th
+                                            <th style="width: 1px"
                                                 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">
                                                 #</th>
-                                            <th
+                                            <th style="width: 5%"
                                                 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                                 Kode</th>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-                                                style="width: 100px;">Nama</th>
+                                                style="width: 15%;">Nama</th>
+                                            <th style="width: 10%"
+                                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                HP</th>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
                                                 style="width: 150px;">Alamat</th>
                                             {{-- <th
                                                 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                                 Email</th> --}}
-                                            {{-- <th
-                                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                HP</th> --}}
+
                                             <th class="text-secondary opacity-7"></th>
                                         </tr>
 
@@ -83,10 +84,10 @@
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $sales->code }}</td>
                                                 <td>{{ $sales->name }}</td>
+                                                <td>{{ $sales->phone }}</td>
                                                 <td>{{ $sales->address }}</td>
                                                 {{-- <td>{{ $sales->email }}</td> --}}
-                                                {{-- <td>{{ $sales->phone }}</td> --}}
-                                                <td><i class="fa fa-eye"><a
+                                                <td class="text-end"><i class="fa fa-eye"><a
                                                             href="{{ route('salesperson.detail', ['id' => $sales->id]) }}"></a></i>
                                                 </td>
                                             </tr>
@@ -130,11 +131,13 @@
                             <div class="mb-3">
                                 <label class="form-label">Jenis Kelamin</label><br>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="gender" id="male" value="M" required>
+                                    <input class="form-check-input" type="radio" name="gender" id="male"
+                                        value="M" required>
                                     <label class="form-check-label" for="male">Laki-laki</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="gender" id="female" value="F" required>
+                                    <input class="form-check-input" type="radio" name="gender" id="female"
+                                        value="F" required>
                                     <label class="form-check-label" for="female">Perempuan</label>
                                 </div>
                             </div>

@@ -102,10 +102,10 @@
                                             <tr>
                                                 <td scope="row">
                                                     <div class="align-items-center justify-content-center"
-                                                        style="color: {{ !is_null($og->returningGoods) ? '#00ff33' : '#ffef42' }}">
+                                                        style="color: {{ !is_null($og->returningGoods) ? '#00ff33' : '#fb6340' }}">
                                                         <i
-                                                            class="far {{ !is_null($og->returningGoods) ? 'fa-check-right' : '#ffef42' }} fa-lg"></i>
-                                                        Success
+                                                            class="{{ !is_null($og->returningGoods) ? 'far fa-check-circle' : 'fa-regular fa-circle-right' }} fa-lg"></i>
+                                                        {{ !is_null($og->returningGoods) ? 'Sucess' : 'Process' }}
                                                     </div>
                                                 </td>
                                                 <td><a
@@ -118,15 +118,23 @@
                                                         {{ $og->salesperson->name }}
                                                     @endif
                                                 </td>
-                                                <td>
-                                                    @foreach ($og->returningGoods->details as $detail)
-                                                        {{ $detail->produk_id == $product->id ? $detail->quantity . ' Kg' : '' }}
-                                                    @endforeach
+                                                <td class="text-end">
+                                                    @if (!is_null($og->returningGoods))
+                                                        @foreach ($og->returningGoods->details as $detail)
+                                                            {{ $detail->produk_id == $product->id ? $detail->quantity . ' Kg' : '' }}
+                                                        @endforeach
+                                                    @else
+                                                        -
+                                                    @endif
                                                 </td>
-                                                <td>
+                                                <td class="text-end">
                                                     @if (!is_null($og->returningGoods))
                                                         Rp.
-                                                        {{ number_format($og->returningGoods->total_amount, 0, '.', '.') }}
+                                                        @foreach ($og->returningGoods->details as $detail)
+                                                            @if ($detail->produk_id == $product->id)
+                                                                {{ number_format($detail->total_price, 0, '.', '.') }}
+                                                            @endif
+                                                        @endforeach
                                                     @else
                                                         ''
                                                     @endif

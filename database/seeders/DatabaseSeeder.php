@@ -25,12 +25,13 @@ class DatabaseSeeder extends Seeder
 
         $this->call(
             [
-                ProduksSeed::class,
-                ProduksGradeSeed::class,
                 ExpenseCategorySeed::class,
                 IncomeCategorySeed::class,
                 PettyCashSeed::class,
+                
+                ProduksGradeSeed::class,
                 RawMaterialsSeed::class,
+                ProduksSeed::class,
                 SuppliersSeed::class,
                 SalespersonSeeds::class,
                 RawMaterialSupplierSeed::class,

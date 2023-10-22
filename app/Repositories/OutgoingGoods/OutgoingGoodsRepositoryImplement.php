@@ -19,5 +19,20 @@ class OutgoingGoodsRepositoryImplement extends Eloquent implements OutgoingGoods
         $this->model = $model;
     }
 
-    // Write something awesome :)
+    public function generateCode()
+    {
+
+        //code format OGG016, OGG019, OGG020, OGG000, OGG001, OGG102
+        $lastData = $this->model->orderBy('id', 'desc')->first();
+        if ($lastData) {
+            $lastCode = $lastData->code;
+            $lastNumber = explode('OGG', $lastCode);
+            $lastNumber = (int) $lastNumber[1];
+            $newNumber = $lastNumber + 1;
+            $newCode = 'OGG' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+            return $newCode;
+        } else {
+            return 'OGG001';
+        }
+    }
 }
