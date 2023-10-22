@@ -27,4 +27,11 @@ class SalespersonController extends Controller
         $this->mainService->create($request);
         return back()->with('success', 'Sales berhasil ditambahkan');
     }
+
+    public function detail($id)
+    {
+        $salesperson = Salesperson::find($id);
+        // return $salesperson->toArray();
+        return view('pages.Salesperson.salesperson-detail', compact('salesperson'));
+    }
 }

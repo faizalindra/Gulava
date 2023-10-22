@@ -26,7 +26,7 @@
                 <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Pages</h6>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ Route::currentRouteName() == 'product' ? 'active' : '' }}"
+                <a class="nav-link {{ Route::currentRouteName() == 'product' || Route::currentRouteName() == 'produks.detail' ? 'active' : '' }}"
                     href="{{ route('product') }}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -36,7 +36,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ Route::currentRouteName() == 'raw-material' ? 'active' : '' }}"
+                <a class="nav-link {{ Route::currentRouteName() == 'raw-material' || Route::currentRouteName() == 'raw-material.detail' ? 'active' : '' }}"
                     href="{{ route('raw-material') }}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -46,7 +46,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ Route::currentRouteName() == 'production' ? 'active' : '' }}"
+                <a class="nav-link {{ Route::currentRouteName() == 'production' || Route::currentRouteName() == 'production.detail' ? 'active' : '' }}"
                     href="{{ route('production') }}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -56,7 +56,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ Route::currentRouteName() == 'logistic' ? 'active' : '' }}"
+                <a class="nav-link {{ Route::currentRouteName() == 'logistic' || Route::currentRouteName() == 'logistic.detail' ? 'active' : '' }}"
                     href="{{ route('logistic') }}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -66,7 +66,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ Route::currentRouteName() == 'cashflow' ? 'active' : '' }}"
+                <a class="nav-link {{ Route::currentRouteName() == 'cashflow' ||  Route::currentRouteName() == 'cashflow.detail' ? 'active' : '' }}"
                     href="{{ route('cashflow') }}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -76,7 +76,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ Route::currentRouteName() == 'salesperson' ? 'active' : '' }}"
+                <a class="nav-link {{ Route::currentRouteName() == 'salesperson' || Route::currentRouteName() == 'salesperson.detail' ? 'active' : '' }}"
                     href="{{ route('salesperson') }}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">

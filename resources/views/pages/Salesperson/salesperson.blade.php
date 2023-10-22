@@ -87,8 +87,9 @@
                                                 <td>{{ $sales->phone }}</td>
                                                 <td>{{ $sales->address }}</td>
                                                 {{-- <td>{{ $sales->email }}</td> --}}
-                                                <td class="text-end"><i class="fa fa-eye"><a
-                                                            href="{{ route('salesperson.detail', ['id' => $sales->id]) }}"></a></i>
+                                                <td class="text-end"><a
+                                                        href="{{ route('salesperson.detail', ['id' => $sales->id]) }}"><i
+                                                            class="fa fa-eye"></i></a>
                                                 </td>
                                             </tr>
                                         @endforeach

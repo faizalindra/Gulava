@@ -2,8 +2,8 @@
 
 @section('content')
     @include('layouts.navbars.auth.topnav', [
-        'title' => 'Detail Produksi',
-        'parents' => [['href' => route('production'), 'title' => 'Produksi']],
+        'title' => 'Detail Bahan Baku',
+        'parents' => [['href' => route('raw-material'), 'title' => 'Bahan Baku']],
     ])
 
     <link rel="stylesheet" href="{{ asset('assets/css/jQuery_dataTables_1.13.6.min.css') }}" />

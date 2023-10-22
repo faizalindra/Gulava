@@ -67,6 +67,7 @@ Route::group(['middleware' => ['auth', 'web']], function () {
 	Route::get('/salesperson', [SalespersonController::class, 'index'])->name('salesperson');
 	Route::post('/salesperson', [SalespersonController::class, 'create'])->name('salesperson.create');
 	Route::get('/salesperson/{id}', [SalespersonController::class, 'detail'])->name('salesperson.detail');
+	Route::put('/salesperson/{id}/update', [SalespersonController::class, 'update'])->name('salesperson.update');
 
 	Route::get('/logistic', [LogisticController::class, 'index'])->name('logistic');
 	Route::post('/logistic', [LogisticController::class, 'create'])->name('logistic.create');
